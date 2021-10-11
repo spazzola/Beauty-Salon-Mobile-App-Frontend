@@ -1,21 +1,42 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack'
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+import ClientScreen from './src/client/ClientScreen';
+import { Provider as ClientProvider } from './src/client/context/ClientContext';
+import ClientDetail from './src/client/ClientDetail';
+import ClientAdd from './src/client/ClientAdd';
+import ClientEdit from './src/client/ClientEdit';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+import UserScreen from './src/user/UserScreen';
+import { Provider as UserProvider } from './src/user/context/UserContext';
+import UserDetail from './src/user/UserDetail';
+import UserAdd from './src/user/UserAdd';
+import UserEdit from './src/user/UserEdit';
+
+
+const navigator = createStackNavigator({
+  Clients: ClientScreen,
+  Client: ClientDetail,
+  ClientAdd,
+  ClientEdit,
+  Users: UserScreen,
+  User: UserDetail,
+  UserAdd,
+  UserEdit
+}, {
+  initialRouteName: 'Users',
+  defaultNavigationOptions: {
+    title: 'Uzytkownicy'
+  }
+})
+
+const App = createAppContainer(navigator);
+
+export default () => {
+  return <ClientProvider>
+    <UserProvider>
+      <App />
+    </UserProvider>
+  </ClientProvider>
+};
