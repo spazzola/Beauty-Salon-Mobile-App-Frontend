@@ -14,29 +14,44 @@ import UserDetail from './src/user/UserDetail';
 import UserAdd from './src/user/UserAdd';
 import UserEdit from './src/user/UserEdit';
 
+import CostScreen from './src/cost/CostScreen';
+import { Provider as CostProvider } from './src/cost/context/CostContext';
+import CostDetail from './src/cost/CostDetail';
+import CostAdd from './src/cost/CostAdd';
+import CostEdit from './src/cost/CostEdit';
+
 
 const navigator = createStackNavigator({
   Clients: ClientScreen,
   Client: ClientDetail,
   ClientAdd,
   ClientEdit,
+
   Users: UserScreen,
   User: UserDetail,
   UserAdd,
-  UserEdit
+  UserEdit,
+
+  Costs: CostScreen,
+  Cost: CostDetail,
+  CostAdd,
+  CostEdit
+
 }, {
-  initialRouteName: 'Users',
+  initialRouteName: 'Costs',
   defaultNavigationOptions: {
-    title: 'Uzytkownicy'
+    title: 'Koszty'
   }
 })
 
 const App = createAppContainer(navigator);
 
 export default () => {
-  return <ClientProvider>
-    <UserProvider>
-      <App />
-    </UserProvider>
-  </ClientProvider>
+  return <CostProvider>
+    <ClientProvider>
+      <UserProvider>
+        <App />
+      </UserProvider>
+    </ClientProvider>
+  </CostProvider>
 };
