@@ -5,12 +5,12 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns'
 
 const CostForm = ({ onSubmit, initialValues }) => {
+  console.log("TUTAJ JESTEM: " + new Date(initialValues.addedDate));
   const [name, setName] = useState(initialValues.name);
   const [value, setValue] = useState(initialValues.value);
-  const [addedDate, setAddedDate] = useState(new Date(Date.now()));
+  const [addedDate, setAddedDate] = useState(initialValues.name === null ? new Date(Date.now()) : new Date(initialValues.addedDate));
 
   const onChange = (event, selectedDate) => {
-    console.log("jestem tuuu");
     let currentDate = selectedDate || addedDate;
     setAddedDate(currentDate);
   };
@@ -43,6 +43,7 @@ CostForm.defaultProps = {
   initialValues: {
     name: '',
     value: 0,
+    addedDate: ''
   }
 };
 

@@ -25,7 +25,7 @@ const addCost = dispatch => {
             value,
             addedDate
         };
-        console.log("dodawanie kosztu: " + cost.addedDate);
+        console.log("dodawanie kosztu: " + cost);
         await axios.post('/cost/create', cost);
 
         if (callback) {
@@ -34,11 +34,11 @@ const addCost = dispatch => {
     };
 }
 const getCosts = dispatch => {
-    return async () => {
+    return async (month, year) => {
         const response = await axios.get('/cost/getMonthCosts', {
             params: {
-                month: 10,
-                year: 2021
+                month: month,
+                year: year
             }
         });
         dispatch({ type: 'get_costs', payload: response.data });

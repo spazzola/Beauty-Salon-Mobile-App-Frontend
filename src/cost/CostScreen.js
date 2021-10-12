@@ -1,16 +1,22 @@
-import React, { useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Button, TouchableOpacity} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, Button, TouchableOpacity } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Context } from './context/CostContext';
 import CostItem from './CostItem';
 
 const CostScreen = ({ navigation }) => {
     const { state, addCost, getCosts } = useContext(Context);
+    const [date, setDate] = useState(new Date(Date.now()));
 
     useEffect(() => {
-        getCosts();
+        var month = new Date().getMonth() + 1;
+        var year = new Date().getFullYear();
+        getCosts(month, year);
 
         const listener = navigation.addListener('didFocus', () => {
-            getCosts();
+            var month = new Date().getMonth() + 1;
+            var year = new Date().getFullYear();
+            getCosts(month, year);
         });
 
         return () => {
@@ -18,11 +24,23 @@ const CostScreen = ({ navigation }) => {
         };
     }, []);
 
+    const onChange = (event, selectedDate) => {
+        var month = selectedDate.getMonth() + 1;
+        var year = selectedDate.getFullYear();
+        let currentDate = selectedDate || date;
+        setDate(currentDate);
+        getCosts(month, year);
+    };
+
     return (
         <View>
+            <DateTimePicker
+                value={date}
+                onChange={onChange}
+            />
             <Text>Cost screen !!! {state.length}</Text>
-            <Button title="Dodaj koszt" onPress={() => navigation.navigate('CostAdd')}/>
-            <FlatList 
+            <Button title="Dodaj koszt" onPress={() => navigation.navigate('CostAdd')} />
+            <FlatList
                 data={state}
                 keyExtractor={cost => cost.id.toString()}
                 renderItem={({ item }) => {
