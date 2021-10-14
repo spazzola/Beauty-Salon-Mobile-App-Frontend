@@ -23,6 +23,11 @@ import CostEdit from './src/cost/CostEdit';
 import SolariumScreen from './src/solarium/SolariumScreen';
 import { Provider as SolariumProvider } from './src/solarium/context/SolariumContext';
 
+import WorkScreen from './src/work/WorkScreen';
+import { Provider as WorkProvider } from './src/work/context/WorkContext';
+import WorkDetail from './src/work/WorkDetail';
+import WorkAdd from './src/work/WorkAdd';
+import WorkEdit from './src/work/WorkEdit';
 
 const navigator = createStackNavigator({
   Clients: ClientScreen,
@@ -40,25 +45,31 @@ const navigator = createStackNavigator({
   CostAdd,
   CostEdit,
 
-  Solarium: SolariumScreen
+  Solarium: SolariumScreen,
 
+  Works: WorkScreen,
+  Work: WorkDetail,
+  WorkAdd,
+  WorkEdit
 }, {
-  initialRouteName: 'Costs',
+  initialRouteName: 'Works',
   defaultNavigationOptions: {
-    title: 'Koszty'
+    title: 'Usługi'
   }
 })
 
 const App = createAppContainer(navigator);
 
 export default () => {
-  return <SolariumProvider>
-    <CostProvider>
-      <ClientProvider>
-        <UserProvider>
-          <App />
-        </UserProvider>
-      </ClientProvider>
-    </CostProvider>
-  </SolariumProvider>
+  return <WorkProvider>
+    <SolariumProvider>
+      <CostProvider>
+        <ClientProvider>
+          <UserProvider>
+            <App />
+          </UserProvider>
+        </ClientProvider>
+      </CostProvider>
+    </SolariumProvider>
+  </WorkProvider>
 };
