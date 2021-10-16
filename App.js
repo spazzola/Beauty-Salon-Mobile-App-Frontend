@@ -29,6 +29,10 @@ import WorkDetail from './src/work/WorkDetail';
 import WorkAdd from './src/work/WorkAdd';
 import WorkEdit from './src/work/WorkEdit';
 
+import AppointmentScreen from './src/appointment/AppointmentScreen';
+import { Provider as AppointmentProvider } from './src/appointment/context/AppointmentContext';
+import AppointmentAdd from './src/appointment/AppointmentAdd';
+
 const navigator = createStackNavigator({
   Clients: ClientScreen,
   Client: ClientDetail,
@@ -50,26 +54,31 @@ const navigator = createStackNavigator({
   Works: WorkScreen,
   Work: WorkDetail,
   WorkAdd,
-  WorkEdit
+  WorkEdit,
+
+  Appointments: AppointmentScreen,
+  AppointmentAdd
 }, {
-  initialRouteName: 'Works',
+  initialRouteName: 'Appointments',
   defaultNavigationOptions: {
-    title: 'Usługi'
+    title: 'Wizyty'
   }
 })
 
 const App = createAppContainer(navigator);
 
 export default () => {
-  return <WorkProvider>
-    <SolariumProvider>
-      <CostProvider>
-        <ClientProvider>
-          <UserProvider>
-            <App />
-          </UserProvider>
-        </ClientProvider>
-      </CostProvider>
-    </SolariumProvider>
-  </WorkProvider>
+  return <AppointmentProvider>
+    <WorkProvider>
+      <SolariumProvider>
+        <CostProvider>
+          <ClientProvider>
+            <UserProvider>
+              <App />
+            </UserProvider>
+          </ClientProvider>
+        </CostProvider>
+      </SolariumProvider>
+    </WorkProvider>
+  </AppointmentProvider>
 };
