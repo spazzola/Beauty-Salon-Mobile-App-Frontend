@@ -29,9 +29,11 @@ import WorkDetail from './src/work/WorkDetail';
 import WorkAdd from './src/work/WorkAdd';
 import WorkEdit from './src/work/WorkEdit';
 
+import AppointmentCalendar from './src/appointment/AppointmentCalendar';
 import AppointmentScreen from './src/appointment/AppointmentScreen';
 import { Provider as AppointmentProvider } from './src/appointment/context/AppointmentContext';
 import AppointmentAdd from './src/appointment/AppointmentAdd';
+import AppointmentDetail from './src/appointment/AppointmentDetail';
 
 const navigator = createStackNavigator({
   Clients: ClientScreen,
@@ -56,10 +58,12 @@ const navigator = createStackNavigator({
   WorkAdd,
   WorkEdit,
 
+  AppointmentCalendar,
   Appointments: AppointmentScreen,
-  AppointmentAdd
+  AppointmentAdd,
+  Appointment: AppointmentDetail
 }, {
-  initialRouteName: 'Appointments',
+  initialRouteName: 'AppointmentCalendar',
   defaultNavigationOptions: {
     title: 'Wizyty'
   }
