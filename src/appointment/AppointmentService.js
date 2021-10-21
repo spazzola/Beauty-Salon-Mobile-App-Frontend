@@ -170,7 +170,11 @@ function calculateTopValue(boxes) {
     }
 }
 
-export { createAppointmentBoxes, calculateDurationTime, createBoxes };
+function changeShowMode(appointmentsToShow) {
+    return (appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments) ? 'double' : 'single';
+}
+
+export { createAppointmentBoxes, calculateDurationTime, createBoxes, changeShowMode };
 
 
 {/* <View style={{ height: '100%', justifyContent: 'center', flexDirection: 'row' }}>

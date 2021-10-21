@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, Button, TouchableOpacity, Dimensions,
 import { Context } from './context/AppointmentContext';
 import AppointmentItem from './AppointmentItem';
 import BaseRadioGroup from '../base_components/BaseRadioGroup';
+import { changeShowMode } from './AppointmentService';
 
 // function extractHours(startDate) {
 //     return startDate.substring(11, 16);
@@ -16,13 +17,21 @@ let hours = ["6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17",
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
+
 const AppointmentScreen = ({ navigation }) => {
     const { state, addClient, getAppointments } = useContext(Context);
-    let appointmentsToShow = {myAppointments: true, employeeAppointments: false};
+
+    let showMode = 'single';
+    let appointmentsToShow = { myAppointments: true, employeeAppointments: false };
+
 
     function changeAppointmentsToShow(event) {
         appointmentsToShow = event;
-        console.log(appointmentsToShow);
+        console.log("My appo: " + appointmentsToShow.myAppointments);
+        console.log("Employee appo: " + appointmentsToShow.employeeAppointments)
+
+        showMode = changeShowMode(appointmentsToShow);
+        console.log(showMode);
     }
 
     useEffect(() => {
@@ -41,8 +50,8 @@ const AppointmentScreen = ({ navigation }) => {
 
     return (
         <>
-            <View style={{ marginBottom: 5, justifyContent: 'center'}}>
-                <BaseRadioGroup navigation={navigation} changeAppointmentsToShow={changeAppointmentsToShow}/>
+            <View style={{ marginBottom: 5, justifyContent: 'center' }}>
+                <BaseRadioGroup navigation={navigation} changeAppointmentsToShow={changeAppointmentsToShow} />
             </View>
             <ScrollView contentContainerStyle={{ height: 1800 }} showsVerticalScrollIndicator={false} >
                 <View style={{ position: 'absolute', zIndex: -2, height: 2000 }}>
