@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Button, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { Context } from './context/AppointmentContext';
 import AppointmentItem from './AppointmentItem';
-import { calculateDurationTime, createAppointmentBoxes, createBoxes } from './AppointmentService';
+import BaseRadioGroup from '../base_components/BaseRadioGroup';
 
 // function extractHours(startDate) {
 //     return startDate.substring(11, 16);
@@ -12,13 +12,19 @@ import { calculateDurationTime, createAppointmentBoxes, createBoxes } from './Ap
 let boxHeight = 100;
 
 let hours = ["6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
-let minutes = ["15", "30", "45"];
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const AppointmentScreen = ({ navigation }) => {
     const { state, addClient, getAppointments } = useContext(Context);
+    let appointmentsToShow = {myAppointments: true, employeeAppointments: false};
+
+    function changeAppointmentsToShow(event) {
+        appointmentsToShow = event;
+        console.log(appointmentsToShow);
+    }
+
     useEffect(() => {
         getAppointments();
         let selectedDate = navigation.getParam('selectedDate');
@@ -32,8 +38,12 @@ const AppointmentScreen = ({ navigation }) => {
             listener.remove();
         };
     }, []);
+
     return (
         <>
+            <View style={{ marginBottom: 5, justifyContent: 'center'}}>
+                <BaseRadioGroup navigation={navigation} changeAppointmentsToShow={changeAppointmentsToShow}/>
+            </View>
             <ScrollView contentContainerStyle={{ height: 1800 }} showsVerticalScrollIndicator={false} >
                 <View style={{ position: 'absolute', zIndex: -2, height: 2000 }}>
                     <FlatList
