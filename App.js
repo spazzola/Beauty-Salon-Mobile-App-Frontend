@@ -65,7 +65,10 @@ const navigator = createStackNavigator({
 }, {
   initialRouteName: 'AppointmentCalendar',
   defaultNavigationOptions: {
-    title: 'Wizyty'
+    title: 'Kalendarz',
+    headerStyle: {
+      backgroundColor: '#f86de1',
+    }
   }
 })
 
