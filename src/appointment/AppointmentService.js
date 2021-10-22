@@ -171,7 +171,15 @@ function calculateTopValue(boxes) {
 }
 
 function changeShowMode(appointmentsToShow) {
-    return (appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments) ? 'double' : 'single';
+    if (appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments) {
+        return 'double';
+    }
+    if (appointmentsToShow.myAppointments || appointmentsToShow.employeeAppointments) {
+        return 'single';
+    }
+    if (!appointmentsToShow.myAppointments && !appointmentsToShow.employeeAppointments) {
+        return 'none'
+    }
 }
 
 export { createAppointmentBoxes, calculateDurationTime, createBoxes, changeShowMode };
