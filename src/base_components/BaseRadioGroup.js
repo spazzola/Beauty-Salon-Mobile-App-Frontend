@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Context as UserContext } from '../user/context/UserContext';
 
-
 const BaseRadioGroup = ({ navigation, changeAppointmentsToShow }) => {
     const { state, addUser, getUsers } = useContext(UserContext);
     const [appointmentsToShow, setAppointmentsToShow] = useState({myAppointments: true, employeeAppointments: false});
+    const [isMyAppointmentsSelected, setIsMyAppointmentsSelected] = useState(true);
+    const [isEmployeeAppointmentsSelected, setIsEmployeeAppointmentsSelected] = useState(false);
 
     useEffect(() => {
         getUsers();
@@ -24,6 +25,7 @@ const BaseRadioGroup = ({ navigation, changeAppointmentsToShow }) => {
             myAppointments: !appointmentsToShow.myAppointments,
             employeeAppointments : appointmentsToShow.employeeAppointments
         }
+        setIsMyAppointmentsSelected(!isMyAppointmentsSelected);
         setAppointmentsToShow(newState);
         changeAppointmentsToShow(newState);
     }
@@ -33,6 +35,7 @@ const BaseRadioGroup = ({ navigation, changeAppointmentsToShow }) => {
             myAppointments: appointmentsToShow.myAppointments,
             employeeAppointments : !appointmentsToShow.employeeAppointments
         }
+        setIsEmployeeAppointmentsSelected(!isEmployeeAppointmentsSelected);
         setAppointmentsToShow(newState);
         changeAppointmentsToShow(newState);
     }
@@ -41,12 +44,12 @@ const BaseRadioGroup = ({ navigation, changeAppointmentsToShow }) => {
         <View style={styles.wrapper}>
             <TouchableOpacity
                 onPress={() => changeToMyAppointments()}
-                style={styles.button}>
+                style={[styles.button, {backgroundColor: isMyAppointmentsSelected ? 'red' : 'white', }]}>
                 <Text style={{ color: 'pink' }}>Moje wizyty</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => changeToEmployeeAppointments()}
-                style={styles.button}>
+                style={[styles.button, {backgroundColor: isEmployeeAppointmentsSelected ? 'purple' : 'white', }]}>
                 <Text style={{ color: 'purple' }}>Wizyty pracownika</Text>
             </TouchableOpacity>
         </View>
