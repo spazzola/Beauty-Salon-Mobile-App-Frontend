@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { calculateDurationTime, createAppointmentBoxes, createBoxes } from './AppointmentService';
+import { calculateDurationTime, createAppointmentBoxes, createBoxes, calculateElementTop, addBackgroundColor } from './AppointmentService';
 import { boxHeight } from './AppointmentScreen';
-import icons from '../icons/Icons';
+import { workIcons } from '../icons/Icons';
 
 const windowWidth = Dimensions.get('window').width;
 
-const AppointmentItem = ({ appointment, navigation }) => {
+const AppointmentItem = ({ appointment, navigation, mode }) => {
     const [boxes, setBoxes] = useState([]);
     //const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
@@ -20,19 +20,22 @@ const AppointmentItem = ({ appointment, navigation }) => {
             setBoxes(appoBoxes);
         });
 
+
         return () => {
             listener.remove();
         };
-    }, []);
+    }, [appointment]);
+
     return (
         <>
             {boxes.map((item, index) => {
                 return (
-                    <TouchableOpacity style={{
+                    <TouchableOpacity key={index} style={{
                         position: 'absolute',
                         width: (windowWidth / 60) * (item.elementsNumber * 5),
-                        height: boxHeight,
-                        top: item.location[0],
+                        height: mode === 'single' ? boxHeight : boxHeight / 2,
+                        display: mode === 'none' ? 'none' : '',
+                        top: calculateElementTop(item, mode, appointment),
                         left: (item.location[1] * (windowWidth / 60)),
                     }} onPress={() => navigation.navigate('Appointment', { id: item.appointmentId })}>
                         <View style={{}}>
@@ -44,7 +47,7 @@ const AppointmentItem = ({ appointment, navigation }) => {
                                 borderWidth: 1,
                                 top: '25%',
                                 height: '80%',
-                                backgroundColor: '#f042c7',
+                                backgroundColor: addBackgroundColor(mode, appointment),
                                 shadowColor: '#171717',
                                 shadowOffset: { width: 2, height: 4 },
                                 shadowOpacity: 0.7,
@@ -53,7 +56,7 @@ const AppointmentItem = ({ appointment, navigation }) => {
                             }}>
                                 <View style={{ height: '100%', justifyContent: '', flexDirection: 'row' }}>
                                     <Text style={styles.label}>
-                                        {item.clientName}
+                                        {appointment.employee.role} {item.location[0]}
                                     </Text>
                                     <Text style={{}}>
                                         {item.workIcons.length > 0 ? (
@@ -62,7 +65,7 @@ const AppointmentItem = ({ appointment, navigation }) => {
                                                 data={item.workIcons}
                                                 keyExtractor={(item, index) => index}
                                                 renderItem={({ item }) => {
-                                                    return <View style={{ backgroundColor: '', marginLeft: 20 }}><Image style={styles.icon} source={(icons.find(icon => icon.name === item)).uri} /></View>
+                                                    return <View style={{ backgroundColor: '', marginLeft: 20 }}><Image style={styles.icon} source={(workIcons.find(icon => icon.name === item)).uri} /></View>
                                                 }}
                                             />
                                         ) : ''}

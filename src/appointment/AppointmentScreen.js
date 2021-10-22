@@ -18,17 +18,32 @@ let hours = ["6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17",
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
+function sortList(appointments, appointmentsToShow) {
+    if (appointmentsToShow.myAppointments && !appointmentsToShow.employeeAppointments) {
+        return appointments.filter((appointment) =>
+            appointment.employee.role === 'ADMIN'
+        );
+    }
+    if (!appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments) {
+        return appointments.filter((appointment) =>
+            appointment.employee.role === 'USER'
+        );
+    }
+    if (appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments) {
+        return appointments;
+    }
+    if (!appointmentsToShow.myAppointments && !appointmentsToShow.employeeAppointments) {
+        return [];
+    }
+}
+
 
 const AppointmentScreen = ({ navigation }) => {
     const { state, addClient, getAppointments } = useContext(Context);
-    const [mode, setMode] = useState('single')
-    //let showMode = 'single';
-    let appointmentsToShow = { myAppointments: true, employeeAppointments: false };
+    const [appointmentsToShow, setAppointmentsToShow] = useState({ myAppointments: true, employeeAppointments: false });
 
     function changeAppointmentsToShow(event) {
-        appointmentsToShow = event;
-        newMode = changeShowMode(appointmentsToShow);
-        setMode(newMode);
+        setAppointmentsToShow(event);
     }
 
     useEffect(() => {
@@ -44,6 +59,16 @@ const AppointmentScreen = ({ navigation }) => {
             listener.remove();
         };
     }, []);
+
+    useEffect(() => {
+        const listener = navigation.addListener('didFocus', () => {
+
+        });
+
+        return () => {
+            listener.remove();
+        };
+    }, [appointmentsToShow]);
 
     return (
         <>
@@ -80,17 +105,32 @@ const AppointmentScreen = ({ navigation }) => {
                         );
                     }}
                 /> */}
-                    {state.map((item, index) => {
+                {appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments ? 
+                (
+                    sortList(state, appointmentsToShow).map((item, index) => {
                         return (
-                            <View style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
-                                <AppointmentItem appointment={item} navigation={navigation} mode={mode} selectedDate={navigation.getParam('selectedDate')}/>
+                            <>
+                            <View key={index} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
+                                <AppointmentItem appointment={item} navigation={navigation} mode={'double'} selectedDate={navigation.getParam('selectedDate')} />
+                            </View>
+                            </>
+                        )
+                    })
+                ) 
+                : 
+                (
+                    sortList(state, appointmentsToShow).map((item, index) => {
+                        return (
+                            <View key={index} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
+                                <AppointmentItem appointment={item} navigation={navigation} mode={'single'} selectedDate={navigation.getParam('selectedDate')} />
                             </View>
                         )
-                    })}
+                    })
+                )}
                 </View>
             </ScrollView>
             <View style={[styles.wrapper]}>
-                <TouchableOpacity onPress={() => navigation.navigate('AppointmentAdd', { selectedDate: navigation.getParam('selectedDate')})}>
+                <TouchableOpacity onPress={() => navigation.navigate('AppointmentAdd', { selectedDate: navigation.getParam('selectedDate') })}>
                     <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'addAppointment')).uri} />
                 </TouchableOpacity>
             </View>

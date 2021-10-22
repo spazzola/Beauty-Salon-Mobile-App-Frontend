@@ -182,7 +182,36 @@ function changeShowMode(appointmentsToShow) {
     }
 }
 
-export { createAppointmentBoxes, calculateDurationTime, createBoxes, changeShowMode };
+function calculateElementTop(item, mode, appointment) {
+    return (appointment.employee.role === 'ADMIN' && mode === 'double') ?
+        (
+            item.location[0] + 50
+        )
+        :
+        (
+            (appointment.employee.role === 'USER' && mode === 'double') ?
+                item.location[0] + 10
+                :
+                item.location[0]
+        )
+}
+
+function addBackgroundColor(mode, appointment) {
+    return (appointment.employee.role === 'ADMIN' && mode === 'double') ?
+        (
+            '#fa94e9'
+        )
+        :
+        (
+            (appointment.employee.role === 'USER' && mode === 'double') ?
+                'blue'
+                :
+                '#fa94e9'
+        )
+}
+
+
+export { createAppointmentBoxes, calculateDurationTime, createBoxes, changeShowMode, calculateElementTop, addBackgroundColor };
 
 
 {/* <View style={{ height: '100%', justifyContent: 'center', flexDirection: 'row' }}>
