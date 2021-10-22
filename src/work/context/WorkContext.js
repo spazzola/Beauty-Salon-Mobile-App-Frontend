@@ -25,7 +25,7 @@ const addWork = dispatch => {
             minutesDuration,
             iconName
         };
-        console.log("Adding work: " + work.iconName);
+
         await axios.post('/work/create', work);
 
         if (callback) {

@@ -28,7 +28,6 @@ const useSolarium = dispatch => {
 }
 const getMonthSolarium = dispatch => {
     return async (month, year) => {
-        console.log("pobieranie solarium");
         const response = await axios.get('/solarium/getMonthSolarium', {
             params: {
                 month: month,

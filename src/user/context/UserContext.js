@@ -40,9 +40,7 @@ const getUsers = dispatch => {
 };
 
 const deleteUser = dispatch => {
-    console.log("usuwanie uzytkownika");
     return async id => {
-        console.log("user id: " + id);
         await axios.delete('/user/delete', {
             params: {
                 id

@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity, Image } from 'react-native';
 import { Context } from './context/WorkContext';
-import icons from '../icons/Icons';
+import { workIcons } from '../icons/Icons';
 
 const WorkDetail = ({ navigation }) => {
     const { state, deleteWork } = useContext(Context);
 
     const work = state.find((work) => work.id === navigation.getParam('id'));
-    const icon = icons.find((icon) => icon.name === work.iconName);
+    const icon = workIcons.find((icon) => icon.name === work.iconName);
 
     return (
         <View>

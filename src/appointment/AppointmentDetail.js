@@ -6,7 +6,6 @@ const AppointmentDetail = ({ navigation }) => {
     const { state, deleteAppointment } = useContext(Context);
 
     const appointment = state.find((appointment) => appointment.id === navigation.getParam('id'));
-    console.log(appointment);
 
     return (
         <View>

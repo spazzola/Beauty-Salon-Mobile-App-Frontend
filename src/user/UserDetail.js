@@ -6,7 +6,7 @@ const UserDetail = ({ navigation }) => {
     const { state, deleteUser } = useContext(Context);
 
     const user = state.find((user) => user.id === navigation.getParam('id'));
-    console.log(user);
+
     return (
         <View>
             <Text style={styles.paragraph}><Text style={styles.title}>Imię: </Text> {user.name}</Text>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, Image, FlatList } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import icons from '../icons/Icons';
+import { workIcons } from '../icons/Icons';
 
 const WorkForm = ({ onSubmit, initialValues, mode }) => {
     const [name, setName] = useState(initialValues.name);
@@ -14,7 +14,7 @@ const WorkForm = ({ onSubmit, initialValues, mode }) => {
     const [myArray, setMyArray] = useState([]);
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
-    const [images, setimages] = useState(icons);
+    const [images, setimages] = useState(workIcons);
     
     return (
         <View style={{ height: 500 }}>
@@ -45,7 +45,7 @@ const WorkForm = ({ onSubmit, initialValues, mode }) => {
             <View style={{marginTop: 10}}>
             <View>
                 <Text style={styles.label}>Wybrana ikona:</Text>
-                {iconName === '' ? null : <Image style={styles.icon} source={(icons.find(icon => icon.name === iconName)).uri}/>}
+                {iconName === '' ? null : <Image style={styles.icon} source={(workIcons.find(icon => icon.name === iconName)).uri}/>}
                 
                 <FlatList
                     vertical={true}

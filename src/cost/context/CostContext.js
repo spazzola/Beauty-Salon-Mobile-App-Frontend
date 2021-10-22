@@ -25,7 +25,7 @@ const addCost = dispatch => {
             value,
             addedDate
         };
-        console.log("dodawanie kosztu: " + cost);
+
         await axios.post('/cost/create', cost);
 
         if (callback) {

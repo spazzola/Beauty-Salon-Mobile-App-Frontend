@@ -21,7 +21,6 @@ const addAppointment = dispatch => {
     return async (startDate, percentageValueToAdd, clientId, employeeId, workIds, callback) => {
         const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
         startDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
-        console.log(workIds);
         let appointment = {
             startDate,
             percentageValueToAdd,

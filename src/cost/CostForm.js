@@ -5,10 +5,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns'
 
 const CostForm = ({ onSubmit, initialValues }) => {
-  console.log("TUTAJ JESTEM: " + new Date(initialValues.addedDate));
   const [name, setName] = useState(initialValues.name);
   const [value, setValue] = useState(initialValues.value);
-  const [addedDate, setAddedDate] = useState(initialValues.name === null ? new Date(Date.now()) : new Date(initialValues.addedDate));
+  const [addedDate, setAddedDate] = useState(initialValues.name === '' ? new Date(Date.now()) : new Date(initialValues.addedDate));
 
   const onChange = (event, selectedDate) => {
     let currentDate = selectedDate || addedDate;
@@ -16,6 +15,7 @@ const CostForm = ({ onSubmit, initialValues }) => {
   };
 
   return (
+    <>
     <View>
       <Text style={styles.label}>Nazwa:</Text>
       <TextInput
@@ -36,6 +36,7 @@ const CostForm = ({ onSubmit, initialValues }) => {
       />
       <Button title="Dodaj koszt" onPress={() => { onSubmit(name, value, addedDate) }} />
     </View>
+</>
   );
 };
 
