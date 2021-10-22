@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Button, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { Context } from './context/AppointmentContext';
 import AppointmentItem from './AppointmentItem';
 import BaseRadioGroup from '../base_components/BaseRadioGroup';
 import { changeShowMode } from './AppointmentService';
+import { buttonIcons } from '../icons/Icons';
 
 // function extractHours(startDate) {
 //     return startDate.substring(11, 16);
@@ -20,18 +21,14 @@ const windowHeight = Dimensions.get('window').height;
 
 const AppointmentScreen = ({ navigation }) => {
     const { state, addClient, getAppointments } = useContext(Context);
-
-    let showMode = 'single';
+    const [mode, setMode] = useState('single')
+    //let showMode = 'single';
     let appointmentsToShow = { myAppointments: true, employeeAppointments: false };
-
 
     function changeAppointmentsToShow(event) {
         appointmentsToShow = event;
-        console.log("My appo: " + appointmentsToShow.myAppointments);
-        console.log("Employee appo: " + appointmentsToShow.employeeAppointments)
-
-        showMode = changeShowMode(appointmentsToShow);
-        console.log(showMode);
+        newMode = changeShowMode(appointmentsToShow);
+        setMode(newMode);
     }
 
     useEffect(() => {
@@ -86,18 +83,30 @@ const AppointmentScreen = ({ navigation }) => {
                     {state.map((item, index) => {
                         return (
                             <View style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
-                                <AppointmentItem appointment={item} navigation={navigation} />
+                                <AppointmentItem appointment={item} navigation={navigation} mode={mode} selectedDate={navigation.getParam('selectedDate')}/>
                             </View>
                         )
                     })}
                 </View>
             </ScrollView>
+            <View style={[styles.wrapper]}>
+                <TouchableOpacity onPress={() => navigation.navigate('AppointmentAdd', { selectedDate: navigation.getParam('selectedDate')})}>
+                    <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'addAppointment')).uri} />
+                </TouchableOpacity>
+            </View>
         </>
     );
 }
 
 const styles = StyleSheet.create({
-
+    wrapper: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    },
+    button: {
+        width: 160,
+        height: 80
+    }
 })
 
 export { boxHeight };
