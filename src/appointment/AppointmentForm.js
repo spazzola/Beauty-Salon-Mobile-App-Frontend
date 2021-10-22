@@ -7,6 +7,7 @@ import { Context as UserContext } from '../user/context/UserContext';
 import { Context as WorkContext } from '../work/context/WorkContext';
 import NumericInput from 'react-native-numeric-input';
 
+
 const AppointmentForm = ({ onSubmit, initialValues, navigation }) => {
   const clientContext = useContext(ClientContext);
   const userContext = useContext(UserContext);
@@ -28,7 +29,11 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation }) => {
     };
   }, []);
 
-  const [startDate, setStartDate] = useState(new Date(Date.now()));
+  let selectedDate = navigation.getParam('selectedDate');
+  // let formattedDate = selectedDate.year + "-" + selectedDate.month + "-" + selectedDate.day;
+  // console.log("selected date: " + formattedDate);
+  // console.log("created date: " + new Date(selectedDate.year, selectedDate.month, selectedDate.day));
+  const [startDate, setStartDate] = useState(selectedDate === undefined ? new Date(Date.now()) : new Date(selectedDate.year, selectedDate.month, selectedDate.day));
   //const [startTime, setStartTime] = useState(new Date(Date.now()));
   const [percentageValueToAdd, setPercentageValueToAdd] = useState(initialValues.value);
 
@@ -56,7 +61,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation }) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom: 50}}>
-      <View style={{ height: '100%' }}>
+      <View style={{ height: '100%' , backgroundColor: '#fa94e9'}}>
 
         <Text style={styles.label}>Data rozpoczęcia:</Text>
         <DateTimePicker
@@ -64,6 +69,8 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation }) => {
           onChange={onChangeDate}
           display='spinner'
           is24Hour={true}
+          locale={'pl'}
+          style={{backgroundColor: '#fa94e9'}}
         />
 
         <Text style={styles.label}>Godzina rozpoczęcia:</Text>
