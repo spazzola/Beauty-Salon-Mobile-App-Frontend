@@ -5,6 +5,7 @@ import AppointmentItem from './AppointmentItem';
 import BaseRadioGroup from '../base_components/BaseRadioGroup';
 import { changeShowMode } from './AppointmentService';
 import { buttonIcons } from '../icons/Icons';
+import { globalBackground } from '../../GlobalStyles';
 
 // function extractHours(startDate) {
 //     return startDate.substring(11, 16);
@@ -72,11 +73,11 @@ const AppointmentScreen = ({ navigation }) => {
 
     return (
         <>
-            <View style={{ marginBottom: 5, justifyContent: 'center' }}>
+            <View style={[globalBackground, { marginBottom: 0, justifyContent: 'center' }]}>
                 <BaseRadioGroup navigation={navigation} changeAppointmentsToShow={changeAppointmentsToShow} />
             </View>
             <ScrollView contentContainerStyle={{ height: 1800 }} showsVerticalScrollIndicator={false} >
-                <View style={{ position: 'absolute', zIndex: -2, height: 2000 }}>
+                <View style={[globalBackground, { position: 'absolute', zIndex: -2, height: 2000 }]}>
                     <FlatList
                         data={hours}
                         keyExtractor={(item, index) => index}

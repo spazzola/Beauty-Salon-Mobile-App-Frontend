@@ -36,6 +36,7 @@ import AppointmentAdd from './src/appointment/AppointmentAdd';
 import AppointmentDetail from './src/appointment/AppointmentDetail';
 
 const navigator = createStackNavigator({
+  
   Clients: ClientScreen,
   Client: ClientDetail,
   ClientAdd,
@@ -67,7 +68,7 @@ const navigator = createStackNavigator({
   defaultNavigationOptions: {
     title: 'Kalendarz',
     headerStyle: {
-      backgroundColor: '#f86de1',
+      backgroundColor: '#FF00E4',
     }
   }
 })

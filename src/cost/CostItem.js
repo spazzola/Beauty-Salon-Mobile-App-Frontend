@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { itemContainer, itemParagraph } from '../../GlobalStyles';
 
 const CostItem = ({ cost }) => {
     return (
-        <View style={styles.container}>
-            <Text style={styles.paragraph}> {cost.name} {cost.value}</Text>
+        <View style={itemContainer}>
+            <Text style={itemParagraph}> {cost.name} {cost.value}</Text>
         </View>
     );
 }

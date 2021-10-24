@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 23,
         marginLeft: 10,
-        height: '50%'
+        height: '50%',
+        fontFamily: 'KalamBold'
     },
     icon: {
         width: 40,

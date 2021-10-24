@@ -1,26 +1,19 @@
-import React, { useContext } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { itemContainer, itemParagraph } from '../../GlobalStyles';
+
+const windowWidth = Dimensions.get('window').width;
 
 const ClientItem = ({ client }) => {
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.paragraph}> {client.name} {client.surname}</Text>
+        <View style={itemContainer}>
+            <Text style={itemParagraph}> {client.name} {client.surname}</Text>
         </View>
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        height: 40,
-        borderWidth: 1,
-        marginBottom: 3,
-    },
-    paragraph: {
-        fontSize: 30,
-        flex: 1,
-        backgroundColor: 'grey'
-    }
-});
+const styles = StyleSheet.create({});
 
 
 export default ClientItem;

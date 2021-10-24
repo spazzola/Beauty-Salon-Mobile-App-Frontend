@@ -1,5 +1,3 @@
-import AppointmentItem from "./AppointmentItem";
-
 function extractStartTime(date) {
     return date.substring(11, 16);
 }
@@ -199,35 +197,23 @@ function calculateElementTop(item, mode, appointment) {
 function addBackgroundColor(mode, appointment) {
     return (appointment.employee.role === 'ADMIN' && mode === 'double') ?
         (
-            '#fa94e9'
+            '#FF00E4'
         )
         :
         (
             (appointment.employee.role === 'USER' && mode === 'double') ?
-                'blue'
+                '#7027A0'
                 :
-                '#fa94e9'
+                appointment.employee.role === 'ADMIN' && mode === 'single' ?
+                (
+                    '#FF00E4'
+                )
+                :
+                (
+                    '#7027A0'
+                )
         )
 }
 
 
 export { createAppointmentBoxes, calculateDurationTime, createBoxes, changeShowMode, calculateElementTop, addBackgroundColor };
-
-
-{/* <View style={{ height: '100%', justifyContent: 'center', flexDirection: 'row' }}>
-<Text style={styles.label}>
-    {item.clientName}
-</Text>
-<Text style={{ backgroundColor: '' }}>
-    {item.workIcons.length > 0 ? (
-        <FlatList
-            horizontal
-            data={item.workIcons}
-            keyExtractor={(item, index) => index}
-            renderItem={({ item }) => {
-                return <View style={{ backgroundColor: '', marginLeft: 20 }}><Image style={styles.icon} source={(icons.find(icon => icon.name === item)).uri} /></View>
-            }}
-        />
-    ) : ''}
-</Text>
-</View> */}
