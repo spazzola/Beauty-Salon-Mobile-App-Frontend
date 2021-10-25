@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Image, Text} from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack'
 
@@ -36,42 +36,219 @@ import AppointmentAdd from './src/appointment/AppointmentAdd';
 import AppointmentDetail from './src/appointment/AppointmentDetail';
 
 const navigator = createStackNavigator({
-  
-  Clients: ClientScreen,
-  Client: ClientDetail,
-  ClientAdd,
-  ClientEdit,
 
-  Users: UserScreen,
-  User: UserDetail,
-  UserAdd,
-  UserEdit,
 
-  Costs: CostScreen,
-  Cost: CostDetail,
-  CostAdd,
-  CostEdit,
+  Clients: {
+    screen: ClientScreen,
+    navigationOptions: {
+      title: 'Klienci',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
+  Client: {
+    screen: ClientDetail,
+    navigationOptions: {
+      title: 'Klient',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
+  ClientAdd: {
+    screen: ClientAdd,
+    navigationOptions: {
+      title: 'Dodawanie klienta',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
+  ClientEdit: {
+    screen: ClientEdit,
+    navigationOptions: {
+      title: 'Edytowanie klienta',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
 
-  Solarium: SolariumScreen,
+  Users: {
+    screen: UserScreen,
+    navigationOptions: {
+      title: 'Personel',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
+  User: {
+    screen: UserDetail,
+    navigationOptions: {
+      title: 'Pracownik',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
+  UserAdd: {
+    screen: UserAdd,
+    navigationOptions: {
+      title: 'Dodawanie pracownika',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
+  UserEdit: {
+    screen: UserEdit,
+    navigationOptions: {
+      title: 'Edytowanie pracownika',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
 
-  Works: WorkScreen,
-  Work: WorkDetail,
-  WorkAdd,
-  WorkEdit,
+  Costs: {
+    screen: CostScreen,
+    navigationOptions: {
+      title: 'Koszty',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
+  CostDetail: {
+    screen: CostDetail,
+    navigationOptions: {
+      title: 'Koszt',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
+  CostAdd: {
+    screen: CostAdd,
+    navigationOptions: {
+      title: 'Dodawanie kosztu',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
+  CostEdit: {
+    screen: CostEdit,
+    navigationOptions: {
+      title: 'Edycja kosztu',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
 
-  AppointmentCalendar,
-  Appointments: AppointmentScreen,
-  AppointmentAdd,
-  Appointment: AppointmentDetail
-}, {
-  initialRouteName: 'AppointmentCalendar',
-  defaultNavigationOptions: {
-    title: 'Kalendarz',
-    headerStyle: {
-      backgroundColor: '#FF00E4',
+  Solarium: {
+    screen: SolariumScreen,
+    navigationOptions: {
+      title: 'Solarium',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
+
+  Works: {
+    screen: WorkScreen,
+    navigationOptions: {
+      title: 'Usługi',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
+  Work: {
+    screen: WorkDetail,
+    navigationOptions: {
+      title: 'Usługa',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
+  WorkAdd: {
+    screen: WorkAdd,
+    navigationOptions: {
+      title: 'Dodawanie usługi',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
+  WorkEdit: {
+    screen: WorkEdit,
+    navigationOptions: {
+      title: 'Edytowanie usługi',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
+
+  AppointmentCalendar: {
+    screen: AppointmentCalendar,
+    navigationOptions: {
+      title: 'Kalendarz',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+      headerBackTitleStyle: {
+        color: 'red'
+      }
+      // headerTitleStyle: {
+      //   fontFamily: 'Kalam-Bold'
+      // }
+    }
+  },
+  Appointments: {
+    screen: AppointmentScreen,
+    navigationOptions: {
+      title: 'Wizyty',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+    }
+  },
+  AppointmentAdd: {
+    screen: AppointmentAdd,
+    navigationOptions: {
+      title: 'Dodawanie wizyty',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
+      options: {
+        headerBackTitleStyle: {
+          color: 'red'
+        },
+        headerBackImage: () => {<Image source={'./src/icons/button_icons/back_button-1.png'} style={{width: 50, height: 50}}/>}
+      }
+    }
+  },
+  Appointment: {
+    screen: AppointmentDetail,
+    navigationOptions: {
+      title: 'Wizyta',
+      headerStyle: {
+        backgroundColor: '#FF00E4',
+      },
     }
   }
-})
+},
+  {
+    initialRouteName: 'AppointmentCalendar',
+  })
+
 
 const App = createAppContainer(navigator);
 
