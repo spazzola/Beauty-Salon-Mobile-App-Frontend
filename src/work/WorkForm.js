@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Image, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, Image, FlatList, ScrollView, SafeAreaView } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { workIcons } from '../icons/Icons';
+import { workIcons, buttonIcons } from '../icons/Icons';
+import { input, globalBackground, detailTitle } from '../../GlobalStyles';
 
 const WorkForm = ({ onSubmit, initialValues, mode }) => {
     const [name, setName] = useState(initialValues.name);
@@ -15,61 +16,89 @@ const WorkForm = ({ onSubmit, initialValues, mode }) => {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
     const [images, setimages] = useState(workIcons);
-    
+
     return (
-        <View style={{ height: 500 }}>
-            <Text style={styles.label}>Nazwa:</Text>
-            <TextInput
-                style={styles.input}
-                value={name}
-                onChangeText={text => setName(text)}
-            />
-            <Text style={styles.label}>Wartość:</Text>
-            <NumericInput
-                style={styles.input}
-                value={price}
-                onChange={text => setPrice(text)}
-            />
-            <Text style={styles.label}>Czas trwania godziny:</Text>
-            <NumericInput
-                style={styles.input}
-                value={hoursDuration}
-                onChange={text => setHoursDuration(text)}
-            />
-            <Text style={styles.label}>Czas trwania minuty:</Text>
-            <NumericInput
-                style={styles.input}
-                value={minutesDuration}
-                onChange={text => setMinutesDuration(text)}
-            />
-            <View style={{marginTop: 10}}>
-            <View>
-                <Text style={styles.label}>Wybrana ikona:</Text>
-                {iconName === '' ? null : <Image style={styles.icon} source={(workIcons.find(icon => icon.name === iconName)).uri}/>}
-                
-                <FlatList
-                    vertical={true}
-                    showsVerticalScrollIndicator={false}
-                    data={images}
-                    keyExtractor={item => item.name}
-                    renderItem={({ item, index }) => (
-                        <TouchableOpacity onPress={() => setIconName(item.name)}>
-                            <Image source={item.uri} 
-                                style={{
-                                    width: 50,
-                                    height: 50,
-                                    marginLeft: 50,
-                                    marginTop: 20,
-                                    resizeMode: 'contain',
-                                    margin: 8
-                                }}
-                            />
-                        </TouchableOpacity>
-                    )}
-                /></View>
-            </View>
-            <Button title={mode === 'add' ? "Dodaj usługę" : "Edytuj usługę"} onPress={() => onSubmit(name, price, hoursDuration, minutesDuration, iconName)} />
-        </View>
+        <SafeAreaView style={globalBackground}>
+            <ScrollView style={globalBackground} showsVerticalScrollIndicator={false}>
+                <View style={{ backgroundColor: globalBackground.backgroundColor, alignItems: 'center'}}>
+
+                    <TextInput
+                        placeholder={'Nazwa usługi'}
+                        style={input}
+                        value={name}
+                        onChangeText={text => setName(text)}
+                    />
+
+                    <Text style={[detailTitle, styles.label, { fontFamily: 'KalamBold' }]}>Wartość:</Text>
+                    <NumericInput
+                        minValue={0}
+                        rounded={true}
+                        rightButtonBackgroundColor='#ED50F1'
+                        leftButtonBackgroundColor='#FDB9FC'
+                        style={styles.input}
+                        value={price}
+                        onChange={text => setPrice(text)}
+                    />
+
+                    <Text style={[detailTitle, styles.label, { fontFamily: 'KalamBold' }]}>Czas trwania godziny:</Text>
+                    <NumericInput
+                        minValue={0}
+                        rounded={true}
+                        rightButtonBackgroundColor='#ED50F1'
+                        leftButtonBackgroundColor='#FDB9FC'
+                        style={styles.input}
+                        value={hoursDuration}
+                        onChange={text => setHoursDuration(text)}
+                    />
+
+                    <Text style={[detailTitle, styles.label, { fontFamily: 'KalamBold' }]}>Czas trwania minuty:</Text>
+                    <NumericInput
+                        minValue={0}
+                        rounded={true}
+                        step={5}
+                        rightButtonBackgroundColor='#ED50F1'
+                        leftButtonBackgroundColor='#FDB9FC'
+                        style={styles.input}
+                        value={minutesDuration}
+                        onChange={text => setMinutesDuration(text)}
+                    />
+                   
+                        <View style={{ height: 300 }}>
+                            <Text style={[detailTitle, styles.label, { fontFamily: 'KalamBold', textAlign: 'center', justifyContent: 'center' }]}>Wybrana ikona:</Text>
+                            {iconName === '' ? null : <Image style={styles.icon} source={(workIcons.find(icon => icon.name === iconName)).uri} />}
+
+                            <SafeAreaView style={{ height: 200 }}>
+                                <ScrollView>
+                                    <FlatList
+                                        vertical={true}
+                                        showsVerticalScrollIndicator={false}
+                                        data={images}
+                                        keyExtractor={item => item.name}
+                                        renderItem={({ item, index }) => (
+                                            <TouchableOpacity onPress={() => setIconName(item.name)}>
+                                                <Image source={item.uri}
+                                                    style={{
+                                                        width: 50,
+                                                        height: 50,
+                                                        marginLeft: 50,
+                                                        marginTop: 20,
+                                                        //resizeMode: 'contain',
+                                                    }}
+                                                />
+                                            </TouchableOpacity>
+                                        )}
+                                    />
+                                </ScrollView>
+                            </SafeAreaView>
+
+                        </View>
+                 
+                    <TouchableOpacity onPress={() => onSubmit(name, surname, phoneNumber)}>
+                        <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'addService')).uri} />
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+        </SafeAreaView>
     );
 };
 
@@ -92,14 +121,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         borderWidth: 1,
         borderColor: 'black',
-        marginBottom: 15,
         padding: 5,
         margin: 5
     },
     label: {
-        fontSize: 20,
-        marginBottom: 5,
-        marginLeft: 5
+        marginTop: 20
     },
     container: {
         justifyContent: 'center',
@@ -111,6 +137,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
+    button: {
+        marginTop: 20,
+        width: 170,
+        height: 90
+    }
 });
 
 export default WorkForm;

@@ -4,13 +4,17 @@ import NumericInput from 'react-native-numeric-input';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import SolariumForm from './SolariumForm';
 import { Context } from './context/SolariumContext';
+import { itemContainer, detailTitle, itemParagraph, globalBackground } from '../../GlobalStyles';
 
 const SolariumItem = ({ solarium, onSubmit, initialValues, navigation }) => {
     const { useSolarium, getMonthSolarium } = useContext(Context);
 
     return (
-        <View>
-            <Text style={styles.paragraph}> Obecnie uzyto: {solarium.usedTime} min</Text>
+        <View style={[globalBackground, { height: '100%' }]}>
+            <View style={itemContainer}>
+                <Text style={[itemParagraph, { textAlign: 'center', marginTop: 5 }]}> Obecnie użyto: {solarium.usedTime} min</Text>
+            </View>
+
             <SolariumForm
                 onSubmit={(usedTime, usedDate) => {
                     useSolarium(usedTime, usedDate, () => {

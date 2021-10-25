@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Button } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { buttonIcons } from '../icons/Icons';
+import { detailTitle } from '../../GlobalStyles';
 
 const SolariumForm = ({ onSubmit, initialValues }) => {
   const [usedTime, setUsedTime] = useState(initialValues.usedTime);
@@ -13,18 +15,33 @@ const SolariumForm = ({ onSubmit, initialValues }) => {
   };
 
   return (
-    <View>
-      <Text style={styles.label}>Wartość:</Text>
-      <NumericInput
-        style={styles.input}
-        value={usedTime}
-        onChange={text => setUsedTime(text)}
-      />
-      <DateTimePicker
-        value={usedDate}
-        onChange={onChange}
-      />
-      <Button title="Uzyj solarium" onPress={() => { onSubmit(usedTime, usedDate) }} />
+    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+
+      <View>
+        <Text style={[detailTitle, styles.label, { fontFamily: 'KalamBold', textAlign: 'center' }]}>Wartość:</Text>
+        <NumericInput
+          minValue={0}
+          rounded={true}
+          rightButtonBackgroundColor='#ED50F1'
+          leftButtonBackgroundColor='#FDB9FC'
+          style={styles.input}
+          value={usedTime}
+          onChange={text => setUsedTime(text)}
+        />
+      </View>
+
+      <View style={{ width: '100%', marginTop: 20 }}>
+        <DateTimePicker
+          display={'spinner'}
+          value={usedDate}
+          onChange={onChange}
+        />
+      </View>
+
+      <TouchableOpacity onPress={() => { onSubmit(usedTime, usedDate) }}>
+        <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'solariumActive')).uri} />
+      </TouchableOpacity>
+
     </View>
   );
 };
@@ -49,7 +66,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 5,
     marginLeft: 5
-  }
+  },
+  label: {
+    marginTop: 20
+  },
+  button: {
+    marginTop: 20,
+    width: 170,
+    height: 90
+}
 });
 
 export default SolariumForm;

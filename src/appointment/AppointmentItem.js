@@ -54,18 +54,28 @@ const AppointmentItem = ({ appointment, navigation, mode }) => {
                                 shadowRadius: 3,
                                 //justifyContent: 'center'
                             }}>
-                                <View style={{ height: '100%', justifyContent: '', flexDirection: 'row' }}>
-                                    <Text style={styles.label}>
+                                <View style={{ height: '100%', flexDirection: 'row' }}>
+                                    <Text style={[styles.label, { fontSize: mode === 'double' ? 20 : 30 }]}>
                                         {appointment.employee.role} {item.location[0]}
                                     </Text>
-                                    <Text style={{}}>
+                                    <Text>
                                         {item.workIcons.length > 0 ? (
                                             <FlatList
                                                 horizontal
                                                 data={item.workIcons}
                                                 keyExtractor={(item, index) => index}
                                                 renderItem={({ item }) => {
-                                                    return <View style={{ backgroundColor: '', marginLeft: 20 }}><Image style={styles.icon} source={(workIcons.find(icon => icon.name === item)).uri} /></View>
+                                                    return <View
+                                                        style={{
+                                                            backgroundColor: '',
+                                                            marginLeft: 20
+                                                        }}>
+                                                        <Image 
+                                                        style={[styles.icon, {
+                                                            width: mode === 'double' ? 25 : 40,
+                                                            height: mode === 'double' ? 25 : 40
+                                                        }]} source={(workIcons.find(icon => icon.name === item)).uri} />
+                                                    </View>
                                                 }}
                                             />
                                         ) : ''}
@@ -95,12 +105,8 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 23,
         marginLeft: 10,
-        height: '50%',
+        height: '100%',
         fontFamily: 'KalamBold'
-    },
-    icon: {
-        width: 40,
-        height: 40,
     }
 });
 

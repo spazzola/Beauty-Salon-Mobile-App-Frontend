@@ -1,11 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker'
 import { Context as ClientContext } from '../client/context/ClientContext';
 import { Context as UserContext } from '../user/context/UserContext';
 import { Context as WorkContext } from '../work/context/WorkContext';
 import NumericInput from 'react-native-numeric-input';
+import { buttonIcons } from '../icons/Icons';
+import { detailTitle, globalBackground } from '../../GlobalStyles';
 
 
 const AppointmentForm = ({ onSubmit, initialValues, navigation }) => {
@@ -60,71 +62,147 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation }) => {
   // };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom: 50}}>
-      <View style={{ height: '100%' , backgroundColor: '#fa94e9'}}>
+    <ScrollView showsVerticalScrollIndicator={false} style={globalBackground}>
+      <View style={{ height: '100%', backgroundColor: globalBackground.backgroundColor, alignItems: 'center' }}>
 
-        <Text style={styles.label}>Data rozpoczęcia:</Text>
-        <DateTimePicker
-          value={startDate}
-          onChange={onChangeDate}
-          display='spinner'
-          is24Hour={true}
-          locale={'pl'}
-          style={{backgroundColor: '#fa94e9'}}
-        />
+        <Text style={[detailTitle, styles.label, { fontFamily: 'KalamBold', textAlign: 'center' }]}>Data rozpoczęcia:</Text>
+        <View style={{ width: '90%' }}>
+          <DateTimePicker
+            value={startDate}
+            onChange={onChangeDate}
+            display='spinner'
+            is24Hour={true}
+            locale={'pl'}
+            style={{ backgroundColor: globalBackground.backgroundColor }}
+          />
+        </View>
 
-        <Text style={styles.label}>Godzina rozpoczęcia:</Text>
-        <DateTimePicker
-          value={startDate}
-          onChange={onChangeDate}
-          mode='time'
-          display='spinner'
-          is24Hour={true}
-        />
+        <Text style={[detailTitle, styles.label, { fontFamily: 'KalamBold', textAlign: 'center' }]}>Godzina rozpoczęcia:</Text>
+        <View style={{ width: '70%' }}>
+          <DateTimePicker
+            value={startDate}
+            onChange={onChangeDate}
+            mode='time'
+            display='spinner'
+            is24Hour={true}
+          />
+        </View>
 
-        <DropDownPicker
-          style={styles.dropDownPicker}
-          placeholder="Wybierz klienta"
-          open={clientDropDownOpen}
-          value={clientId}
-          items={clientContext.state.map(client => ({ label: `${client.name} ${client.surname}`, value: client.id }))}
-          setOpen={setClientDropDownOpen}
-          setValue={setClientId}
-          setItems={setClients}
-        />
+        <View>
+          <DropDownPicker
+            searchable={true}
+            searchPlaceholder="Wyszukaj..."
+            searchContainerStyle={{
+              borderWidth: 1,
+              borderRadius: 6,
+              backgroundColor: '#FF00E4'
+            }}
+            style={[styles.dropDownPicker]}
+            textStyle={{
+              fontFamily: 'KalamBold',
+              textAlign: 'center',
+              width: '50%',
+              fontSize: 20
+            }}
+            dropDownContainerStyle={{
+              backgroundColor: '#ED50F1',
+              width: '80%',
+              borderWidth: 2
+            }}
+            dropDownDirection="TOP"
+            placeholder="Wybierz klienta"
+            open={clientDropDownOpen}
+            value={clientId}
+            items={clientContext.state.map(client => ({ label: `${client.name} ${client.surname}`, value: client.id }))}
+            setOpen={setClientDropDownOpen}
+            setValue={setClientId}
+            setItems={setClients}
+          />
 
-        <DropDownPicker
-          style={styles.dropDownPicker}
-          placeholder="Wybierz pracownika"
-          open={userDropDownOpen}
-          value={employeeId}
-          items={userContext.state.map(user => ({ label: `${user.name} ${user.surname}`, value: user.id }))}
-          setOpen={setUserDropDownOpen}
-          setValue={setUserId}
-          setItems={setUsers}
-        />
+          <DropDownPicker
+            searchable={true}
+            searchPlaceholder="Wyszukaj..."
+            searchContainerStyle={{
+              borderWidth: 1,
+              borderRadius: 6,
+              backgroundColor: '#FF00E4'
+            }}
+            style={[styles.dropDownPicker]}
+            textStyle={{
+              fontFamily: 'KalamBold',
+              textAlign: 'center',
+              width: '50%',
+              fontSize: 20
+            }}
+            dropDownContainerStyle={{
+              backgroundColor: '#ED50F1',
+              width: '80%',
+              borderWidth: 2
+            }}
+            dropDownDirection="TOP"
+            placeholder="Wybierz pracownika"
+            open={userDropDownOpen}
+            value={employeeId}
+            items={userContext.state.map(user => ({ label: `${user.name} ${user.surname}`, value: user.id }))}
+            setOpen={setUserDropDownOpen}
+            setValue={setUserId}
+            setItems={setUsers}
+          />
 
-        <DropDownPicker
-          style={styles.dropDownPicker}
-          placeholder="Wybierz usługę"
-          multiple={true}
-          min={1}
-          mode="BADGE"
-          open={workDropDownOpen}
-          value={workIds}
-          items={workContext.state.map(work => ({ label: `${work.name} - ${work.price}zł`, value: work.id }))}
-          setOpen={setWorkDropDownOpen}
-          setValue={setWorkId}
-          setItems={setWorks}
-        />
+          <DropDownPicker
+            searchable={true}
+            searchPlaceholder="Wyszukaj..."
+            searchContainerStyle={{
+              borderWidth: 1,
+              borderRadius: 6,
+              backgroundColor: '#FF00E4'
+            }}
+            style={[styles.dropDownPicker]}
+            textStyle={{
+              fontFamily: 'KalamBold',
+              fontSize: 20,
+              textAlign: 'center',
+              //width: '50%'
+            }}
+            dropDownContainerStyle={{
+              backgroundColor: '#ED50F1',
+              width: '80%',
+              borderWidth: 2
+            }}
+            dropDownDirection="TOP"
+            placeholder="Wybierz usługę"
+            multiple={true}
+            min={1}
+            mode="BADGE"
+            badgeColors={["#6ECB63", "#FFEDED", "#95DAC1", "#FD6F96", "#FF67E7"]}
+            showBadgeDot={false}
+            open={workDropDownOpen}
+            value={workIds}
+            items={workContext.state.map(work => ({ label: `${work.name} - ${work.price}zł`, value: work.id }))}
+            setOpen={setWorkDropDownOpen}
+            setValue={setWorkId}
+            setItems={setWorks}
+          />
+        </View>
 
-        <Text style={styles.label}>Kara procentowa (%):</Text>
+
+        <Text style={[detailTitle, styles.label, { fontFamily: 'KalamBold', marginTop: 30 }]}>Kara procentowa (%):</Text>
         <NumericInput
+          containerStyle={{ marginTop: 10 }}
+          inputStyle={{ fontFamily: 'KalamRegular' }}
+          minValue={0}
+          rounded={true}
+          rightButtonBackgroundColor='#ED50F1'
+          leftButtonBackgroundColor='#FDB9FC'
           style={styles.input}
           value={percentageValueToAdd}
           onChange={text => setPercentageValueToAdd(text)}
         />
-        <Button title="Dodaj wizytę" onPress={() => { onSubmit(startDate, percentageValueToAdd, clientId, employeeId, workIds) }} />
+
+        <TouchableOpacity style={{marginBottom: 50, marginTop: 20}} onPress={() => { onSubmit(startDate, percentageValueToAdd, clientId, employeeId, workIds) }}>
+          <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'addAppointment')).uri} />
+        </TouchableOpacity>
+
       </View>
     </ScrollView>
   );
@@ -156,7 +234,18 @@ const styles = StyleSheet.create({
     marginLeft: 5
   },
   dropDownPicker: {
-    marginTop: 30
+    marginTop: 30,
+    width: '80%',
+    borderWidth: 2,
+    backgroundColor: '#FF00E4'
+  },
+  label: {
+    marginTop: 20
+  },
+  button: {
+    marginTop: 20,
+    width: 170,
+    height: 90
   }
 });
 

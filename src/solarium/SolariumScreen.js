@@ -24,7 +24,6 @@ const SolariumScreen = ({ navigation }) => {
 
     return (
         <View>
-            <Text>Solarium screen !!! </Text>
             <SolariumItem solarium={state}/>
         </View>
     );

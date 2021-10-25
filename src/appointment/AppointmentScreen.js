@@ -61,6 +61,8 @@ const AppointmentScreen = ({ navigation }) => {
         };
     }, []);
 
+    console.log(navigation);
+
     useEffect(() => {
         const listener = navigation.addListener('didFocus', () => {
 

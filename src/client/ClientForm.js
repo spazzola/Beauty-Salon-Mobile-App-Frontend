@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native';
+import { buttonIcons } from '../icons/Icons';
+import { input, globalBackground } from '../../GlobalStyles';
 
 const ClientForm = ({ onSubmit, initialValues }) => {
   const [name, setName] = useState(initialValues.name);
@@ -7,26 +9,32 @@ const ClientForm = ({ onSubmit, initialValues }) => {
   const [phoneNumber, setPhoneNumber] = useState(initialValues.phoneNumber);
 
   return (
-    <View>
-      <Text style={styles.label}>Imię:</Text>
+    <View style={[globalBackground, { alignItems: 'center', height: '100%' }]}>
       <TextInput
-        style={styles.input}
+        placeholder={'Imię'}
+        style={[input, { fontFamily: 'KalamBold', marginTop: 20 }]}
         value={name}
         onChangeText={text => setName(text)}
       />
-      <Text style={styles.label}>Nazwisko:</Text>
+
       <TextInput
-        style={styles.input}
+        placeholder={'Nazwisko'}
+        style={[input, { fontFamily: 'KalamBold' }]}
         value={surname}
         onChangeText={text => setSurname(text)}
       />
-      <Text style={styles.label}>Numer kom.:</Text>
+
       <TextInput
-        style={styles.input}
+        placeholder={'Numer kom.'}
+        style={[input, { fontFamily: 'KalamBold' }]}
         value={phoneNumber}
         onChangeText={text => setPhoneNumber(text)}
       />
-      <Button title="Dodaj klienta" onPress={() => onSubmit(name, surname, phoneNumber)} />
+
+      <TouchableOpacity onPress={() => onSubmit(name, surname, phoneNumber)}>
+        <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'addClient')).uri} />
+      </TouchableOpacity>
+
     </View>
   );
 };
@@ -52,7 +60,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 5,
     marginLeft: 5
-  }
+  },
+  button: {
+    marginTop: 20,
+    width: 170,
+    height: 90
+}
 });
 
 export default ClientForm;

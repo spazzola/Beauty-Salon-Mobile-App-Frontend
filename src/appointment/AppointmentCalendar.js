@@ -61,6 +61,9 @@ const AppointmentCalendar = ({ navigation }) => {
                 <TouchableOpacity onPress={() => navigation.navigate('Works')}>
                     <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'services')).uri} />
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('Solarium')}>
+                    <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'solarium')).uri} />
+                </TouchableOpacity>
             </View>
 
         </View>
