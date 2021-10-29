@@ -1,90 +1,158 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import { Context } from './context/AppointmentContext';
 import { workIcons, buttonIcons } from '../icons/Icons';
-import { globalBackground, detailTitle, detailParagraph } from '../../GlobalStyles';
+import { globalBackground, detailTitle, detailParagraph, button, buttonText, buttonWrapper } from '../../GlobalStyles';
+import Modal from 'react-native-modal';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { format } from 'date-fns'
 
+function getWorkIds(worksList) {
+    const resultList = [];
+    worksList.forEach(appointmentDetails => resultList.push(appointmentDetails.work.id));
+    console.log(resultList);
+    return resultList;
+}
 
 const AppointmentDetail = ({ navigation }) => {
-    const { state, deleteAppointment } = useContext(Context);
+    const { state, deleteAppointment, editAppointment, getAppointments } = useContext(Context);
+    const appointment = state.find((appointment) => appointment.id === navigation.getParam('id'));
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const appointment = state.find((appointment) => appointment.id === navigation.getParam('id'));
+    useEffect(() => {
+        getAppointments();
+        const listener = navigation.addListener('didFocus', () => {
+        });
+        return () => {
+            listener.remove();
+        };
+    }, [isModalVisible])
+
+
+    const startYear = appointment.startDate.substring(0, 4);
+    const startMonth = appointment.startDate.substring(5, 7);
+    const startDay = appointment.startDate.substring(8, 10);
+    const startHour = appointment.startDate.substring(11, 13);
+    const startMinute = appointment.startDate.substring(14, 16);
+
+    const [startDate, setStartDate] = useState(new Date(startYear, startMonth - 1, startDay, startHour, startMinute));
+
+    const onChangeDate = (event, selectedDate) => {
+        let currentDate = selectedDate || startDate;
+        setStartDate(currentDate);
+    };
 
     return (
-        <View style={{ height: '40%', backgroundColor: globalBackground.backgroundColor }}>
-            <View style={[globalBackground, { height: '50%', flexDirection: 'row', justifyContent: 'center'}]}>
-                <View>
-                    <Text style={[detailTitle, { fontFamily: 'KalamBold' }]}>Klient:</Text>
-                    <Text style={[detailTitle, { fontFamily: 'KalamBold' }]}>Nr kom:</Text>
-                    <Text style={[detailTitle, { fontFamily: 'KalamBold' }]}>Wartość:</Text>
-                </View>
-
-                <View>
-                    <Text style={[detailParagraph, { fontFamily: 'KalamRegular' }]}> {appointment.client.name} {appointment.client.surname}</Text>
-                    <Text style={[detailParagraph, { fontFamily: 'KalamRegular' }]}> {appointment.client.phoneNumber}</Text>
-                    <Text style={[detailParagraph, { fontFamily: 'KalamRegular' }]}> {appointment.worksSum} zł</Text>
-                </View>
-            </View>
-            <View style={[globalBackground]}>
-                <Text style={[detailTitle, { fontFamily: 'KalamBold', textAlign: 'center' }]}>Usługi:</Text>
-                <Text style={{marginLeft: 10, maxHeight: 250}}> <FlatList
-                    //vertical={true}
-                    showsVerticalScrollIndicator={false}
-                    data={appointment.appointmentDetails}
-                    keyExtractor={(item, index) => 'key' + index}
-                    renderItem={({ item, index }) => (
-                        <>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={[styles.paragraph, { fontFamily: 'KalamRegular' }]} key={index} >{item.work.name}</Text>
-                                <Image style={styles.icon} source={(workIcons.find(icon => icon.name === item.work.iconName)).uri} />
-                            </View>
-                        </>
-                    )}
-                /></Text>
-            </View>
-
-            <View style={[globalBackground, { height: '100%', flexDirection: 'column', alignItems: 'center' }]}>
-                <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity onPress={() => {
-                        setIsModalVisible(true);
-                    }}>
-                        <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'changeDate')).uri} />
-                    </TouchableOpacity>
+        <>
+            <View style={[globalBackground, { height: '100%' }]}>
+                <View style={[{ height: '20%', flexDirection: 'row', justifyContent: 'center' }]}>
                     <View>
-                        <TouchableOpacity onPress={() => navigation.navigate('')}>
-                            <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'editAppointment')).uri} />
-                        </TouchableOpacity>
+                        <Text style={[detailTitle, { fontFamily: 'NotoSerifBold' }]}>Klient:</Text>
+                        <Text style={[detailTitle, { fontFamily: 'NotoSerifBold' }]}>Nr kom:</Text>
+                        <Text style={[detailTitle, { fontFamily: 'NotoSerifBold' }]}>Wartość:</Text>
+                    </View>
+
+                    <View>
+                        <Text style={[detailParagraph, { fontFamily: 'NotoSerif' }]}> {appointment.client.name} {appointment.client.surname}</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'NotoSerif' }]}> {appointment.client.phoneNumber}</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'NotoSerif' }]}> {appointment.worksSum} zł</Text>
                     </View>
                 </View>
+                <View>
+                    <Text style={[detailTitle, { fontFamily: 'NotoSerif', textAlign: 'center' }]}>Usługi:</Text>
+                    <Text style={{ marginLeft: 10, maxHeight: '20%' }}> <FlatList
+                        vertical={true}
+                        style={{ height: '390%' }}
+                        showsVerticalScrollIndicator={false}
+                        data={appointment.appointmentDetails}
+                        keyExtractor={(item, index) => 'key' + index}
+                        renderItem={({ item, index }) => (
+                            <>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={[styles.paragraph, { fontFamily: 'NotoSerif' }]} key={index} >{item.work.name}</Text>
+                                    <Image style={styles.icon} source={(workIcons.find(icon => icon.name === item.work.iconName)).uri} />
+                                </View>
+                            </>
+                        )}
+                    /></Text>
+                </View>
 
                 <View>
-                    <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity onPress={() => navigation.navigate('')}>
-                            <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'editAppointment')).uri} />
+                    <View style={[buttonWrapper, { flexDirection: 'row' }]}>
+                        <TouchableOpacity style={button} onPress={() => {
+                            setIsModalVisible(true);
+                        }}>
+                            <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Przełóz wizytę</Text>
                         </TouchableOpacity>
-                        <View style={{flexDirection: 'row'}}>
-                            <TouchableOpacity onPress={() => navigation.navigate('')}>
-                                <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'cancelAppointment')).uri} />
+                        <TouchableOpacity style={button} onPress={() => navigation.navigate('AppointmentEdit', {id: navigation.getParam('id'), selectedDate: navigation.getParam('selectedDate')})}>
+                            <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Edytuj wizytę</Text>
+                        </TouchableOpacity>
+
+                    </View>
+
+                    <View>
+                        <View style={[buttonWrapper]}>
+                            <TouchableOpacity style={button} onPress={async () => {
+                                await deleteAppointment(appointment.id);
+                                navigation.navigate('Appointments');
+                            }}
+                            >
+                                <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Odwołaj wizytę</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
             </View>
+            <Modal isVisible={isModalVisible} onBackdropPress={() => setIsModalVisible(false)}>
+                <View style={styles.modalContainer}>
+                    <View style={{ width: '100%', marginTop: '5%' }}>
+                        <Text style={{ textAlign: 'center', fontSize: 20, fontFamily: 'NotoSerif' }}>Wybierz datę</Text>
+                        <DateTimePicker
+                            value={startDate}
+                            onChange={onChangeDate}
+                            display='spinner'
+                            is24Hour={true}
+                            locale={'pl'}
+                            style={{ backgroundColor: globalBackground.backgroundColor }}
+                        />
+                        <Text style={{ textAlign: 'center', fontSize: 20, fontFamily: 'NotoSerif' }}>Wybierz godzinę</Text>
+                        <DateTimePicker
+                            value={startDate}
+                            onChange={onChangeDate}
+                            mode='time'
+                            display='spinner'
+                            is24Hour={true}
+                        />
+                        <View style={[buttonWrapper, { width: '100%' }]}>
+                            <TouchableOpacity style={button} onPress={async () => {
+                                const workIds = getWorkIds(appointment.appointmentDetails);
 
-        </View>
+                                await editAppointment(appointment.id, startDate, appointment.client.id, appointment.employee.id, workIds, appointment.percentageValueToAdd);
+
+                                setIsModalVisible(false)
+                            }}
+                            >
+                                <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Przełóz</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+        </>
     );
 }
 
 const styles = StyleSheet.create({
+    modalContainer: {
+        height: '80%',
+        //flex: 1, 
+        backgroundColor: globalBackground.backgroundColor,
+        borderRadius: 30
+    },
     wrapper: {
         flexDirection: 'row',
         justifyContent: 'center',
         backgroundColor: globalBackground.backgroundColor
-    },
-    delete: {
-        height: 20,
-        width: 50
     },
     icon: {
         width: 40,
@@ -92,15 +160,19 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginLeft: 10
     },
-    button: {
-        width: 160,
-        height: 80
-    },
     paragraph: {
         marginTop: 13,
         fontSize: 25,
         textAlign: 'left',
-    }
+    },
+    wrapper: {
+        justifyContent: 'space-around',
+        flexDirection: 'row',
+        shadowColor: '#171717',
+        shadowOffset: { width: 2, height: 4 },
+        shadowOpacity: 0.7,
+        shadowRadius: 3
+    },
 });
 
 export default AppointmentDetail;
