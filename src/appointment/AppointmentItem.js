@@ -40,10 +40,10 @@ const AppointmentItem = ({ appointment, navigation, mode }) => {
                     }} onPress={() => navigation.navigate('Appointment', { id: item.appointmentId })}>
                         <View style={{}}>
                             <View style={{
-                                borderTopLeftRadius: index === 0 ? 35 : 0,
-                                borderBottomLeftRadius: index === 0 ? 35 : 0,
-                                borderTopRightRadius: index === boxes.length - 1 ? 35 : 0,
-                                borderBottomRightRadius: index === boxes.length - 1 ? 35 : 0,
+                                borderTopLeftRadius: index === 0 ? 30 : 0,
+                                borderBottomLeftRadius: index === 0 ? 30 : 0,
+                                borderTopRightRadius: index === boxes.length - 1 ? 30 : 0,
+                                borderBottomRightRadius: index === boxes.length - 1 ? 30 : 0,
                                 borderWidth: 1,
                                 top: '25%',
                                 height: '80%',
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
         fontSize: 23,
         marginLeft: 10,
         height: '100%',
-        fontFamily: 'KalamBold'
+        fontFamily: 'NotoSerif'
     }
 });
 
