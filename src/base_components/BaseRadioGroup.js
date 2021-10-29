@@ -54,13 +54,13 @@ const BaseRadioGroup = ({ navigation, changeAppointmentsToShow }) => {
         <View style={[styles.wrapper, globalBackground]}>
             <TouchableOpacity
                 onPress={() => changeToMyAppointments()}
-                style={[styles.button, {backgroundColor: isMyAppointmentsSelected ? '#FF00E4' : '#d0c3c8' }]}>
-                <Text style={{ color: 'pink', fontFamily: 'KalamBold' }}>Moje wizyty</Text>
+                style={[styles.button, {backgroundColor: isMyAppointmentsSelected ? '#FBACCC' : '#d0c3c8' }]}>
+                <Text style={{ color: '#F4F9F9', fontFamily: 'NotoSerif' }}>Moje wizyty</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => changeToEmployeeAppointments()}
-                style={[styles.button, {backgroundColor: isEmployeeAppointmentsSelected ? '#7027A0' : '#d0c3c8' }]}>
-                <Text style={{ color: '#F56FAD', fontFamily: 'KalamBold' }}>Wizyty pracownika</Text>
+                style={[styles.button, {backgroundColor: isEmployeeAppointmentsSelected ? '#F1D1D0' : '#d0c3c8', marginLeft: '50%' }]}>
+                <Text style={{ color: '#F4F9F9', fontFamily: 'NotoSerif' }}>Wizyty pracownika</Text>
             </TouchableOpacity>
         </View>
     );
@@ -68,13 +68,14 @@ const BaseRadioGroup = ({ navigation, changeAppointmentsToShow }) => {
 
 const styles = StyleSheet.create({
     wrapper: {
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     button: {
         height: 30,
-        width: 200,
-        borderRadius: 10,
+        width: '50%',
+        borderRadius: 15,
         borderWidth: 1,
+        position: 'absolute',
     }
 })
 
