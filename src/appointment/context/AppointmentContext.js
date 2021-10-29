@@ -2,6 +2,7 @@ import createDataContext from '../../../createDataContext';
 import axios from './AppointmentApi';
 import { format } from 'date-fns'
 
+
 const appointmentReducer = (state, action) => {
     switch (action.type) {
         case 'get_appointments':
@@ -55,17 +56,22 @@ const deleteAppointment = dispatch => {
 };
 
 const editAppointment = dispatch => {
-    return async (id, name, surname, phoneNumber, callback) => {
+    return async (appointmentId, startDate, clientId, employeeId, workIds, percentageValueToAdd, callback) => {
+        const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
+        startDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
         let appointment = {
-            id,
-            name,
-            surname,
-            phoneNumber
+            appointmentId,
+            startDate,
+            clientId,
+            employeeId,
+            workIds,
+            percentageValueToAdd
         };
+
         await axios.put('appointment/update', appointment);
         dispatch({
             type: 'edit_appointment',
-            payload: { id, name, surname, phoneNumber }
+            payload: { appointmentId, startDate, clientId, employeeId, workIds, percentageValueToAdd }
         });
         if (callback) {
             callback();
@@ -77,7 +83,6 @@ export const { Context, Provider } = createDataContext(
     appointmentReducer,
     { addAppointment, getAppointments, deleteAppointment, editAppointment },
     [])
-
 // {
 //     "id": 1,
 //     "name": "Mariola",
