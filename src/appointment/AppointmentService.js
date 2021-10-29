@@ -114,55 +114,55 @@ function addIcons(boxes, appointment) {
 function calculateTopValue(boxes) {
     for (const box of boxes) {
         if (box.location[0] === 6) {
-            box.location[0] = 0;
+            box.location[0] = 30;
         }
         if (box.location[0] === 7) {
-            box.location[0] = 100;
+            box.location[0] = 130;
         }
         if (box.location[0] === 8) {
-            box.location[0] = 200;
+            box.location[0] = 230;
         }
         if (box.location[0] === 9) {
-            box.location[0] = 300;
+            box.location[0] = 330;
         }
         if (box.location[0] === 10) {
-            box.location[0] = 400;
+            box.location[0] = 430;
         }
         if (box.location[0] === 11) {
-            box.location[0] = 500;
+            box.location[0] = 530;
         }
         if (box.location[0] === 12) {
-            box.location[0] = 600;
+            box.location[0] = 630;
         }
         if (box.location[0] === 13) {
-            box.location[0] = 700;
+            box.location[0] = 730;
         }
         if (box.location[0] === 14) {
-            box.location[0] = 800;
+            box.location[0] = 830;
         }
         if (box.location[0] === 15) {
-            box.location[0] = 900;
+            box.location[0] = 930;
         }
         if (box.location[0] === 16) {
-            box.location[0] = 1000;
+            box.location[0] = 1030;
         }
         if (box.location[0] === 17) {
-            box.location[0] = 1100;
+            box.location[0] = 1130;
         }
         if (box.location[0] === 18) {
-            box.location[0] = 1200;
+            box.location[0] = 1230;
         }
         if (box.location[0] === 19) {
-            box.location[0] = 1300;
+            box.location[0] = 1330;
         }
         if (box.location[0] === 20) {
-            box.location[0] = 1400;
+            box.location[0] = 1430;
         }
         if (box.location[0] === 21) {
-            box.location[0] = 1500;
+            box.location[0] = 1530;
         }
         if (box.location[0] === 22) {
-            box.location[0] = 1600;
+            box.location[0] = 1630;
         }
 
     }
@@ -197,20 +197,20 @@ function calculateElementTop(item, mode, appointment) {
 function addBackgroundColor(mode, appointment) {
     return (appointment.employee.role === 'ADMIN' && mode === 'double') ?
         (
-            '#FF00E4'
+            '#FBACCC'
         )
         :
         (
             (appointment.employee.role === 'USER' && mode === 'double') ?
-                '#7027A0'
+                '#F1D1D0'
                 :
                 appointment.employee.role === 'ADMIN' && mode === 'single' ?
                 (
-                    '#FF00E4'
+                    '#FBACCC'
                 )
                 :
                 (
-                    '#7027A0'
+                    '#F1D1D0'
                 )
         )
 }
