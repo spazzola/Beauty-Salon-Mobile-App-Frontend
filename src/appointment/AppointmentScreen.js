@@ -5,7 +5,7 @@ import AppointmentItem from './AppointmentItem';
 import BaseRadioGroup from '../base_components/BaseRadioGroup';
 import { changeShowMode } from './AppointmentService';
 import { buttonIcons } from '../icons/Icons';
-import { globalBackground } from '../../GlobalStyles';
+import { globalBackground, buttonText, button } from '../../GlobalStyles';
 
 // function extractHours(startDate) {
 //     return startDate.substring(11, 16);
@@ -61,8 +61,6 @@ const AppointmentScreen = ({ navigation }) => {
         };
     }, []);
 
-    console.log(navigation);
-
     useEffect(() => {
         const listener = navigation.addListener('didFocus', () => {
 
@@ -75,11 +73,11 @@ const AppointmentScreen = ({ navigation }) => {
 
     return (
         <>
-            <View style={[globalBackground, { marginBottom: 0, justifyContent: 'center' }]}>
+            <View style={[globalBackground, { marginBottom: 0, justifyContent: 'center',  zIndex: 2}]}>
                 <BaseRadioGroup navigation={navigation} changeAppointmentsToShow={changeAppointmentsToShow} />
             </View>
             <ScrollView contentContainerStyle={{ height: 1800 }} showsVerticalScrollIndicator={false} >
-                <View style={[globalBackground, { position: 'absolute', zIndex: -2, height: 2000 }]}>
+                <View style={[globalBackground, { position: 'absolute', zIndex: -2, height: 2000, top: 30 }]}>
                     <FlatList
                         data={hours}
                         keyExtractor={(item, index) => index}
@@ -132,24 +130,23 @@ const AppointmentScreen = ({ navigation }) => {
                 )}
                 </View>
             </ScrollView>
-            <View style={[styles.wrapper]}>
-                <TouchableOpacity onPress={() => navigation.navigate('AppointmentAdd', { selectedDate: navigation.getParam('selectedDate') })}>
-                    <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'addAppointment')).uri} />
+                <TouchableOpacity style={[styles.wrapper, button]} onPress={() =>{ 
+                    console.log("clicked");
+                    navigation.navigate('AppointmentAdd', { selectedDate: navigation.getParam('selectedDate') })}}>
+                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Dodaj wizytę</Text>
                 </TouchableOpacity>
-            </View>
         </>
     );
 }
 
 const styles = StyleSheet.create({
     wrapper: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
+        position: 'absolute', 
+        top: 650, 
+        left: 200,
+        zIndex: 1, 
+        borderRadius: 20
     },
-    button: {
-        width: 160,
-        height: 80
-    }
 })
 
 export { boxHeight };

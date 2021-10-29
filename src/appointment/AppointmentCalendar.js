@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, Button, TouchableOpacity } from 'react-n
 import { Calendar, CalendarList, Agenda, LocaleConfig } from 'react-native-calendars';
 import { buttonIcons } from '../icons/Icons';
 import { useFonts } from 'expo-font';
-import { globalBackground, itemParagraph } from '../../GlobalStyles';
+import { globalBackground, itemParagraph, button, buttonText, buttonWrapper } from '../../GlobalStyles';
 
 
 LocaleConfig.locales['pl'] = {
@@ -17,8 +17,8 @@ LocaleConfig.defaultLocale = 'pl';
 
 const AppointmentCalendar = ({ navigation }) => {
     const [loaded] = useFonts({
-        KalamRegular: require('../../assets/fonts/Kalam-Regular.ttf'),
-        KalamBold: require('../../assets/fonts/Kalam-Bold.ttf'),
+        NotoSerif: require('../../assets/fonts/Noto-Serif.ttf'),
+        NotoSerifBold: require('../../assets/fonts/Noto-Serif-Bold.ttf'),
     });
 
     if (!loaded) {
@@ -27,24 +27,77 @@ const AppointmentCalendar = ({ navigation }) => {
 
     return (
         <View style={{ backgroundColor: globalBackground.backgroundColor, height: '100%' }}>
-            <Text style={itemParagraph}>Witaj, Iwona Worek </Text>
+            <Text style={[itemParagraph, { fontSize: 20, color: '#81F5FF' }]}></Text>
             <Calendar
                 onDayPress={(selectedDate) => { navigation.navigate('Appointments', { selectedDate }) }}
                 style={globalBackground}
+                scrollEnabled={true}
                 theme={{
                     calendarBackground: globalBackground.backgroundColor,
-                    textSectionTitleColor: 'black',
-                    todayTextColor: '#FA26A0',
+                    textSectionTitleColor: '#F875AA',
+                    dayTextColor: '#F875AA',
+                    todayTextColor: '#F1D1D0',
+                    arrowColor: '#F875AA',
                     textDisabledColor: '#bab5b5',
-                    textDayFontFamily: 'KalamRegular',
-                    textDayHeaderFontFamily: 'KalamBold',
-                    textMonthFontFamily: 'KalamRegular',
+                    textDayFontFamily: 'NotoSerif',
+                    textDayHeaderFontFamily: 'NotoSerifBold',
+                    textMonthFontFamily: 'NotoSerif',
+                    monthTextColor: '#FBACCC'
                 }}
             />
 
-            <View style={[styles.wrapper, { marginTop: 10 }]}>
+            <View style={buttonWrapper}>
+                <TouchableOpacity style={button} onPress={() => navigation.navigate('AppointmentAdd')}>
+                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Dodaj wizytę</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={buttonWrapper}>
+                <TouchableOpacity style={button} onPress={() => navigation.navigate('Solarium')}>
+                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Solarium</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={button} onPress={() => navigation.navigate('Costs')}>
+                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Koszty</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={buttonWrapper}>
+                <TouchableOpacity style={button} onPress={() => navigation.navigate('Clients')}>
+                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Klienci</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={button} onPress={() => navigation.navigate('Users')}>
+                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Personel</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={buttonWrapper}>
+                <TouchableOpacity style={button} onPress={() => navigation.navigate('Works')}>
+                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Usługi</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={button} onPress={() => navigation.navigate('')}>
+                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Raporty</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({})
+
+export default AppointmentCalendar;
+
+{/* <View style={[styles.wrapper]}>
                 <TouchableOpacity onPress={() => navigation.navigate('AppointmentAdd')}>
                     <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'addAppointment')).uri} />
+                </TouchableOpacity>
+            </View>
+
+            <View style={[styles.wrapper]}>
+                <TouchableOpacity onPress={() => navigation.navigate('Solarium')}>
+                    <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'solarium')).uri} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('Costs')}>
+                    <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'costs')).uri} />
                 </TouchableOpacity>
             </View>
 
@@ -61,24 +114,7 @@ const AppointmentCalendar = ({ navigation }) => {
                 <TouchableOpacity onPress={() => navigation.navigate('Works')}>
                     <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'services')).uri} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('Solarium')}>
-                    <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'solarium')).uri} />
+                <TouchableOpacity onPress={() => navigation.navigate('')}>
+                    <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'reports')).uri} />
                 </TouchableOpacity>
-            </View>
-
-        </View>
-    );
-}
-
-const styles = StyleSheet.create({
-    wrapper: {
-        flexDirection: 'row',
-        justifyContent: 'center'
-    },
-    button: {
-        width: 160,
-        height: 80
-    }
-})
-
-export default AppointmentCalendar;
+            </View> */}
