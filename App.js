@@ -34,6 +34,9 @@ import AppointmentScreen from './src/appointment/AppointmentScreen';
 import { Provider as AppointmentProvider } from './src/appointment/context/AppointmentContext';
 import AppointmentAdd from './src/appointment/AppointmentAdd';
 import AppointmentDetail from './src/appointment/AppointmentDetail';
+import AppointmentEdit from './src/appointment/AppointmentEdit';
+
+const headerBackgroundColor = "#F1D1D0"
 
 const navigator = createStackNavigator({
 
@@ -43,7 +46,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Klienci',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -52,7 +55,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Klient',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -61,7 +64,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Dodawanie klienta',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -70,7 +73,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Edytowanie klienta',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -80,7 +83,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Personel',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -89,7 +92,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Pracownik',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -98,7 +101,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Dodawanie pracownika',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -107,7 +110,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Edytowanie pracownika',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -117,16 +120,16 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Koszty',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
-  CostDetail: {
+  Cost: {
     screen: CostDetail,
     navigationOptions: {
       title: 'Koszt',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -135,7 +138,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Dodawanie kosztu',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -144,7 +147,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Edycja kosztu',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -154,7 +157,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Solarium',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -164,7 +167,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Usługi',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -173,7 +176,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Usługa',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -182,7 +185,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Dodawanie usługi',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -191,7 +194,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Edytowanie usługi',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -201,7 +204,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Kalendarz',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
       headerBackTitleStyle: {
         color: 'red'
@@ -216,7 +219,7 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Wizyty',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
     }
   },
@@ -225,13 +228,12 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Dodawanie wizyty',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
       },
       options: {
-        headerBackTitleStyle: {
-          color: 'red'
-        },
-        headerBackImage: () => {<Image source={'./src/icons/button_icons/back_button-1.png'} style={{width: 50, height: 50}}/>}
+        // headerBackTitleStyle: {
+        //   color: 'red'
+        // }
       }
     }
   },
@@ -240,7 +242,16 @@ const navigator = createStackNavigator({
     navigationOptions: {
       title: 'Wizyta',
       headerStyle: {
-        backgroundColor: '#FF00E4',
+        backgroundColor: headerBackgroundColor,
+      },
+    }
+  },
+  AppointmentEdit: {
+    screen: AppointmentEdit,
+    navigationOptions: {
+      title: 'Edytowanie wizyty',
+      headerStyle: {
+        backgroundColor: headerBackgroundColor,
       },
     }
   }
