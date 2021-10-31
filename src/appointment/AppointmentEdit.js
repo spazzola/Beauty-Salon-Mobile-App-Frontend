@@ -3,11 +3,20 @@ import { StyleSheet } from 'react-native';
 import { Context } from './context/AppointmentContext';
 import AppointmentForm from './AppointmentForm';
 
+function getWorkIds(worksList) {
+    const resultList = [];
+    worksList.forEach(appointmentDetails => resultList.push(appointmentDetails.work.id));
+
+    return resultList;
+}
+
 const AppointmentEdit = ({ navigation }) => {
     const id = navigation.getParam('id');
     const { state, editAppointment } = useContext(Context);
     //const [startDate, setStartDate] = useState(null);
     const appointment = state.find(appointment => appointment.id === id);
+
+    const workIds = getWorkIds(appointment.appointmentDetails);
 
     const year = appointment.startDate.substring(0, 4);
     const month = appointment.startDate.substring(5, 7);
@@ -22,6 +31,9 @@ const AppointmentEdit = ({ navigation }) => {
         <AppointmentForm
             navigation={navigation}
             givenDate={createdDate}
+            givenClientId={appointment.client.id}
+            givenEmployeeId={appointment.employee.id}
+            givenWorkIds={workIds}
             mode={'edit'}
             initialValues={{ startDate: appointment.startDate, clientId: appointment.client.id, employeeId: appointment.employee.id }}
             onSubmit={(startDate, startTime, percentageValueToAdd, clientId, userId, workIds) => {

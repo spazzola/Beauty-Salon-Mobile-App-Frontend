@@ -12,7 +12,7 @@ import { detailTitle, globalBackground, button, buttonText, buttonWrapper } from
 import ClientForm from '../client/ClientForm';
 
 
-const AppointmentForm = ({ onSubmit, initialValues, navigation, givenDate, mode }) => {
+const AppointmentForm = ({ onSubmit, initialValues, navigation, givenDate, mode, givenClientId, givenEmployeeId, givenWorkIds }) => {
   const clientContext = useContext(ClientContext);
   const userContext = useContext(UserContext);
   const workContext = useContext(WorkContext);
@@ -57,15 +57,15 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, givenDate, mode 
   const [percentageValueToAdd, setPercentageValueToAdd] = useState(initialValues.value);
 
   const [clientDropDownOpen, setClientDropDownOpen] = useState(false);
-  const [clientId, setClientId] = useState(null);
+  const [clientId, setClientId] = useState(givenClientId ? givenClientId : null);
   const [clientItems, setClients] = useState([]);
 
   const [userDropDownOpen, setUserDropDownOpen] = useState(false);
-  const [employeeId, setUserId] = useState(null);
+  const [employeeId, setUserId] = useState(givenEmployeeId ? givenEmployeeId : null);
   const [userItems, setUsers] = useState([]);
 
   const [workDropDownOpen, setWorkDropDownOpen] = useState(false);
-  const [workIds, setWorkId] = useState(null);
+  const [workIds, setWorkId] = useState(givenWorkIds ? givenWorkIds : null);
   const [workItems, setWorks] = useState([]);
 
   const onChangeDate = (event, selectedDate) => {
