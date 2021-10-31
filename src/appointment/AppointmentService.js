@@ -2,10 +2,6 @@ function extractStartTime(date) {
     return date.substring(11, 16);
 }
 
-function extractEndTime(date) {
-    return date.substring(11, 16);
-}
-
 function calculateDurationTime(appointment) {
     let milisDifference = new Date(appointment.finishDate).getTime() - new Date(appointment.startDate).getTime()
     var minutesDifference = Math.floor(milisDifference / (1000 * 60));
@@ -83,28 +79,38 @@ function createBox(appointment, durationTime, startHour, startTime) {
         appointmentId: appointment.id,
         location: [startHour, startTime],
         elementsNumber: durationTime / 5,
+        spaceToUse: durationTime / 5,
         clientName: '',
         workIcons: []
     }
 }
 
 function addClientName(boxes, appointment) {
+    const letterWidth = 0.75;
+    const desiredLenght = appointment.client.name.length * letterWidth;
     let isNameAdded = false;
     for (const box of boxes) {
-        if (box.elementsNumber > 5 && !isNameAdded) {
+        if (box.elementsNumber >= desiredLenght && !isNameAdded) {
             box.clientName = appointment.client.name;
+            box.spaceToUse -= desiredLenght;
             isNameAdded = true;
         }
     }
 }
 
 function addIcons(boxes, appointment) {
+    const iconWidth = 1.5;
+    let workIconsToAdd = [];
+    appointment.appointmentDetails.forEach(el => workIconsToAdd.push(el));
     let areIconsAdded = false;
+
     for (const box of boxes) {
-        if (box.elementsNumber >= 6 && !areIconsAdded) {
+        if (box.spaceToUse >= iconWidth && workIconsToAdd.length > 0) {
             let appointmentDetails = appointment.appointmentDetails;
-            for (let i = 0; i < appointmentDetails.length; i++) {
-                box.workIcons.push(appointmentDetails[i].work.iconName);
+            for (let i = 0; i < workIconsToAdd.length; i++) {
+                box.workIcons.push(workIconsToAdd[i].work.iconName);
+                workIconsToAdd.shift();
+                box.spaceToUse -= iconWidth;
             }
             areIconsAdded = true;
         }
@@ -164,7 +170,6 @@ function calculateTopValue(boxes) {
         if (box.location[0] === 22) {
             box.location[0] = 1630;
         }
-
     }
 }
 
@@ -196,22 +201,16 @@ function calculateElementTop(item, mode, appointment) {
 
 function addBackgroundColor(mode, appointment) {
     return (appointment.employee.role === 'ADMIN' && mode === 'double') ?
-        (
-            '#FBACCC'
-        )
+        ('#FBACCC')
         :
         (
             (appointment.employee.role === 'USER' && mode === 'double') ?
-                '#F1D1D0'
+                ('#F1D1D0')
                 :
                 appointment.employee.role === 'ADMIN' && mode === 'single' ?
-                (
-                    '#FBACCC'
-                )
+                ('#FBACCC')
                 :
-                (
-                    '#F1D1D0'
-                )
+                ('#F1D1D0')
         )
 }
 
