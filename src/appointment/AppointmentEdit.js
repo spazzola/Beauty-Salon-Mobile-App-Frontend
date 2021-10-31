@@ -26,18 +26,19 @@ const AppointmentEdit = ({ navigation }) => {
 
     let createdDate = new Date(year, month - 1, day);
     createdDate.setHours(hour, minute);
-    
+
     return (
         <AppointmentForm
             navigation={navigation}
+            appointmentId={id}
             givenDate={createdDate}
             givenClientId={appointment.client.id}
             givenEmployeeId={appointment.employee.id}
             givenWorkIds={workIds}
             mode={'edit'}
-            initialValues={{ startDate: appointment.startDate, clientId: appointment.client.id, employeeId: appointment.employee.id }}
-            onSubmit={(startDate, startTime, percentageValueToAdd, clientId, userId, workIds) => {
-                editAppointment(startDate, startTime, percentageValueToAdd, clientId, userId, workIds, () => navigation.navigate('Appointments'));
+            initialValues={{startDate: appointment.startDate, clientId: appointment.client.id, employeeId: appointment.employee.id, percentageValueToAdd: appointment.percentageValueToAdd }}
+            onSubmit={(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds) => {
+                editAppointment(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds, () => navigation.navigate('Appointments'));
             }}
         />
     );

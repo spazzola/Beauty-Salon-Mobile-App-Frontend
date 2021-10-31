@@ -1,5 +1,6 @@
 import createDataContext from '../../../createDataContext';
-import axios from './AppointmentApi';
+//import axios from './AppointmentApi';
+import axios from '../../../axios-config';
 import { format } from 'date-fns'
 
 
@@ -50,14 +51,17 @@ const deleteAppointment = dispatch => {
                 id
             }
         });
+        // ??? to delete?
         getAppointments();
         //dispatch({ type: 'delete_client', payload: id });
     };
 };
 
 const editAppointment = dispatch => {
-    return async (appointmentId, startDate, clientId, employeeId, workIds, percentageValueToAdd, callback) => {
+    return async (appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds, callback) => {
+
         const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
+
         startDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
         let appointment = {
             appointmentId,

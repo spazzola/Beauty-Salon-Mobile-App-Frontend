@@ -12,7 +12,7 @@ import { detailTitle, globalBackground, button, buttonText, buttonWrapper } from
 import ClientForm from '../client/ClientForm';
 
 
-const AppointmentForm = ({ onSubmit, initialValues, navigation, givenDate, mode, givenClientId, givenEmployeeId, givenWorkIds }) => {
+const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, givenDate, mode, givenClientId, givenEmployeeId, givenWorkIds }) => {
   const clientContext = useContext(ClientContext);
   const userContext = useContext(UserContext);
   const workContext = useContext(WorkContext);
@@ -54,7 +54,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, givenDate, mode,
       new Date(Date.now()) :
     new Date(selectedDate.year, selectedDate.month - 1, selectedDate.day));
 
-  const [percentageValueToAdd, setPercentageValueToAdd] = useState(initialValues.value);
+  const [percentageValueToAdd, setPercentageValueToAdd] = useState(initialValues.percentageValueToAdd);
 
   const [clientDropDownOpen, setClientDropDownOpen] = useState(false);
   const [clientId, setClientId] = useState(givenClientId ? givenClientId : null);
@@ -155,7 +155,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, givenDate, mode,
                             phoneNumber
                           };
                           let response = await fetch(
-                            'http://188.68.237.171:8080/app/client/create',
+                            'http://188.68.237.171:8080/myfront/client/create',
                             {
                               method: 'POST',
                               headers: {
@@ -255,10 +255,17 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, givenDate, mode,
             />
 
             <View style={[buttonWrapper, { marginBottom: 50, marginTop: 30 }]}>
-              <TouchableOpacity style={button} onPress={async () => {
-                await onSubmit(startDate, percentageValueToAdd, clientId, employeeId, workIds);
-                navigation.navigate('Appointments');
-              }}
+              <TouchableOpacity style={button} onPress={
+                mode === 'edit' ? async () => {
+                  await onSubmit(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds);
+                  navigation.navigate('Appointments');
+                }
+                :
+                async () => {
+                  await onSubmit(startDate, percentageValueToAdd, clientId, employeeId, workIds);
+                  navigation.navigate('Appointments');
+                }
+              }
               >
                 <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Dodaj wizytę</Text>
               </TouchableOpacity>
@@ -274,7 +281,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, givenDate, mode,
 AppointmentForm.defaultProps = {
   initialValues: {
     startDate: '',
-    percentageValueToAdd: null,
+    percentageValueToAdd: 0,
     clientId: null,
     employeeId: null,
     workIds: []
