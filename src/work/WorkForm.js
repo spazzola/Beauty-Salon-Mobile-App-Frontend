@@ -93,7 +93,7 @@ const WorkForm = ({ onSubmit, initialValues, mode }) => {
 
                         </View>
                  
-                    <TouchableOpacity onPress={() => onSubmit(name, surname, phoneNumber)}>
+                    <TouchableOpacity onPress={() => onSubmit(name, price, hoursDuration, minutesDuration, iconName)}>
                         <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'addService')).uri} />
                     </TouchableOpacity>
                 </View>
