@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Context as UserContext } from '../user/context/UserContext';
-import { globalBackground } from '../../GlobalStyles';
+import { globalBackground, buttonWrapper, button, buttonText } from '../../GlobalStyles';
 import { useFonts } from 'expo-font';
 
 const BaseRadioGroup = ({ navigation, changeAppointmentsToShow }) => {
     const { state, addUser, getUsers } = useContext(UserContext);
-    const [appointmentsToShow, setAppointmentsToShow] = useState({myAppointments: true, employeeAppointments: false});
+    const [appointmentsToShow, setAppointmentsToShow] = useState({ myAppointments: true, employeeAppointments: false });
     const [isMyAppointmentsSelected, setIsMyAppointmentsSelected] = useState(true);
     const [isEmployeeAppointmentsSelected, setIsEmployeeAppointmentsSelected] = useState(false);
     const [loaded] = useFonts({
@@ -33,7 +33,7 @@ const BaseRadioGroup = ({ navigation, changeAppointmentsToShow }) => {
     function changeToMyAppointments() {
         let newState = {
             myAppointments: !appointmentsToShow.myAppointments,
-            employeeAppointments : appointmentsToShow.employeeAppointments
+            employeeAppointments: appointmentsToShow.employeeAppointments
         }
         setIsMyAppointmentsSelected(!isMyAppointmentsSelected);
         setAppointmentsToShow(newState);
@@ -43,7 +43,7 @@ const BaseRadioGroup = ({ navigation, changeAppointmentsToShow }) => {
     function changeToEmployeeAppointments() {
         let newState = {
             myAppointments: appointmentsToShow.myAppointments,
-            employeeAppointments : !appointmentsToShow.employeeAppointments
+            employeeAppointments: !appointmentsToShow.employeeAppointments
         }
         setIsEmployeeAppointmentsSelected(!isEmployeeAppointmentsSelected);
         setAppointmentsToShow(newState);
@@ -54,13 +54,13 @@ const BaseRadioGroup = ({ navigation, changeAppointmentsToShow }) => {
         <View style={[styles.wrapper, globalBackground]}>
             <TouchableOpacity
                 onPress={() => changeToMyAppointments()}
-                style={[styles.button, {backgroundColor: isMyAppointmentsSelected ? '#FBACCC' : '#d0c3c8' }]}>
-                <Text style={{ color: '#F4F9F9', fontFamily: 'NotoSerif' }}>Moje wizyty</Text>
+                style={[styles.button, { backgroundColor: isMyAppointmentsSelected ? '#FBACCC' : '#d0c3c8' }]}>
+                <Text style={{ color: '#F4F9F9', fontFamily: 'MerriWeatherBold' }}>Moje wizyty</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => changeToEmployeeAppointments()}
-                style={[styles.button, {backgroundColor: isEmployeeAppointmentsSelected ? '#F1D1D0' : '#d0c3c8', marginLeft: '50%' }]}>
-                <Text style={{ color: '#F4F9F9', fontFamily: 'NotoSerif' }}>Wizyty pracownika</Text>
+                style={[styles.button, { backgroundColor: isEmployeeAppointmentsSelected ? '#F1D1D0' : '#d0c3c8', marginLeft: '50%' }]}>
+                <Text style={{ color: '#F4F9F9', fontFamily: 'MerriWeatherBold' }}>Wizyty pracownika</Text>
             </TouchableOpacity>
         </View>
     );
@@ -76,6 +76,12 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         borderWidth: 1,
         position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#171717',
+        shadowOffset: { width: 2, height: 4 },
+        shadowOpacity: 0.7,
+        shadowRadius: 3
     }
 })
 
