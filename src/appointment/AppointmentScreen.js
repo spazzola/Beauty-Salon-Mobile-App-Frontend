@@ -142,8 +142,10 @@ const AppointmentScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     wrapper: {
         position: 'absolute', 
-        top: 650, 
-        left: 200,
+        top: '87%',
+        left: '50%',
+        //top: 650, 
+        //left: 200,
         zIndex: 1, 
         borderRadius: 20
     },

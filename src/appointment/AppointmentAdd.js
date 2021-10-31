@@ -3,9 +3,9 @@ import { StyleSheet } from 'react-native';
 import { Context } from './context/AppointmentContext';
 import AppointmentForm from './AppointmentForm';
 
-const AppointmentAdd = ({ navigation, options }) => {
+const AppointmentAdd = ({ navigation }) => {
   const { addAppointment } = useContext(Context);
-  console.log(options);
+
   return (
     <AppointmentForm
       navigation={navigation}

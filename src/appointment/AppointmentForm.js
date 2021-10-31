@@ -1,19 +1,23 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, Button, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker'
 import { Context as ClientContext } from '../client/context/ClientContext';
 import { Context as UserContext } from '../user/context/UserContext';
 import { Context as WorkContext } from '../work/context/WorkContext';
 import NumericInput from 'react-native-numeric-input';
+import Modal from 'react-native-modal';
 import { buttonIcons } from '../icons/Icons';
 import { detailTitle, globalBackground, button, buttonText, buttonWrapper } from '../../GlobalStyles';
+import ClientForm from '../client/ClientForm';
 
 
 const AppointmentForm = ({ onSubmit, initialValues, navigation, givenDate, mode }) => {
   const clientContext = useContext(ClientContext);
   const userContext = useContext(UserContext);
   const workContext = useContext(WorkContext);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
 
   useEffect(() => {
     clientContext.getClients();
@@ -31,12 +35,23 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, givenDate, mode 
     };
   }, []);
 
+  useEffect(() => {
+    clientContext.getClients();
+
+    const listener = navigation.addListener('didFocus', () => {
+    });
+
+    return () => {
+      listener.remove();
+    };
+  }, [isModalVisible]);
+
   let selectedDate = navigation.getParam('selectedDate');
 
-  const [startDate, setStartDate] = useState(selectedDate === undefined ? 
-    mode === 'edit' ? 
-      givenDate : 
-      new Date(Date.now()) : 
+  const [startDate, setStartDate] = useState(selectedDate === undefined ?
+    mode === 'edit' ?
+      givenDate :
+      new Date(Date.now()) :
     new Date(selectedDate.year, selectedDate.month - 1, selectedDate.day));
 
   const [percentageValueToAdd, setPercentageValueToAdd] = useState(initialValues.value);
@@ -70,7 +85,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, givenDate, mode 
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView showsVerticalScrollIndicator={false} style={globalBackground}>
-          <View style={{ height: '100%', backgroundColor: globalBackground.backgroundColor, alignItems: 'center',  justifyContent: 'space-around' }}>
+          <View style={{ height: '100%', backgroundColor: globalBackground.backgroundColor, alignItems: 'center', justifyContent: 'space-around' }}>
 
             <Text style={[detailTitle, styles.label, { fontFamily: 'NotoSerif', textAlign: 'center' }]}>Data rozpoczęcia:</Text>
             <View style={{ width: '90%' }}>
@@ -125,7 +140,40 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, givenDate, mode 
                 setValue={setClientId}
                 setItems={setClients}
               />
-
+              <View>
+                <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => setIsModalVisible(true)} >
+                  <Text style={{fontSize: 18, color: '#F875AA', fontFamily: 'NotoSerifBold', marginTop: '3%'}}>Nowy klient</Text>
+                </TouchableOpacity>
+                <Modal isVisible={isModalVisible} onBackdropPress={() => setIsModalVisible(false)}>
+                  <View style={styles.modalContainer}>
+                    <View style={{ width: '100%', marginTop: '5%' }}>
+                      <ClientForm
+                        onSubmit={async (name, surname, phoneNumber) => {
+                          let client = {
+                            name,
+                            surname,
+                            phoneNumber
+                          };
+                          let response = await fetch(
+                            'http://188.68.237.171:8080/app/client/create',
+                            {
+                              method: 'POST',
+                              headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json'
+                              },
+                              body: JSON.stringify(client)
+                            }
+                          );
+                          let json = await response.json();
+                          setClientId(json.id);
+                          setIsModalVisible(false);
+                        }}
+                      />
+                    </View>
+                  </View>
+                </Modal>
+              </View>
               <DropDownPicker
                 searchable={true}
                 searchPlaceholder="Wyszukaj..."
@@ -207,11 +255,11 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, givenDate, mode 
             />
 
             <View style={[buttonWrapper, { marginBottom: 50, marginTop: 30 }]}>
-              <TouchableOpacity style={button} onPress={async () => { 
+              <TouchableOpacity style={button} onPress={async () => {
                 await onSubmit(startDate, percentageValueToAdd, clientId, employeeId, workIds);
                 navigation.navigate('Appointments');
               }}
-                >
+              >
                 <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Dodaj wizytę</Text>
               </TouchableOpacity>
             </View>
@@ -261,7 +309,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: 170,
     height: 90
-  }
+  },
+  modalContainer: {
+    height: '80%',
+    //flex: 1, 
+    backgroundColor: globalBackground.backgroundColor,
+    borderRadius: 30
+  },
 });
 
 export default AppointmentForm;
