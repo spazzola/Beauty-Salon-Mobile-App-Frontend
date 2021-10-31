@@ -73,7 +73,7 @@ const AppointmentScreen = ({ navigation }) => {
 
     return (
         <>
-            <View style={[globalBackground, { marginBottom: 0, justifyContent: 'center',  zIndex: 2}]}>
+            <View style={[globalBackground, { marginBottom: 0, justifyContent: 'center', zIndex: 2 }]}>
                 <BaseRadioGroup navigation={navigation} changeAppointmentsToShow={changeAppointmentsToShow} />
             </View>
             <ScrollView contentContainerStyle={{ height: 1800 }} showsVerticalScrollIndicator={false} >
@@ -106,48 +106,53 @@ const AppointmentScreen = ({ navigation }) => {
                         );
                     }}
                 /> */}
-                {appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments ? 
-                (
-                    sortList(state, appointmentsToShow).map((item, index) => {
-                        return (
-                            <>
-                            <View key={index} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
-                                <AppointmentItem appointment={item} navigation={navigation} mode={'double'} selectedDate={navigation.getParam('selectedDate')} />
-                            </View>
-                            </>
+                    {appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments ?
+                        (
+                            sortList(state, appointmentsToShow).map((item, index) => {
+                                return (
+                                    <>
+                                        <View key={index} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
+                                            <AppointmentItem appointment={item} navigation={navigation} mode={'double'} selectedDate={navigation.getParam('selectedDate')} />
+                                        </View>
+                                    </>
+                                )
+                            })
                         )
-                    })
-                ) 
-                : 
-                (
-                    sortList(state, appointmentsToShow).map((item, index) => {
-                        return (
-                            <View key={index} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
-                                <AppointmentItem appointment={item} navigation={navigation} mode={'single'} selectedDate={navigation.getParam('selectedDate')} />
-                            </View>
-                        )
-                    })
-                )}
+                        :
+                        (
+                            sortList(state, appointmentsToShow).map((item, index) => {
+                                return (
+                                    <View key={index} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
+                                        <AppointmentItem appointment={item} navigation={navigation} mode={'single'} selectedDate={navigation.getParam('selectedDate')} />
+                                    </View>
+                                )
+                            })
+                        )}
                 </View>
             </ScrollView>
-                <TouchableOpacity style={[styles.wrapper, button]} onPress={() =>{ 
-                    console.log("clicked");
-                    navigation.navigate('AppointmentAdd', { selectedDate: navigation.getParam('selectedDate') })}}>
-                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Dodaj wizytę</Text>
-                </TouchableOpacity>
+            <TouchableOpacity style={[styles.wrapper, button]} onPress={() => {
+                console.log("clicked");
+                navigation.navigate('AppointmentAdd', { selectedDate: navigation.getParam('selectedDate') })
+            }}>
+                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Dodaj wizytę</Text>
+            </TouchableOpacity>
         </>
     );
 }
 
 const styles = StyleSheet.create({
     wrapper: {
-        position: 'absolute', 
+        position: 'absolute',
         top: '87%',
         left: '50%',
         //top: 650, 
         //left: 200,
-        zIndex: 1, 
-        borderRadius: 20
+        zIndex: 1,
+        borderRadius: 20,
+        shadowColor: '#171717',
+        shadowOffset: { width: 2, height: 4 },
+        shadowOpacity: 0.7,
+        shadowRadius: 3
     },
 })
 

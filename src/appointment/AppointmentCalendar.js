@@ -19,6 +19,8 @@ const AppointmentCalendar = ({ navigation }) => {
     const [loaded] = useFonts({
         NotoSerif: require('../../assets/fonts/Noto-Serif.ttf'),
         NotoSerifBold: require('../../assets/fonts/Noto-Serif-Bold.ttf'),
+        MerriWeather: require('../../assets/fonts/Merriweather-Regular.ttf'),
+        MerriWeatherBold: require('../../assets/fonts/Merriweather-Bold.ttf')
     });
 
     if (!loaded) {
@@ -48,34 +50,34 @@ const AppointmentCalendar = ({ navigation }) => {
 
             <View style={buttonWrapper}>
                 <TouchableOpacity style={button} onPress={() => navigation.navigate('AppointmentAdd')}>
-                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Dodaj wizytę</Text>
+                    <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Dodaj wizytę</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={buttonWrapper}>
                 <TouchableOpacity style={button} onPress={() => navigation.navigate('Solarium')}>
-                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Solarium</Text>
+                    <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Solarium</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={button} onPress={() => navigation.navigate('Costs')}>
-                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Koszty</Text>
+                    <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Koszty</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={buttonWrapper}>
                 <TouchableOpacity style={button} onPress={() => navigation.navigate('Clients')}>
-                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Klienci</Text>
+                    <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Klienci</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={button} onPress={() => navigation.navigate('Users')}>
-                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Personel</Text>
+                    <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Personel</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={buttonWrapper}>
                 <TouchableOpacity style={button} onPress={() => navigation.navigate('Works')}>
-                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Usługi</Text>
+                    <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Usługi</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={button} onPress={() => navigation.navigate('')}>
-                    <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Raporty</Text>
+                    <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Raporty</Text>
                 </TouchableOpacity>
             </View>
         </View>

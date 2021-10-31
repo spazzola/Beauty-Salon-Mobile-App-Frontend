@@ -16,11 +16,19 @@ function getWorkIds(worksList) {
     return resultList;
 }
 
+function formatDate(date) {
+    const year = date.substring(0, 4);
+    const month = date.substring(5, 7);
+    const day = date.substring(8, 10);
+
+    return day + "/" + month + "/" + year;
+}
+
 
 const AppointmentDetail = ({ navigation }) => {
     const { state, deleteAppointment, editAppointment, getAppointments } = useContext(AppointmentContext);
     const workContext = useContext(WorkContext);
-    const[appointment, setAppointment] = useState(state.find((appointment) => appointment.id === navigation.getParam('id')));
+    const [appointment, setAppointment] = useState(state.find((appointment) => appointment.id === navigation.getParam('id')));
 
     //let appointment = state.find((appointment) => appointment.id === navigation.getParam('id'));
 
@@ -72,29 +80,33 @@ const AppointmentDetail = ({ navigation }) => {
             <View style={[globalBackground, { height: '100%' }]}>
                 <View style={[{ height: '20%', flexDirection: 'row', justifyContent: 'center' }]}>
                     <View>
-                        <Text style={[detailTitle, { fontFamily: 'NotoSerifBold' }]}>Klient:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'NotoSerifBold' }]}>Nr kom:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'NotoSerifBold' }]}>Wartość:</Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Klient:</Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nr kom:</Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Wartość:</Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Data:</Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Godzina:</Text>
                     </View>
 
                     <View>
-                        <Text style={[detailParagraph, { fontFamily: 'NotoSerif' }]}> {appointment.client.name} {appointment.client.surname}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'NotoSerif' }]}> {appointment.client.phoneNumber}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'NotoSerif' }]}> {appointment.worksSum} zł</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.client.name} {appointment.client.surname}</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.client.phoneNumber}</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.worksSum} zł</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {formatDate(appointment.startDate)}</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.startDate.substring(11, 16)}</Text>
                     </View>
                 </View>
-                <View>
-                    <Text style={[detailTitle, { fontFamily: 'NotoSerif', textAlign: 'center' }]}>Usługi:</Text>
-                    <Text style={{ marginLeft: 10, maxHeight: '20%' }}> <FlatList
+                <View style={{marginTop: '20%', height: '20%'}}>
+                    <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold', textAlign: 'center' }]}>Usługi:</Text>
+                    <Text style={{ marginLeft: 10, height: '100%' }}> <FlatList
                         vertical={true}
-                        style={{ height: '390%' }}
+                        //style={{ height: '390%' }}
                         showsVerticalScrollIndicator={false}
                         data={appointment.appointmentDetails}
                         keyExtractor={(item, index) => 'key' + index}
                         renderItem={({ item, index }) => (
                             <>
                                 <View style={{ flexDirection: 'row' }}>
-                                    <Text style={[styles.paragraph, { fontFamily: 'NotoSerif' }]} key={index} >{item.work.name}</Text>
+                                    <Text style={[styles.paragraph, { fontFamily: 'MerriWeather' }]} key={index} >{item.work.name}</Text>
                                     <Image style={styles.icon} source={(workIcons.find(icon => icon.name === item.work.iconName)).uri} />
                                 </View>
                             </>
@@ -102,13 +114,13 @@ const AppointmentDetail = ({ navigation }) => {
                     /></Text>
                 </View>
 
-                <View>
+                <View style={{marginTop: '10%'}}>
                     <View>
                         <View style={[buttonWrapper]}>
                             <TouchableOpacity style={button} onPress={() => {
                                 setIsEditDateModalVisible(true);
                             }}>
-                                <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Przełóz wizytę</Text>
+                                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Przełóz wizytę</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -118,10 +130,10 @@ const AppointmentDetail = ({ navigation }) => {
                             setIsEditWorksModalVisible(true);
                         }}
                         >
-                            <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Zmień usługi</Text>
+                            <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Zmień usługi</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={button} onPress={() => navigation.navigate('AppointmentEdit', { id: navigation.getParam('id'), selectedDate: navigation.getParam('selectedDate') })}>
-                            <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Edytuj wizytę</Text>
+                            <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Edytuj wizytę</Text>
                         </TouchableOpacity>
 
                     </View>
@@ -133,23 +145,26 @@ const AppointmentDetail = ({ navigation }) => {
                                 navigation.navigate('Appointments');
                             }}
                             >
-                                <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Odwołaj wizytę</Text>
+                                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Odwołaj wizytę</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
             </View>
             <Modal isVisible={isEditDateModalVisible} onBackdropPress={() => setIsEditDateModalVisible(false)}>
-                <View style={styles.modalContainer}>
+                <View style={[styles.modalContainer, { height: '90%'}]}>
+                <View style={[styles.headerWrapper, { height: '8%'}]}>
+                        <Text style={styles.modalHeader}>Przekładanie wizyty</Text>
+                    </View>
                     <View style={{ width: '100%', marginTop: '5%' }}>
-                        <Text style={{ textAlign: 'center', fontSize: 20, fontFamily: 'NotoSerif' }}>Wybierz datę</Text>
+                        <Text style={{ textAlign: 'center', fontSize: 20, fontFamily: 'MerriWeatherBold', marginBottom: '2%' }}>Wybierz datę</Text>
                         <DateTimePicker
                             value={startDate}
                             onChange={onChangeDate}
                             display='spinner'
                             is24Hour={true}
                             locale={'pl'}
-                            style={{ backgroundColor: globalBackground.backgroundColor }}
+                            style={{ backgroundColor: '#FBACCC' }}
                         />
                         <Text style={{ textAlign: 'center', fontSize: 20, fontFamily: 'NotoSerif' }}>Wybierz godzinę</Text>
                         <DateTimePicker
@@ -175,8 +190,11 @@ const AppointmentDetail = ({ navigation }) => {
                 </View>
             </Modal>
 
-            <Modal isVisible={isEditWorksModalVisible} onBackdropPress={() => setIsEditWorksModalVisible(false)}>
-                <View style={[styles.modalContainer, {height: '60%', justifyContent: 'center'}]}>
+            <Modal isVisible={isEditWorksModalVisible} style={{ margin: '1%' }} onBackdropPress={() => setIsEditWorksModalVisible(false)}>
+                <View style={[styles.modalContainer, { height: '30%' }]}>
+                    <View style={styles.headerWrapper}>
+                        <Text style={styles.modalHeader}>Zamiana usług</Text>
+                    </View>
                     <View style={{ width: '100%', marginTop: '5%' }}>
                         <DropDownPicker
                             searchable={true}
@@ -224,21 +242,21 @@ const AppointmentDetail = ({ navigation }) => {
                                     employeeId: appointment.employee.id,
                                     workIds,
                                     percentageValueToAdd: appointment.percentageValueToAdd
-                                  };
-                                  let response = await fetch(
+                                };
+                                let response = await fetch(
                                     'http://188.68.237.171:8080/app/appointment/update',
                                     {
-                                      method: 'PUT',
-                                      headers: {
-                                        Accept: 'application/json',
-                                        'Content-Type': 'application/json'
-                                      },
-                                      body: JSON.stringify(appointmentToUpdate)
+                                        method: 'PUT',
+                                        headers: {
+                                            Accept: 'application/json',
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify(appointmentToUpdate)
                                     }
-                                  );
-                                  let json = await response.json();
-                                  setAppointment(json);
-                                  setIsEditWorksModalVisible(false);
+                                );
+                                let json = await response.json();
+                                setAppointment(json);
+                                setIsEditWorksModalVisible(false);
 
                                 // editAppointment(appointment.id, startDate, appointment.client.id, appointment.employee.id, workIds, appointment.percentageValueToAdd).then((response) => {console.log(response.data)});
                             }}
@@ -255,10 +273,23 @@ const AppointmentDetail = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     modalContainer: {
+        width: '100%',
         height: '80%',
         //flex: 1, 
-        backgroundColor: globalBackground.backgroundColor,
+        backgroundColor: '#FBACCC',
         borderRadius: 30
+    },
+    headerWrapper: {
+        height: '20%', 
+        borderTopLeftRadius: 30, 
+        borderTopRightRadius: 30, 
+        backgroundColor: '#F875AA', 
+        justifyContent: 'center'
+    },
+    modalHeader: {
+        textAlign: 'center',
+        fontSize: 25,
+        fontFamily: 'MerriWeatherBold'
     },
     wrapper: {
         flexDirection: 'row',
