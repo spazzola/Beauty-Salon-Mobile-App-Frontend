@@ -41,9 +41,9 @@ const AppointmentCalendar = ({ navigation }) => {
                     todayTextColor: '#F1D1D0',
                     arrowColor: '#F875AA',
                     textDisabledColor: '#bab5b5',
-                    textDayFontFamily: 'NotoSerif',
-                    textDayHeaderFontFamily: 'NotoSerifBold',
-                    textMonthFontFamily: 'NotoSerif',
+                    textDayFontFamily: 'MerriWeather',
+                    textDayHeaderFontFamily: 'MerriWeatherBold',
+                    textMonthFontFamily: 'MerriWeatherBold',
                     monthTextColor: '#FBACCC'
                 }}
             />
