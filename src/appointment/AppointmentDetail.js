@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { Context as AppointmentContext } from './context/AppointmentContext';
 import { Context as WorkContext } from '../work/context/WorkContext';
 import { workIcons, buttonIcons } from '../icons/Icons';
@@ -58,7 +58,6 @@ const AppointmentDetail = ({ navigation }) => {
         };
     }, [isEditWorksModalVisible])
 
-
     const startYear = appointment.startDate.substring(0, 4);
     const startMonth = appointment.startDate.substring(5, 7);
     const startDay = appointment.startDate.substring(8, 10);
@@ -75,83 +74,91 @@ const AppointmentDetail = ({ navigation }) => {
 
     return (
         <>
-            <View style={[globalBackground, { height: '100%' }]}>
-                <View style={[{ height: '20%', flexDirection: 'row', justifyContent: 'center' }]}>
-                    <View>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Klient:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nr kom:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Wartość:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Data:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Godzina:</Text>
-                    </View>
+            <ScrollView style={globalBackground} showsVerticalScrollIndicator={false}>
+                <View style={[globalBackground, { height: '100%' }]}>
+                    <View style={[{ height: '20%', flexDirection: 'row', justifyContent: 'center' }]}>
+                        <View>
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Klient:</Text>
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nr kom:</Text>
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Wartość:</Text>
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Data:</Text>
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Godzina:</Text>
+                        </View>
 
-                    <View>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.client.name} {appointment.client.surname}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.client.phoneNumber}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.worksSum} zł</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {formatDate(appointment.startDate)}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.startDate.substring(11, 16)}</Text>
-                    </View>
-                </View>
-                <View style={{marginTop: '20%', height: '20%'}}>
-                    <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold', textAlign: 'center' }]}>Usługi:</Text>
-                    <Text style={{ marginLeft: 10, height: '100%' }}> <FlatList
-                        vertical={true}
-                        //style={{ height: '390%' }}
-                        showsVerticalScrollIndicator={false}
-                        data={appointment.appointmentDetails}
-                        keyExtractor={(item, index) => 'key' + index}
-                        renderItem={({ item, index }) => (
-                            <>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={[styles.paragraph, { fontFamily: 'MerriWeather' }]} key={index} >{item.work.name}</Text>
-                                    <Image style={styles.icon} source={(workIcons.find(icon => icon.name === item.work.iconName)).uri} />
-                                </View>
-                            </>
-                        )}
-                    /></Text>
-                </View>
-
-                <View style={{marginTop: '10%'}}>
-                    <View>
-                        <View style={[buttonWrapper]}>
-                            <TouchableOpacity style={button} onPress={() => {
-                                setIsEditDateModalVisible(true);
-                            }}>
-                                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Przełóz wizytę</Text>
-                            </TouchableOpacity>
+                        <View>
+                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.client.name} {appointment.client.surname}</Text>
+                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.client.phoneNumber}</Text>
+                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.worksSum} zł</Text>
+                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {formatDate(appointment.startDate)}</Text>
+                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.startDate.substring(11, 16)}</Text>
                         </View>
                     </View>
 
-                    <View style={[buttonWrapper, { flexDirection: 'row' }]}>
-                        <TouchableOpacity style={button} onPress={() => {
-                            setIsEditWorksModalVisible(true);
-                        }}
-                        >
-                            <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Zmień usługi</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={button} onPress={() => navigation.navigate('AppointmentEdit', { id: navigation.getParam('id'), selectedDate: navigation.getParam('selectedDate') })}>
-                            <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Edytuj wizytę</Text>
-                        </TouchableOpacity>
-
+                    <View style={{ marginTop: '15%', height: '20%' }}>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold', textAlign: 'center' }]}>Usługi:</Text>
+                        <Text style={{ marginLeft: 10, height: '80%' }}> <FlatList
+                            vertical={true}
+                            style={{ width: '200%' }}
+                            showsVerticalScrollIndicator={false}
+                            data={appointment.appointmentDetails}
+                            keyExtractor={(item, index) => 'key' + index}
+                            renderItem={({ item, index }) => (
+                                <>
+                                    <View style={{ flexDirection: 'row', width: '100%' }}>
+                                        <Image style={styles.icon} source={(workIcons.find(icon => icon.name === item.work.iconName)).uri} />
+                                        <Text style={[styles.paragraph, { fontFamily: 'MerriWeather' }]} key={index} >{item.work.name}</Text>
+                                    </View>
+                                </>
+                            )}
+                        /></Text>
                     </View>
 
-                    <View>
-                        <View style={[buttonWrapper]}>
-                            <TouchableOpacity style={button} onPress={async () => {
-                                await deleteAppointment(appointment.id);
-                                navigation.navigate('Appointments');
+                    <View style={{ height: '20%' }}>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold', textAlign: 'center', marginTop: '5%' }]}>Uwagi:</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather', marginLeft: '5%', marginRight: '5%' }]}> {appointment.note}</Text>
+                    </View>
+
+                    <View style={{ marginBottom: '10%' }}>
+                        <View>
+                            <View style={[buttonWrapper]}>
+                                <TouchableOpacity style={button} onPress={() => {
+                                    setIsEditDateModalVisible(true);
+                                }}>
+                                    <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Przełóz wizytę</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
+                        <View style={[buttonWrapper, { flexDirection: 'row' }]}>
+                            <TouchableOpacity style={button} onPress={() => {
+                                setIsEditWorksModalVisible(true);
                             }}
                             >
-                                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Odwołaj wizytę</Text>
+                                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Zmień usługi</Text>
                             </TouchableOpacity>
+                            <TouchableOpacity style={button} onPress={() => navigation.navigate('AppointmentEdit', { id: navigation.getParam('id'), selectedDate: navigation.getParam('selectedDate') })}>
+                                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Edytuj wizytę</Text>
+                            </TouchableOpacity>
+
+                        </View>
+
+                        <View>
+                            <View style={[buttonWrapper]}>
+                                <TouchableOpacity style={button} onPress={async () => {
+                                    await deleteAppointment(appointment.id);
+                                    navigation.navigate('Appointments');
+                                }}
+                                >
+                                    <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Odwołaj wizytę</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </View>
-            </View>
+            </ScrollView>
             <Modal isVisible={isEditDateModalVisible} onBackdropPress={() => setIsEditDateModalVisible(false)}>
-                <View style={[styles.modalContainer, { height: '90%'}]}>
-                <View style={[styles.headerWrapper, { height: '8%'}]}>
+                <View style={[styles.modalContainer, { height: '90%' }]}>
+                    <View style={[styles.headerWrapper, { height: '8%' }]}>
                         <Text style={styles.modalHeader}>Przekładanie wizyty</Text>
                     </View>
                     <View style={{ width: '100%', marginTop: '5%' }}>
@@ -297,10 +304,10 @@ const styles = StyleSheet.create({
         borderRadius: 30
     },
     headerWrapper: {
-        height: '20%', 
-        borderTopLeftRadius: 30, 
-        borderTopRightRadius: 30, 
-        backgroundColor: '#F875AA', 
+        height: '20%',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        backgroundColor: '#F875AA',
         justifyContent: 'center'
     },
     modalHeader: {
@@ -317,7 +324,6 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         marginTop: 10,
-        marginLeft: 10
     },
     paragraph: {
         marginTop: 13,
@@ -338,6 +344,12 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         backgroundColor: '#F1D1D0'
     },
+    shadow: {
+        shadowColor: '#171717',
+        shadowOffset: { width: 2, height: 4 },
+        shadowOpacity: 0.7,
+        shadowRadius: 3
+    }
 });
 
 export default AppointmentDetail;

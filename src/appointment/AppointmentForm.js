@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker'
 import { Context as ClientContext } from '../client/context/ClientContext';
@@ -55,6 +55,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
     new Date(selectedDate.year, selectedDate.month - 1, selectedDate.day));
 
   const [percentageValueToAdd, setPercentageValueToAdd] = useState(initialValues.percentageValueToAdd);
+  const [note, setNote] = useState(initialValues.note);
 
   const [clientDropDownOpen, setClientDropDownOpen] = useState(false);
   const [clientId, setClientId] = useState(givenClientId ? givenClientId : null);
@@ -95,7 +96,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 display='spinner'
                 is24Hour={true}
                 locale={'pl'}
-                style={{ backgroundColor: globalBackground.backgroundColor }}
+                style={{ backgroundColor: globalBackground.backgroundColor, marginTop: '5%' }}
               />
             </View>
 
@@ -107,6 +108,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 mode='time'
                 display='spinner'
                 is24Hour={true}
+                style={{ marginTop: '5%'}}
               />
             </View>
 
@@ -142,7 +144,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
               />
               <View>
                 <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => setIsModalVisible(true)} >
-                  <Text style={{fontSize: 18, color: '#F875AA', fontFamily: 'MerriWeatherBold', marginTop: '3%'}}>Nowy klient</Text>
+                  <Text style={{ fontSize: 18, color: '#F875AA', fontFamily: 'MerriWeatherBold', marginTop: '3%' }}>Nowy klient</Text>
                 </TouchableOpacity>
                 <Modal isVisible={isModalVisible} onBackdropPress={() => setIsModalVisible(false)}>
                   <View style={styles.modalContainer}>
@@ -240,8 +242,15 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
               />
             </View>
 
+            <TextInput
+              multiline={true}
+              numberOfLines={10}
+              placeholder={'Dodaj notatkę'}
+              value={note}
+              onChangeText={text => setNote(text)}
+              style={styles.multilineInput} />
 
-            <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', marginTop: 30 }]}>Kara procentowa (%):</Text>
+            <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', marginTop: '10%', marginBottom: '5%' }]}>Kara procentowa (%):</Text>
             <NumericInput
               inputStyle={{ fontFamily: 'MerriWeatherBold' }}
               containerStyle={{ marginTop: 10 }}
@@ -255,16 +264,16 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
             />
 
             <View style={[buttonWrapper, { marginBottom: 50, marginTop: 30 }]}>
-              <TouchableOpacity style={button} onPress={
+              <TouchableOpacity style={[button, {marginTop: '5%'}]} onPress={
                 mode === 'edit' ? async () => {
-                  await onSubmit(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds);
+                  await onSubmit(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds, note);
                   navigation.navigate('Appointments');
                 }
-                :
-                async () => {
-                  await onSubmit(startDate, percentageValueToAdd, clientId, employeeId, workIds);
-                  navigation.navigate('Appointments');
-                }
+                  :
+                  async () => {
+                    await onSubmit(startDate, percentageValueToAdd, clientId, employeeId, workIds, note);
+                    navigation.navigate('Appointments');
+                  }
               }
               >
                 <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj wizytę' : 'Dodaj wizytę'}</Text>
@@ -284,19 +293,20 @@ AppointmentForm.defaultProps = {
     percentageValueToAdd: 0,
     clientId: null,
     employeeId: null,
-    workIds: []
-
+    workIds: [],
+    note: ''
   }
 };
 
 const styles = StyleSheet.create({
   input: {
     fontSize: 18,
-    borderWidth: 1,
-    borderColor: 'black',
-    marginBottom: 15,
-    padding: 5,
-    margin: 5
+    marginTop: 50
+    //borderWidth: 1,
+    //borderColor: 'black',
+    //marginBottom: 15,
+    //padding: 5,
+    //margin: 5
   },
   label: {
     fontSize: 20,
@@ -304,7 +314,7 @@ const styles = StyleSheet.create({
     marginLeft: 5
   },
   dropDownPicker: {
-    marginTop: 30,
+    marginTop: '10%',
     width: '80%',
     borderWidth: 2,
     backgroundColor: '#F1D1D0'
@@ -323,6 +333,16 @@ const styles = StyleSheet.create({
     backgroundColor: globalBackground.backgroundColor,
     borderRadius: 30
   },
+  multilineInput: {
+    borderWidth: 2,
+    borderRadius: 10,
+    width: '80%',
+    height: '15%',
+    marginTop: '15%',
+    fontSize: 20,
+    fontFamily: 'MerriWeather',
+    padding: 5,
+  }
 });
 
 export default AppointmentForm;

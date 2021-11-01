@@ -36,9 +36,9 @@ const AppointmentEdit = ({ navigation }) => {
             givenEmployeeId={appointment.employee.id}
             givenWorkIds={workIds}
             mode={'edit'}
-            initialValues={{startDate: appointment.startDate, clientId: appointment.client.id, employeeId: appointment.employee.id, percentageValueToAdd: appointment.percentageValueToAdd }}
-            onSubmit={(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds) => {
-                editAppointment(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds, () => navigation.navigate('Appointments'));
+            initialValues={{startDate: appointment.startDate, clientId: appointment.client.id, employeeId: appointment.employee.id, percentageValueToAdd: appointment.percentageValueToAdd, note: appointment.note }}
+            onSubmit={(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds, note) => {
+                editAppointment(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds, note, () => navigation.navigate('Appointments'));
             }}
         />
     );
