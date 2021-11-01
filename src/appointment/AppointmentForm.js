@@ -87,7 +87,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
         <ScrollView showsVerticalScrollIndicator={false} style={globalBackground}>
           <View style={{ height: '100%', backgroundColor: globalBackground.backgroundColor, alignItems: 'center', justifyContent: 'space-around' }}>
 
-            <Text style={[detailTitle, styles.label, { fontFamily: 'NotoSerif', textAlign: 'center' }]}>Data rozpoczęcia:</Text>
+            <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', textAlign: 'center' }]}>Data rozpoczęcia:</Text>
             <View style={{ width: '90%' }}>
               <DateTimePicker
                 value={startDate}
@@ -99,7 +99,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
               />
             </View>
 
-            <Text style={[detailTitle, styles.label, { fontFamily: 'NotoSerif', textAlign: 'center' }]}>Godzina rozpoczęcia:</Text>
+            <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', textAlign: 'center' }]}>Godzina rozpoczęcia:</Text>
             <View style={{ width: '70%' }}>
               <DateTimePicker
                 value={startDate}
@@ -121,7 +121,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 }}
                 style={[styles.dropDownPicker]}
                 textStyle={{
-                  fontFamily: 'NotoSerif',
+                  fontFamily: 'MerriWeatherBold',
                   textAlign: 'center',
                   width: '50%',
                   fontSize: 20
@@ -142,7 +142,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
               />
               <View>
                 <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => setIsModalVisible(true)} >
-                  <Text style={{fontSize: 18, color: '#F875AA', fontFamily: 'NotoSerifBold', marginTop: '3%'}}>Nowy klient</Text>
+                  <Text style={{fontSize: 18, color: '#F875AA', fontFamily: 'MerriWeatherBold', marginTop: '3%'}}>Nowy klient</Text>
                 </TouchableOpacity>
                 <Modal isVisible={isModalVisible} onBackdropPress={() => setIsModalVisible(false)}>
                   <View style={styles.modalContainer}>
@@ -184,7 +184,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 }}
                 style={[styles.dropDownPicker]}
                 textStyle={{
-                  fontFamily: 'NotoSerif',
+                  fontFamily: 'MerriWeatherBold',
                   textAlign: 'center',
                   width: '50%',
                   fontSize: 20
@@ -214,7 +214,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 }}
                 style={[styles.dropDownPicker]}
                 textStyle={{
-                  fontFamily: 'NotoSerif',
+                  fontFamily: 'MerriWeatherBold',
                   fontSize: 20,
                   textAlign: 'center',
                   //width: '50%'
@@ -241,9 +241,9 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
             </View>
 
 
-            <Text style={[detailTitle, styles.label, { fontFamily: 'NotoSerif', marginTop: 30 }]}>Kara procentowa (%):</Text>
+            <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', marginTop: 30 }]}>Kara procentowa (%):</Text>
             <NumericInput
-              inputStyle={{ fontFamily: 'NotoSerif' }}
+              inputStyle={{ fontFamily: 'MerriWeatherBold' }}
               containerStyle={{ marginTop: 10 }}
               minValue={0}
               rounded={true}
@@ -267,7 +267,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 }
               }
               >
-                <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Dodaj wizytę</Text>
+                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj wizytę' : 'Dodaj wizytę'}</Text>
               </TouchableOpacity>
             </View>
 
