@@ -1,18 +1,18 @@
 import React, { useContext, useEffect } from 'react';
-import { View, Image, StyleSheet, FlatList, Button, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native';
 import { Context } from './context/ClientContext';
 import ClientItem from './ClientItem';
-import { globalBackground } from '../../GlobalStyles';
+import { globalBackground, button, buttonText } from '../../GlobalStyles';
 import { useFonts } from 'expo-font';
 import { buttonIcons } from '../icons/Icons';
 
 
 const ClientScreen = ({ navigation }) => {
     const { state, addClient, getClients } = useContext(Context);
-    const [loaded] = useFonts({
-        KalamRegular: require('../../assets/fonts/Kalam-Regular.ttf'),
-        KalamBold: require('../../assets/fonts/Kalam-Bold.ttf'),
-    });
+    // const [loaded] = useFonts({
+    //     KalamRegular: require('../../assets/fonts/Kalam-Regular.ttf'),
+    //     KalamBold: require('../../assets/fonts/Kalam-Bold.ttf'),
+    // });
 
     useEffect(() => {
         getClients();
@@ -26,9 +26,9 @@ const ClientScreen = ({ navigation }) => {
         };
     }, []);
 
-    if (!loaded) {
-        return null;
-    }
+    // if (!loaded) {
+    //     return null;
+    // }
 
     return (
         <View style={[globalBackground, styles.container]}>
@@ -53,16 +53,16 @@ const ClientScreen = ({ navigation }) => {
                     //return a.name.localeCompare(b.name); //using String.prototype.localCompare()
                 })}
                 keyExtractor={client => client.id.toString()}
-                renderItem={({ item }) => {
+                renderItem={({ item, index }) => {
                     return (
-                        <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Client', { id: item.id })}>
-                            <ClientItem client={item}></ClientItem>
+                        <TouchableOpacity onPress={() => navigation.navigate('Client', { id: item.id })}>
+                            <ClientItem client={item} index={index}></ClientItem>
                         </TouchableOpacity>
                     );
                 }}
             />
-            <TouchableOpacity onPress={() => navigation.navigate('ClientAdd')}>
-                <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'addClient')).uri} />
+            <TouchableOpacity style={[styles.wrapper, button]} onPress={() => navigation.navigate('ClientAdd')}>
+                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Dodaj klienta</Text>
             </TouchableOpacity>
         </View>
     );
@@ -72,10 +72,17 @@ const styles = StyleSheet.create({
     container: {
         height: '100%'
     },
-    button: {
-        width: 160,
-        height: 80
-    }
+    wrapper: {
+        position: 'absolute',
+        top: '87%',
+        left: '50%',
+        zIndex: 1,
+        borderRadius: 20,
+        shadowColor: '#171717',
+        shadowOffset: { width: 2, height: 4 },
+        shadowOpacity: 0.7,
+        shadowRadius: 3
+    },
 })
 
 export default ClientScreen;

@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity, Image } from 'react-native';
 import { Context } from './context/ClientContext';
-import { globalBackground } from '../../GlobalStyles';
-import { buttonIcons } from '../icons/Icons';
+import { globalBackground, button, buttonWrapper, buttonText, detailTitle, detailParagraph } from '../../GlobalStyles';
 
 const ClientDetail = ({ navigation }) => {
     const { state, deleteClient } = useContext(Context);
@@ -15,29 +14,29 @@ const ClientDetail = ({ navigation }) => {
                 <View style={[globalBackground, { height: '35%', flexDirection: 'row', justifyContent: 'center', maxWidth: '100%' }]}>
 
                     <View>
-                        <Text style={styles.title}>Imię:</Text>
-                        <Text style={styles.title}>Nazwisko:</Text>
-                        <Text style={styles.title}>Nr.kom:</Text>
-                        <Text style={styles.title}>Ilość spóźnień:</Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Imię:</Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nazwisko:</Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nr.kom:</Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Ilość spóźnień:</Text>
                     </View>
 
                     <View>
-                        <Text style={styles.paragraph}> {client.name}</Text>
-                        <Text style={styles.paragraph}> {client.surname}</Text>
-                        <Text style={styles.paragraph}> {client.phoneNumber}</Text>
-                        <Text style={styles.paragraph}> {client.belatedCounter}</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.name}</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.surname}</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.phoneNumber}</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.belatedCounter}</Text>
                     </View>
                 </View>
 
-                <View style={[styles.buttonsContainer, { flexDirection: 'row' }]}>
-                    <TouchableOpacity onPress={() => navigation.navigate('ClientEdit', { id: navigation.getParam('id') })}>
-                        <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'edit')).uri} />
+                <View style={buttonWrapper}>
+                    <TouchableOpacity style={button} onPress={() => navigation.navigate('ClientEdit', { id: navigation.getParam('id') })}>
+                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Edytuj</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity style={button} onPress={() => {
                         navigation.navigate('Clients')
                         deleteClient(client.id)
                     }}>
-                        <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'deleteIcon')).uri} />
+                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Usuń</Text>
                     </TouchableOpacity>
                 </View>
             </View>

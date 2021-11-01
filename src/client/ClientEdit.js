@@ -12,6 +12,7 @@ const ClientEdit = ({ navigation }) => {
 
   return (
     <ClientForm
+      mode={'edit'}
       initialValues={{ name: client.name, surname: client.surname, phoneNumber: client.phoneNumber }}
       onSubmit={(name, surname, phoneNumber) => {
         editClient(id, name, surname, phoneNumber, () => navigation.pop());

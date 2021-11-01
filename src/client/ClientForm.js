@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native';
-import { buttonIcons } from '../icons/Icons';
-import { input, globalBackground } from '../../GlobalStyles';
+import { View, TouchableOpacity, StyleSheet, TextInput, Text } from 'react-native';
+import { input, globalBackground, button, buttonText, buttonWrapper } from '../../GlobalStyles';
 
-const ClientForm = ({ onSubmit, initialValues }) => {
+const ClientForm = ({ onSubmit, initialValues, mode }) => {
   const [name, setName] = useState(initialValues.name);
   const [surname, setSurname] = useState(initialValues.surname);
   const [phoneNumber, setPhoneNumber] = useState(initialValues.phoneNumber);
@@ -12,28 +11,30 @@ const ClientForm = ({ onSubmit, initialValues }) => {
     <View style={[globalBackground, { alignItems: 'center', height: '100%' }]}>
       <TextInput
         placeholder={'Imię'}
-        style={[input, { fontFamily: 'KalamBold', marginTop: 20 }]}
+        style={[input, { fontFamily: 'MerriWeatherBold', marginTop: 20 }]}
         value={name}
         onChangeText={text => setName(text)}
       />
 
       <TextInput
         placeholder={'Nazwisko'}
-        style={[input, { fontFamily: 'KalamBold' }]}
+        style={[input, { fontFamily: 'MerriWeatherBold' }]}
         value={surname}
         onChangeText={text => setSurname(text)}
       />
 
       <TextInput
         placeholder={'Numer kom.'}
-        style={[input, { fontFamily: 'KalamBold' }]}
+        style={[input, { fontFamily: 'MerriWeatherBold' }]}
         value={phoneNumber}
         onChangeText={text => setPhoneNumber(text)}
       />
 
-      <TouchableOpacity onPress={() => onSubmit(name, surname, phoneNumber)}>
-        <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'addClient')).uri} />
-      </TouchableOpacity>
+      <View style={[buttonWrapper, { marginBottom: 50, marginTop: 30 }]}>
+        <TouchableOpacity style={[button, { marginTop: '5%' }]} onPress={() => onSubmit(name, surname, phoneNumber)}>
+          <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj klienta' : 'Dodaj klienta'}</Text>
+        </TouchableOpacity>
+      </View>
 
     </View>
   );
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: 170,
     height: 90
-}
+  }
 });
 
 export default ClientForm;
