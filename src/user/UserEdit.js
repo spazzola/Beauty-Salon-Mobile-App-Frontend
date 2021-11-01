@@ -12,6 +12,7 @@ const UserEdit = ({ navigation }) => {
 
   return (
     <UserForm
+      mode={'edit'}
       initialValues={{ name: user.name, surname: user.surname, phoneNumber: user.phoneNumber, login: user.login }}
       onSubmit={(name, surname, phoneNumber, login, password) => {
         editUser(id, name, surname, phoneNumber, login, password, () => navigation.pop());

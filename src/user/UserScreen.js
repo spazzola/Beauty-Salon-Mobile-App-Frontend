@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
-import { View, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, FlatList, TouchableOpacity, Text } from 'react-native';
 import { Context } from './context/UserContext';
 import UserItem from './UserItem';
-import { globalBackground } from '../../GlobalStyles';
+import { globalBackground, button, buttonText } from '../../GlobalStyles';
 import { buttonIcons } from '../icons/Icons';
 
 const UserScreen = ({ navigation }) => {
@@ -43,16 +43,17 @@ const UserScreen = ({ navigation }) => {
                     //return a.name.localeCompare(b.name); //using String.prototype.localCompare()
                 })}
                 keyExtractor={user => user.id.toString()}
-                renderItem={({ item }) => {
+                renderItem={({ item, index }) => {
                     return (
                         <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('User', { id: item.id })}>
-                            <UserItem user={item}></UserItem>
+                            <UserItem user={item} index={index}></UserItem>
                         </TouchableOpacity>
                     );
                 }}
             />
-            <TouchableOpacity onPress={() => navigation.navigate('UserAdd')}>
-                <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'addEmployee')).uri} />
+
+            <TouchableOpacity style={[styles.wrapper, button, {width: 210}]} onPress={() => navigation.navigate('UserAdd')}>
+                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Dodaj pracownika</Text>
             </TouchableOpacity>
         </View>
     );
@@ -62,9 +63,16 @@ const styles = StyleSheet.create({
     container: {
         height: '100%'
     },
-    button: {
-        width: 160,
-        height: 80
+    wrapper: {
+        position: 'absolute',
+        top: '87%',
+        left: '38%',
+        zIndex: 1,
+        borderRadius: 20,
+        shadowColor: '#171717',
+        shadowOffset: { width: 2, height: 4 },
+        shadowOpacity: 0.7,
+        shadowRadius: 3,
     }
 })
 
