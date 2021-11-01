@@ -30,8 +30,6 @@ const AppointmentDetail = ({ navigation }) => {
     const workContext = useContext(WorkContext);
     const [appointment, setAppointment] = useState(state.find((appointment) => appointment.id === navigation.getParam('id')));
 
-    //let appointment = state.find((appointment) => appointment.id === navigation.getParam('id'));
-
     const [isEditDateModalVisible, setIsEditDateModalVisible] = useState(false);
     const [isEditWorksModalVisible, setIsEditWorksModalVisible] = useState(false);
 
@@ -176,10 +174,29 @@ const AppointmentDetail = ({ navigation }) => {
                         />
                         <View style={[buttonWrapper, { width: '100%' }]}>
                             <TouchableOpacity style={button} onPress={async () => {
-                                const workIds = getWorkIds(appointment.appointmentDetails);
-
-                                await editAppointment(appointment.id, startDate, appointment.client.id, appointment.employee.id, workIds, appointment.percentageValueToAdd);
-
+                                const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
+                                const extractedDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
+                                let appointmentToUpdate = {
+                                    appointmentId: appointment.id,
+                                    startDate: extractedDate,
+                                    clientId: appointment.client.id,
+                                    employeeId: appointment.employee.id,
+                                    workIds,
+                                    percentageValueToAdd: appointment.percentageValueToAdd
+                                };
+                                let response = await fetch(
+                                    'http://188.68.237.171:8080/myfront/appointment/update',
+                                    {
+                                        method: 'PUT',
+                                        headers: {
+                                            Accept: 'application/json',
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify(appointmentToUpdate)
+                                    }
+                                );
+                                let json = await response.json();
+                                setAppointment(json);
                                 setIsEditDateModalVisible(false);
                             }}
                             >
@@ -244,7 +261,7 @@ const AppointmentDetail = ({ navigation }) => {
                                     percentageValueToAdd: appointment.percentageValueToAdd
                                 };
                                 let response = await fetch(
-                                    'http://188.68.237.171:8080/app/appointment/update',
+                                    'http://188.68.237.171:8080/myfront/appointment/update',
                                     {
                                         method: 'PUT',
                                         headers: {
