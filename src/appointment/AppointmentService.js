@@ -44,7 +44,7 @@ function createBoxes(appointment) {
     if (durationTime === 0) {
         calculateTopValue(boxes);
         let filteredBoxes = boxes.filter(item => !(item.elementsNumber === 0));
-        
+
         addClientName(filteredBoxes, appointment);
         addIcons(filteredBoxes, appointment);
         return boxes;
@@ -102,17 +102,15 @@ function addIcons(boxes, appointment) {
     const iconWidth = 1.5;
     let workIconsToAdd = [];
     appointment.appointmentDetails.forEach(el => workIconsToAdd.push(el));
-    let areIconsAdded = false;
 
     for (const box of boxes) {
-        if (box.spaceToUse >= iconWidth && workIconsToAdd.length > 0) {
-            let appointmentDetails = appointment.appointmentDetails;
-            for (let i = 0; i < workIconsToAdd.length; i++) {
+        for (let i = 0; i < workIconsToAdd.length; i++) {
+            if (box.spaceToUse >= iconWidth && workIconsToAdd.length > 0) {
                 box.workIcons.push(workIconsToAdd[i].work.iconName);
                 workIconsToAdd.shift();
                 box.spaceToUse -= iconWidth;
+                i = -1;
             }
-            areIconsAdded = true;
         }
     }
 }
@@ -208,9 +206,9 @@ function addBackgroundColor(mode, appointment) {
                 ('#F1D1D0')
                 :
                 appointment.employee.role === 'ADMIN' && mode === 'single' ?
-                ('#FBACCC')
-                :
-                ('#F1D1D0')
+                    ('#FBACCC')
+                    :
+                    ('#F1D1D0')
         )
 }
 
