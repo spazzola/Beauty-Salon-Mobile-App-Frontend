@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { buttonIcons } from '../icons/Icons';
-import { detailTitle } from '../../GlobalStyles';
+import { detailTitle, buttonText, buttonWrapper, button } from '../../GlobalStyles';
 
-const SolariumForm = ({ onSubmit, initialValues }) => {
+const SolariumForm = ({ onSubmit, getSolarium, initialValues }) => {
   const [usedTime, setUsedTime] = useState(initialValues.usedTime);
   const [usedDate, setUsedDate] = useState(new Date(Date.now()));
 
@@ -18,12 +17,13 @@ const SolariumForm = ({ onSubmit, initialValues }) => {
     <View style={{ flexDirection: 'column', alignItems: 'center' }}>
 
       <View>
-        <Text style={[detailTitle, styles.label, { fontFamily: 'KalamBold', textAlign: 'center' }]}>Wartość:</Text>
+        <Text style={[detailTitle, styles.label, { fontFamily: 'NotoSerif', textAlign: 'center' }]}>Minuty:</Text>
         <NumericInput
           minValue={0}
           rounded={true}
-          rightButtonBackgroundColor='#ED50F1'
-          leftButtonBackgroundColor='#FDB9FC'
+          rightButtonBackgroundColor='#FBACCC'
+          leftButtonBackgroundColor='#F1D1D0'
+          inputStyle={{ fontFamily: 'MerriWeatherBold' }}
           style={styles.input}
           value={usedTime}
           onChange={text => setUsedTime(text)}
@@ -38,9 +38,16 @@ const SolariumForm = ({ onSubmit, initialValues }) => {
         />
       </View>
 
-      <TouchableOpacity onPress={() => { onSubmit(usedTime, usedDate) }}>
-        <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'solariumActive')).uri} />
-      </TouchableOpacity>
+      <View style={buttonWrapper}>
+        <TouchableOpacity style={[button, { width: 220 }]} onPress={() => { onSubmit(usedTime, usedDate) }}>
+          <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Potwierdź solarium</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={buttonWrapper}>
+        <TouchableOpacity style={[button, { width: 220 }]} onPress={() => { getSolarium(usedDate)}}>
+          <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Pobierz solarium</Text>
+        </TouchableOpacity>
+      </View>
 
     </View>
   );
@@ -74,7 +81,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: 170,
     height: 90
-}
+  }
 });
 
 export default SolariumForm;
