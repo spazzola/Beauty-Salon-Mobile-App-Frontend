@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Context } from './context/WorkContext';
 import { workIcons, buttonIcons } from '../icons/Icons';
-import { globalBackground, detailParagraph, detailTitle } from '../../GlobalStyles';
+import { globalBackground, detailParagraph, detailTitle, button, buttonWrapper, buttonText } from '../../GlobalStyles';
 
 const WorkDetail = ({ navigation }) => {
     const { state, deleteWork } = useContext(Context);
@@ -16,29 +16,29 @@ const WorkDetail = ({ navigation }) => {
                 <View style={[globalBackground, { height: '35%', flexDirection: 'row', justifyContent: 'center', maxWidth: '100%' }]}>
 
                     <View>
-                        <Text style={[detailTitle, { fontFamily: 'KalamBold' }]}>Nazwa:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'KalamBold' }]}>Wartość:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'KalamBold' }]}>Czas trwania:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'KalamBold' }]}>Wybrana ikona:</Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nazwa:</Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Wartość:</Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Czas trwania:</Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Wybrana ikona:</Text>
                     </View>
 
                     <View>
-                        <Text style={[detailParagraph, { fontFamily: 'KalamRegular'}]}> {work.name}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'KalamRegular'}]}> {work.price}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'KalamRegular'}]}> {work.hoursDuration}h {work.minutesDuration}min</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather'}]}> {work.name}</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather'}]}> {work.price}</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather'}]}> {work.hoursDuration}h {work.minutesDuration}min</Text>
                         <Text style={detailParagraph}> <Image style={{ marginLeft: 50, maxWidth: 30, maxHeight: 30 }} source={icon.uri} /></Text>
                     </View>
                 </View>
 
-                <View style={[styles.buttonsContainer, { flexDirection: 'row' }]}>
-                    <TouchableOpacity onPress={() => navigation.navigate('WorkEdit', { id: navigation.getParam('id') })}>
-                        <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'edit')).uri} />
+                <View style={buttonWrapper}>
+                    <TouchableOpacity style={button} onPress={() => navigation.navigate('WorkEdit', { id: navigation.getParam('id') })}>
+                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Edytuj</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity style={button} onPress={() => {
                         navigation.navigate('Works')
-                        deleteClient(work.id)
+                        deleteWork(work.id)
                     }}>
-                        <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'deleteIcon')).uri} />
+                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Usuń</Text>
                     </TouchableOpacity>
                 </View>
             </View>

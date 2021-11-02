@@ -2,16 +2,10 @@ import React, { useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 import { Context } from './context/WorkContext';
 import WorkItem from './WorkItem';
-import { globalBackground } from '../../GlobalStyles';
-import { useFonts } from 'expo-font';
-import { buttonIcons } from '../icons/Icons';
+import { globalBackground, button, buttonText } from '../../GlobalStyles';
 
 const WorkScreen = ({ navigation }) => {
     const { state, addClient, getWorks } = useContext(Context);
-    const [loaded] = useFonts({
-        KalamRegular: require('../../assets/fonts/Kalam-Regular.ttf'),
-        KalamBold: require('../../assets/fonts/Kalam-Bold.ttf'),
-    });
 
     useEffect(() => {
         getWorks();
@@ -24,10 +18,6 @@ const WorkScreen = ({ navigation }) => {
             listener.remove();
         };
     }, []);
-
-    if (!loaded) {
-        return null;
-    }
 
     return (
         <View style={[globalBackground, styles.container]}>
@@ -47,16 +37,17 @@ const WorkScreen = ({ navigation }) => {
                     //return a.name.localeCompare(b.name); //using String.prototype.localCompare()
                 })}
                 keyExtractor={work => work.id.toString()}
-                renderItem={({ item }) => {
+                renderItem={({ item, index }) => {
                     return (
                         <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Work', { id: item.id })}>
-                            <WorkItem work={item}></WorkItem>
+                            <WorkItem work={item} index={index}></WorkItem>
                         </TouchableOpacity>
                     );
                 }}
             />
-            <TouchableOpacity onPress={() => navigation.navigate('WorkAdd')}>
-                <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'addService')).uri} />
+
+            <TouchableOpacity style={[styles.wrapper, button]} onPress={() => navigation.navigate('WorkAdd')}>
+                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Dodaj usługę</Text>
             </TouchableOpacity>
         </View>
     );
@@ -69,6 +60,17 @@ const styles = StyleSheet.create({
     button: {
         width: 160,
         height: 80
+    },
+    wrapper: {
+        position: 'absolute',
+        top: '87%',
+        left: '50%',
+        zIndex: 1,
+        borderRadius: 20,
+        shadowColor: '#171717',
+        shadowOffset: { width: 2, height: 4 },
+        shadowOpacity: 0.7,
+        shadowRadius: 3
     }
 })
 

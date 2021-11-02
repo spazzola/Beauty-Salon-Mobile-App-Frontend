@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, Image, FlatList, ScrollView, SafeAreaView } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { workIcons, buttonIcons } from '../icons/Icons';
-import { input, globalBackground, detailTitle } from '../../GlobalStyles';
+import { workIcons } from '../icons/Icons';
+import { input, globalBackground, detailTitle, button, buttonText, buttonWrapper } from '../../GlobalStyles';
 
 const WorkForm = ({ onSubmit, initialValues, mode }) => {
     const [name, setName] = useState(initialValues.name);
@@ -20,82 +20,84 @@ const WorkForm = ({ onSubmit, initialValues, mode }) => {
     return (
         <SafeAreaView style={globalBackground}>
             <ScrollView style={globalBackground} showsVerticalScrollIndicator={false}>
-                <View style={{ backgroundColor: globalBackground.backgroundColor, alignItems: 'center'}}>
+                <View style={{ backgroundColor: globalBackground.backgroundColor, alignItems: 'center' }}>
 
                     <TextInput
                         placeholder={'Nazwa usługi'}
-                        style={input}
+                        style={[input, { fontFamily: 'MerriWeatherBold' }]}
                         value={name}
                         onChangeText={text => setName(text)}
                     />
 
-                    <Text style={[detailTitle, styles.label, { fontFamily: 'KalamBold' }]}>Wartość:</Text>
+                    <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold' }]}>Wartość:</Text>
                     <NumericInput
                         minValue={0}
                         rounded={true}
-                        rightButtonBackgroundColor='#ED50F1'
-                        leftButtonBackgroundColor='#FDB9FC'
+                        rightButtonBackgroundColor='#FBACCC'
+                        leftButtonBackgroundColor='#F1D1D0'
                         style={styles.input}
                         value={price}
                         onChange={text => setPrice(text)}
                     />
 
-                    <Text style={[detailTitle, styles.label, { fontFamily: 'KalamBold' }]}>Czas trwania godziny:</Text>
+                    <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold' }]}>Czas trwania godziny:</Text>
                     <NumericInput
                         minValue={0}
                         rounded={true}
-                        rightButtonBackgroundColor='#ED50F1'
-                        leftButtonBackgroundColor='#FDB9FC'
+                        rightButtonBackgroundColor='#FBACCC'
+                        leftButtonBackgroundColor='#F1D1D0'
                         style={styles.input}
                         value={hoursDuration}
                         onChange={text => setHoursDuration(text)}
                     />
 
-                    <Text style={[detailTitle, styles.label, { fontFamily: 'KalamBold' }]}>Czas trwania minuty:</Text>
+                    <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold' }]}>Czas trwania minuty:</Text>
                     <NumericInput
                         minValue={0}
                         rounded={true}
                         step={5}
-                        rightButtonBackgroundColor='#ED50F1'
-                        leftButtonBackgroundColor='#FDB9FC'
+                        rightButtonBackgroundColor='#FBACCC'
+                        leftButtonBackgroundColor='#F1D1D0'
                         style={styles.input}
                         value={minutesDuration}
                         onChange={text => setMinutesDuration(text)}
                     />
-                   
-                        <View style={{ height: 300 }}>
-                            <Text style={[detailTitle, styles.label, { fontFamily: 'KalamBold', textAlign: 'center', justifyContent: 'center' }]}>Wybrana ikona:</Text>
-                            {iconName === '' ? null : <Image style={styles.icon} source={(workIcons.find(icon => icon.name === iconName)).uri} />}
 
-                            <SafeAreaView style={{ height: 200 }}>
-                                <ScrollView>
-                                    <FlatList
-                                        vertical={true}
-                                        showsVerticalScrollIndicator={false}
-                                        data={images}
-                                        keyExtractor={item => item.name}
-                                        renderItem={({ item, index }) => (
-                                            <TouchableOpacity onPress={() => setIconName(item.name)}>
-                                                <Image source={item.uri}
-                                                    style={{
-                                                        width: 50,
-                                                        height: 50,
-                                                        marginLeft: 50,
-                                                        marginTop: 20,
-                                                        //resizeMode: 'contain',
-                                                    }}
-                                                />
-                                            </TouchableOpacity>
-                                        )}
-                                    />
-                                </ScrollView>
-                            </SafeAreaView>
+                    <View style={{ height: 300 }}>
+                        <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', textAlign: 'center', justifyContent: 'center' }]}>Wybrana ikona:</Text>
+                        {iconName === '' ? null : <Image style={styles.icon} source={(workIcons.find(icon => icon.name === iconName)).uri} />}
 
-                        </View>
-                 
-                    <TouchableOpacity onPress={() => onSubmit(name, price, hoursDuration, minutesDuration, iconName)}>
-                        <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'addService')).uri} />
-                    </TouchableOpacity>
+                        <SafeAreaView style={{ height: 200 }}>
+                            <ScrollView>
+                                <FlatList
+                                    vertical={true}
+                                    showsVerticalScrollIndicator={false}
+                                    data={images}
+                                    keyExtractor={item => item.name}
+                                    renderItem={({ item, index }) => (
+                                        <TouchableOpacity onPress={() => setIconName(item.name)}>
+                                            <Image source={item.uri}
+                                                style={{
+                                                    width: 50,
+                                                    height: 50,
+                                                    marginLeft: 50,
+                                                    marginTop: 20,
+                                                    //resizeMode: 'contain',
+                                                }}
+                                            />
+                                        </TouchableOpacity>
+                                    )}
+                                />
+                            </ScrollView>
+                        </SafeAreaView>
+
+                    </View>
+                    
+                    <View style={[buttonWrapper, { marginBottom: 50, marginTop: 30 }]}>
+                        <TouchableOpacity style={[button, { marginTop: '5%' }]} onPress={() => onSubmit(name, price, hoursDuration, minutesDuration, iconName)}>
+                            <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj usługę' : 'Dodaj usługę'}</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </ScrollView>
         </SafeAreaView>

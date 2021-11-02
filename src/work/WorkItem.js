@@ -2,10 +2,12 @@ import React, { useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { itemContainer, itemParagraph } from '../../GlobalStyles';
 
-const WorkItem = ({ work }) => {
+const WorkItem = ({ work, index }) => {
     return (
-        <View style={itemContainer}>
-            <Text style={itemParagraph}> {work.name} </Text>
+        <View style={{ alignItems: 'center' }}>
+            <View style={[itemContainer, {backgroundColor: index % 2 === 0 ? '#F875AA' : '#FBACCC'}]}>
+                <Text style={[itemParagraph, { fontFamily: 'MerriWeatherBold' }]}> {work.name} </Text>
+            </View>
         </View>
     );
 }
