@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Context } from './context/CostContext';
+import { detailParagraph, detailTitle, globalBackground, button, buttonWrapper, buttonText } from '../../GlobalStyles';
 
 const CostDetail = ({ navigation }) => {
     const { state, deleteCost } = useContext(Context);
@@ -8,37 +9,48 @@ const CostDetail = ({ navigation }) => {
     const cost = state.find((cost) => cost.id === navigation.getParam('id'));
 
     return (
-        <View>
-            <Text style={styles.paragraph}><Text style={styles.title}>Nazwa: </Text> {cost.name}</Text>
-            <Text style={styles.paragraph}><Text style={styles.title}>Wartość: </Text> {cost.value}</Text>
-            <View style={styles.buttonsContainer}>
-                <Button title="Edytuj" onPress={() => navigation.navigate('CostEdit', { id: navigation.getParam('id') })} />
-                <Button title="Usuń" onPress={() => {
+        <View style={{ height: '100%', backgroundColor: globalBackground.backgroundColor }}>
+            <View style={[globalBackground, { height: '20%', flexDirection: 'row', justifyContent: 'center', maxWidth: '100%' }]}>
+
+                <View>
+                    <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nazwa:</Text>
+                    <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Wartość:</Text>
+                </View>
+
+                <View>
+                    <Text style={[detailParagraph, { fontFamily: 'MerriWeather'}]}> {cost.name}</Text>
+                    <Text style={[detailParagraph, { fontFamily: 'MerriWeather'}]}> {cost.value} zł</Text>
+                </View>
+            </View>
+
+            <View style={buttonWrapper}>
+                    <TouchableOpacity style={button} onPress={() => navigation.navigate('CostEdit', { id: navigation.getParam('id') })}>
+                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Edytuj</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={button} onPress={() => {
                     navigation.navigate('Costs')
                     deleteCost(cost.id)
-                    }}/>
-            </View>
+                    }}>
+                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Usuń</Text>
+                    </TouchableOpacity>
+                </View>
+
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    paragraph: {
-        marginTop: 10,
-        fontSize: 30,
-        textAlign: 'center'
-    },
-    title: {
-        fontWeight: 'bold'
-    },
     buttonsContainer: {
-        marginTop: 20,
         flexDirection: 'row',
         justifyContent: 'center'
     },
     delete: {
         height: 20,
         width: 50
+    },
+    button: {
+        width: 160,
+        height: 80
     }
 });
 

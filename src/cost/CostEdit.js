@@ -12,6 +12,7 @@ const CostEdit = ({ navigation }) => {
 
   return (
     <CostForm
+      mode={'edit'}
       initialValues={{ name: cost.name, value: cost.value, addedDate: cost.addedDate }}
       onSubmit={(name, value, addedDate) => {
         editCost(id, name, value, addedDate, () => navigation.pop());

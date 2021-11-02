@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { format } from 'date-fns'
+import { input, globalBackground, detailTitle, button, buttonWrapper, buttonText } from '../../GlobalStyles';
 
-const CostForm = ({ onSubmit, initialValues }) => {
+const CostForm = ({ onSubmit, initialValues, mode }) => {
   const [name, setName] = useState(initialValues.name);
   const [value, setValue] = useState(initialValues.value);
   const [addedDate, setAddedDate] = useState(initialValues.name === '' ? new Date(Date.now()) : new Date(initialValues.addedDate));
@@ -16,27 +16,41 @@ const CostForm = ({ onSubmit, initialValues }) => {
 
   return (
     <>
-    <View>
-      <Text style={styles.label}>Nazwa:</Text>
-      <TextInput
-        style={styles.input}
-        value={name}
-        onChangeText={text => setName(text)}
-      />
-      <Text style={styles.label}>Wartość:</Text>
-      <NumericInput
-        style={styles.input}
-        value={value}
-        onChange={text => setValue(text)}
-      />
-      <DateTimePicker
-        value={addedDate}
-        onChange={onChange}
-        display='spinner'
-      />
-      <Button title="Dodaj koszt" onPress={() => { onSubmit(name, value, addedDate) }} />
-    </View>
-</>
+      <View style={[globalBackground, { alignItems: 'center', height: '100%' }]}>
+        <TextInput
+          placeholder={'Nazwa kosztu'}
+          style={[input, { fontFamily: 'MerriWeatherBold', marginTop: 20 }]}
+          value={name}
+          onChangeText={text => setName(text)}
+        />
+
+        <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold' }]}>Wartość:</Text>
+        <NumericInput
+          minValue={0}
+          rounded={true}
+          rightButtonBackgroundColor='#FBACCC'
+          leftButtonBackgroundColor='#F1D1D0'
+          style={styles.input}
+          value={value}
+          onChange={text => setValue(text)}
+        />
+
+        <View style={{width: '90%'}}>
+          <DateTimePicker
+            value={addedDate}
+            onChange={onChange}
+            display='spinner'
+            style={{ backgroundColor: globalBackground.backgroundColor, marginTop: '5%' }}
+          />
+        </View>
+
+        <View style={[buttonWrapper]}>
+          <TouchableOpacity style={[button]} onPress={() => { onSubmit(name, value, addedDate) }}>
+            <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj koszt' : 'Dodaj koszt'}</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </>
   );
 };
 
@@ -56,7 +70,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     padding: 5,
     margin: 5,
-    marginBottom: 20
   },
   label: {
     fontSize: 20,

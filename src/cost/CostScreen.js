@@ -3,18 +3,11 @@ import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Context } from './context/CostContext';
 import CostItem from './CostItem';
-import { globalBackground } from '../../GlobalStyles';
-import { useFonts } from 'expo-font';
-import { buttonIcons } from '../icons/Icons';
+import { globalBackground, button, buttonText } from '../../GlobalStyles';
 
 const CostScreen = ({ navigation }) => {
     const { state, addCost, getCosts } = useContext(Context);
     const [date, setDate] = useState(new Date(Date.now()));
-
-    const [loaded] = useFonts({
-        KalamRegular: require('../../assets/fonts/Kalam-Regular.ttf'),
-        KalamBold: require('../../assets/fonts/Kalam-Bold.ttf'),
-    });
 
     useEffect(() => {
         var month = new Date().getMonth() + 1;
@@ -31,10 +24,6 @@ const CostScreen = ({ navigation }) => {
             listener.remove();
         };
     }, []);
-
-    if (!loaded) {
-        return null;
-    }
 
     const onChange = (event, selectedDate) => {
         var month = selectedDate.getMonth() + 1;
@@ -54,16 +43,17 @@ const CostScreen = ({ navigation }) => {
                 showsVerticalScrollIndicator={false}
                 data={state}
                 keyExtractor={cost => cost.id.toString()}
-                renderItem={({ item }) => {
+                renderItem={({ item, index }) => {
                     return (
-                        <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Cost', { id: item.id })}>
-                            <CostItem cost={item}></CostItem>
+                        <TouchableOpacity onPress={() => navigation.navigate('Cost', { id: item.id })}>
+                            <CostItem cost={item} index={index}></CostItem>
                         </TouchableOpacity>
                     );
                 }}
             />
-            <TouchableOpacity onPress={() => navigation.navigate('CostAdd')}>
-                <Image style={styles.button} source={(buttonIcons.find(icon => icon.name === 'addClient')).uri} />
+
+            <TouchableOpacity style={[styles.wrapper, button]} onPress={() => navigation.navigate('CostAdd')}>
+                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Dodaj koszt</Text>
             </TouchableOpacity>
         </View>
     );
@@ -76,6 +66,17 @@ const styles = StyleSheet.create({
     button: {
         width: 160,
         height: 80
+    },
+    wrapper: {
+        position: 'absolute',
+        top: '87%',
+        left: '50%',
+        zIndex: 1,
+        borderRadius: 20,
+        shadowColor: '#171717',
+        shadowOffset: { width: 2, height: 4 },
+        shadowOpacity: 0.7,
+        shadowRadius: 3
     }
 })
 
