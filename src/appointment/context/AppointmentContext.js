@@ -1,5 +1,4 @@
 import createDataContext from '../../../createDataContext';
-//import axios from './AppointmentApi';
 import axios from '../../../axios-config';
 import { format } from 'date-fns'
 
@@ -20,7 +19,7 @@ const appointmentReducer = (state, action) => {
 }
 
 const addAppointment = dispatch => {
-    return async (startDate, percentageValueToAdd, clientId, employeeId, workIds, callback) => {
+    return async (startDate, percentageValueToAdd, clientId, employeeId, workIds, note, callback) => {
         const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
         startDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
         let appointment = {
@@ -28,8 +27,10 @@ const addAppointment = dispatch => {
             percentageValueToAdd,
             clientId,
             employeeId,
-            workIds
+            workIds,
+            note
         };
+
         await axios.post('/appointment/create', appointment);
 
         if (callback) {
@@ -58,10 +59,8 @@ const deleteAppointment = dispatch => {
 };
 
 const editAppointment = dispatch => {
-    return async (appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds, callback) => {
-
+    return async (appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds, note, callback) => {
         const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
-
         startDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
         let appointment = {
             appointmentId,
@@ -69,9 +68,10 @@ const editAppointment = dispatch => {
             clientId,
             employeeId,
             workIds,
-            percentageValueToAdd
+            percentageValueToAdd,
+            note
         };
-
+        console.log(appointment);
         await axios.put('appointment/update', appointment);
         dispatch({
             type: 'edit_appointment',

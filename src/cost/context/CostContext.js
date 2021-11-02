@@ -1,5 +1,6 @@
 import createDataContext from '../../../createDataContext';
-import axios from './CostApi';
+//import axios from './CostApi';
+import axios from '../../../axios-config';
 import { format } from 'date-fns'
 
 const costReducer = (state, action) => {

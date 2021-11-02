@@ -1,5 +1,6 @@
 import createDataContext from '../../../createDataContext';
-import axios from './SolariumApi';
+//import axios from './SolariumApi';
+import axios from '../../../axios-config';
 import { format } from 'date-fns'
 
 const solariumReducer = (state, action) => {

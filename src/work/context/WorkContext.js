@@ -1,5 +1,6 @@
 import createDataContext from '../../../createDataContext';
-import axios from './WorkApi';
+//import axios from './WorkApi';
+import axios from '../../../axios-config';
 
 const workReducer = (state, action) => {
     switch (action.type) {

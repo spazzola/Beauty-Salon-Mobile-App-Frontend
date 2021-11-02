@@ -1,5 +1,6 @@
 import createDataContext from '../../../createDataContext';
-import axios from './UserApi';
+//import axios from './UserApi';
+import axios from '../../../axios-config';
 
 const userReducer = (state, action) => {
     switch (action.type) {
