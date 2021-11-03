@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { input, globalBackground, detailTitle, button, buttonWrapper, buttonText } from '../../GlobalStyles';
@@ -47,10 +47,10 @@ const CostForm = ({ onSubmit, initialValues, mode }) => {
         <View style={[buttonWrapper]}>
           <TouchableOpacity style={[button]} onPress={() => {
             if (name.length === 0) {
-              alert("Podaj nazwę kosztu")
+              Alert.alert("Błąd", "Podaj nazwę kosztu")
             } 
             else if (value <= 0) {
-              alert("Podaj wartość kosztu")
+              Alert.alert("Błąd", "Podaj wartość kosztu")
             }
             else {
               onSubmit(name, value, addedDate)
