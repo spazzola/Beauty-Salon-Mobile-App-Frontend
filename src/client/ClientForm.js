@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, TextInput, Text } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, TextInput, Text, Alert } from 'react-native';
 import { input, globalBackground, button, buttonText, buttonWrapper } from '../../GlobalStyles';
 
 const ClientForm = ({ onSubmit, initialValues, mode }) => {
@@ -31,7 +31,19 @@ const ClientForm = ({ onSubmit, initialValues, mode }) => {
       />
 
       <View style={[buttonWrapper, { marginBottom: 50, marginTop: 30 }]}>
-        <TouchableOpacity style={[button, { marginTop: '5%' }]} onPress={() => onSubmit(name, surname, phoneNumber)}>
+        <TouchableOpacity style={[button, { marginTop: '5%' }]} onPress={() => {
+          if (name.length === 0) {
+            Alert.alert("Błąd", "Podaj imię klienta");
+          }
+          else if (surname.length === 0) {
+            Alert.alert("Błąd", "Podaj nazwisko klienta");
+          }
+          else if (phoneNumber.length < 9 || phoneNumber.length > 13) {
+            Alert.alert("Błąd", "Podana długość numeru kom. jest błędna");
+          } else {
+            onSubmit(name, surname, phoneNumber);
+          }
+        }}>
           <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj klienta' : 'Dodaj klienta'}</Text>
         </TouchableOpacity>
       </View>
