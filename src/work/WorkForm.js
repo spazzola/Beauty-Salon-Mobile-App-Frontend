@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Image, FlatList, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, Image, FlatList, ScrollView, SafeAreaView, Alert } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { workIcons } from '../icons/Icons';
@@ -94,7 +94,23 @@ const WorkForm = ({ onSubmit, initialValues, mode }) => {
                     </View>
                     
                     <View style={[buttonWrapper, { marginBottom: 50, marginTop: 30 }]}>
-                        <TouchableOpacity style={[button, { marginTop: '5%' }]} onPress={() => onSubmit(name, price, hoursDuration, minutesDuration, iconName)}>
+                        <TouchableOpacity style={[button, { marginTop: '5%' }]} onPress={() => {
+                            if (name.length === 0) {
+                                Alert.alert("Błąd", "Podaj nazwę usługi");
+                            }
+                            else if (price === 0) {
+                                Alert.alert("Błąd", "Podaj wartość usługi");
+                            }
+                            else if (hoursDuration === 0 && minutesDuration === 0) {
+                                Alert.alert("Błąd", "Podaj czas trwania usługi");
+                            }
+                            else if (iconName === '') {
+                                Alert.alert("Błąd", "Wybierz ikonę")
+                            }
+                            else {
+                                onSubmit(name, price, hoursDuration, minutesDuration, iconName);
+                            }
+                            }}>
                             <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj usługę' : 'Dodaj usługę'}</Text>
                         </TouchableOpacity>
                     </View>

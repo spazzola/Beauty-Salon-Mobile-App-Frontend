@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { detailTitle, buttonText, buttonWrapper, button } from '../../GlobalStyles';
@@ -39,12 +39,18 @@ const SolariumForm = ({ onSubmit, getSolarium, initialValues }) => {
       </View>
 
       <View style={buttonWrapper}>
-        <TouchableOpacity style={[button, { width: 220 }]} onPress={() => { onSubmit(usedTime, usedDate) }}>
+        <TouchableOpacity style={[button, { width: 220 }]} onPress={() => {
+          if (usedTime === 0) {
+            Alert.alert("Błąd", "Podaj ilość minut");
+          } else {
+            onSubmit(usedTime, usedDate)
+          }
+        }}>
           <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Potwierdź solarium</Text>
         </TouchableOpacity>
       </View>
       <View style={buttonWrapper}>
-        <TouchableOpacity style={[button, { width: 220 }]} onPress={() => { getSolarium(usedDate)}}>
+        <TouchableOpacity style={[button, { width: 220 }]} onPress={() => { getSolarium(usedDate) }}>
           <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Pobierz solarium</Text>
         </TouchableOpacity>
       </View>

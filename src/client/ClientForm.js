@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, TextInput, Text, Alert } from 'react-native';
 import { input, globalBackground, button, buttonText, buttonWrapper } from '../../GlobalStyles';
 
+function numberIsNotValid(phoneNumber) {
+  const spaceIndex = phoneNumber.indexOf(" ");
+  const firstPart = phoneNumber.substring(0, spaceIndex);
+  const secondPart = phoneNumber.substring(spaceIndex + 1, phoneNumber.length);
+  const numberWithoutWhiteSpace = firstPart + secondPart;
+
+  return !isFinite(numberWithoutWhiteSpace);
+}
+
 const ClientForm = ({ onSubmit, initialValues, mode }) => {
   const [name, setName] = useState(initialValues.name);
   const [surname, setSurname] = useState(initialValues.surname);
@@ -37,6 +46,9 @@ const ClientForm = ({ onSubmit, initialValues, mode }) => {
           }
           else if (surname.length === 0) {
             Alert.alert("Błąd", "Podaj nazwisko klienta");
+          }
+          else if (numberIsNotValid(phoneNumber)) {
+            Alert.alert("Błąd", "Podany numer kom. zawiera błędne znaki");
           }
           else if (phoneNumber.length < 9 || phoneNumber.length > 13) {
             Alert.alert("Błąd", "Podana długość numeru kom. jest błędna");

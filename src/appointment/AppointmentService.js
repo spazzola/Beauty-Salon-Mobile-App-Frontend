@@ -1,3 +1,5 @@
+import { Alert } from 'react-native';
+
 function extractStartTime(date) {
     return date.substring(11, 16);
 }
@@ -212,5 +214,33 @@ function addBackgroundColor(mode, appointment) {
         )
 }
 
+function isAppointmentFormValid(id, startDate, percentageValueToAdd, clientId, employeeId, workIds) {
+    if (id <= 0) {
+        Alert.alert("Błąd", "Złe id appointmentu, zadzwoń do mnie bo coś się wyjebało");
+        return false;
+    }
+    if (startDate === '' || startDate === undefined) {
+        Alert.alert("Błąd", "Podaj datę rozpoczęcia");
+        return false;
+    }
+    if (percentageValueToAdd < 0) {
+        Alert.alert("Błąd", "Podaj dodatnią wartość kary");
+        return false;
+    }
+    if (clientId <= 0 || clientId === undefined) {
+        Alert.alert("Błąd", "Wybierz klienta");
+        return false;
+    }
+    if (employeeId <= 0 || employeeId === undefined) {
+        Alert.alert("Błąd", "Wybierz pracownika");
+        return false;
+    }
+    if (workIds === null || workIds.length === 0) {
+        Alert.alert("Błąd", "Wybierz usługi");
+        return false;
+    }
+    return true;
+}
 
-export { createAppointmentBoxes, calculateDurationTime, createBoxes, changeShowMode, calculateElementTop, addBackgroundColor };
+
+export { createAppointmentBoxes, calculateDurationTime, createBoxes, changeShowMode, calculateElementTop, addBackgroundColor, isAppointmentFormValid };

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker'
 import { Context as ClientContext } from '../client/context/ClientContext';
@@ -10,6 +10,7 @@ import Modal from 'react-native-modal';
 import { buttonIcons } from '../icons/Icons';
 import { detailTitle, globalBackground, button, buttonText, buttonWrapper } from '../../GlobalStyles';
 import ClientForm from '../client/ClientForm';
+import { isAppointmentFormValid } from './AppointmentService';
 
 
 const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, givenDate, mode, givenClientId, givenEmployeeId, givenWorkIds }) => {
@@ -108,7 +109,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 mode='time'
                 display='spinner'
                 is24Hour={true}
-                style={{ marginTop: '5%'}}
+                style={{ marginTop: '5%' }}
               />
             </View>
 
@@ -264,15 +265,19 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
             />
 
             <View style={[buttonWrapper, { marginBottom: 50, marginTop: 30 }]}>
-              <TouchableOpacity style={[button, {marginTop: '5%'}]} onPress={
+              <TouchableOpacity style={[button, { marginTop: '5%' }]} onPress={
                 mode === 'edit' ? async () => {
-                  await onSubmit(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds, note);
-                  navigation.navigate('Appointments');
+                  if (isAppointmentFormValid(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds)) {
+                    await onSubmit(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds, note);
+                    navigation.navigate('Appointments');
+                  }
                 }
                   :
                   async () => {
-                    await onSubmit(startDate, percentageValueToAdd, clientId, employeeId, workIds, note);
-                    navigation.navigate('Appointments');
+                    if (isAppointmentFormValid(1, startDate, percentageValueToAdd, clientId, employeeId, workIds)) {
+                      await onSubmit(startDate, percentageValueToAdd, clientId, employeeId, workIds, note);
+                      navigation.navigate('Appointments');
+                    }
                   }
               }
               >
