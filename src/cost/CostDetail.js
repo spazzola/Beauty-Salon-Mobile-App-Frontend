@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { Context } from './context/CostContext';
 import { detailParagraph, detailTitle, globalBackground, button, buttonWrapper, buttonText } from '../../GlobalStyles';
 
@@ -18,22 +18,36 @@ const CostDetail = ({ navigation }) => {
                 </View>
 
                 <View>
-                    <Text style={[detailParagraph, { fontFamily: 'MerriWeather'}]}> {cost.name}</Text>
-                    <Text style={[detailParagraph, { fontFamily: 'MerriWeather'}]}> {cost.value} zł</Text>
+                    <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {cost.name}</Text>
+                    <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {cost.value} zł</Text>
                 </View>
             </View>
 
             <View style={buttonWrapper}>
-                    <TouchableOpacity style={button} onPress={() => navigation.navigate('CostEdit', { id: navigation.getParam('id') })}>
-                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Edytuj</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={button} onPress={() => {
-                    navigation.navigate('Costs')
-                    deleteCost(cost.id)
-                    }}>
-                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Usuń</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity style={button} onPress={() => navigation.navigate('CostEdit', { id: navigation.getParam('id') })}>
+                    <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Edytuj</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={button} onPress={() => {
+                    Alert.alert(
+                        "Usuwanie kosztu",
+                        "Czy napewno chcesz usunąc koszt?",
+                        [
+                            {
+                                text: "Nie",
+                                style: "cancel"
+                            },
+                            {
+                                text: "Tak", onPress: async () => {
+                                    navigation.navigate('Costs');
+                                    deleteCost(cost.id);
+                                }
+                            }
+                        ]
+                    );
+                }}>
+                    <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Usuń</Text>
+                </TouchableOpacity>
+            </View>
 
         </View>
     );

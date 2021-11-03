@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, Button, TouchableOpacity, Alert } from 'react-native';
 import { Context } from './context/ClientContext';
 import { globalBackground, button, buttonWrapper, buttonText, detailTitle, detailParagraph } from '../../GlobalStyles';
 
@@ -33,8 +33,22 @@ const ClientDetail = ({ navigation }) => {
                         <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Edytuj</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={button} onPress={() => {
-                        navigation.navigate('Clients')
-                        deleteClient(client.id)
+                        Alert.alert(
+                            "Usuwanie klienta",
+                            "Czy napewno chcesz usunąć klienta?",
+                            [
+                                {
+                                    text: "Nie",
+                                    style: "cancel"
+                                },
+                                {
+                                    text: "Tak", onPress: async () => {
+                                        navigation.navigate('Clients');
+                                        deleteClient(client.id);
+                                    }
+                                }
+                            ]
+                        );
                     }}>
                         <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Usuń</Text>
                     </TouchableOpacity>

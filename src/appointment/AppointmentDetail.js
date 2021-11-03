@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView, Alert } from 'react-native';
 import { Context as AppointmentContext } from './context/AppointmentContext';
 import { Context as WorkContext } from '../work/context/WorkContext';
 import { workIcons, buttonIcons } from '../icons/Icons';
@@ -145,8 +145,22 @@ const AppointmentDetail = ({ navigation }) => {
                         <View>
                             <View style={[buttonWrapper]}>
                                 <TouchableOpacity style={button} onPress={async () => {
-                                    await deleteAppointment(appointment.id);
-                                    navigation.navigate('Appointments');
+                                    Alert.alert(
+                                        "Usuwanie wizyty",
+                                        "Czy napewno chcesz usunąć wizytę?",
+                                        [
+                                            {
+                                                text: "Nie",
+                                                style: "cancel"
+                                            },
+                                            {
+                                                text: "Tak", onPress: async () => {
+                                                    await deleteAppointment(appointment.id);
+                                                    navigation.navigate('Appointments');
+                                                }
+                                            }
+                                        ]
+                                    );
                                 }}
                                 >
                                     <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Odwołaj wizytę</Text>

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import { Context } from './context/WorkContext';
 import { workIcons, buttonIcons } from '../icons/Icons';
 import { globalBackground, detailParagraph, detailTitle, button, buttonWrapper, buttonText } from '../../GlobalStyles';
@@ -23,9 +23,9 @@ const WorkDetail = ({ navigation }) => {
                     </View>
 
                     <View>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather'}]}> {work.name}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather'}]}> {work.price}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather'}]}> {work.hoursDuration}h {work.minutesDuration}min</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {work.name}</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {work.price}</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {work.hoursDuration}h {work.minutesDuration}min</Text>
                         <Text style={detailParagraph}> <Image style={{ marginLeft: 50, maxWidth: 30, maxHeight: 30 }} source={icon.uri} /></Text>
                     </View>
                 </View>
@@ -35,8 +35,22 @@ const WorkDetail = ({ navigation }) => {
                         <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Edytuj</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={button} onPress={() => {
-                        navigation.navigate('Works')
-                        deleteWork(work.id)
+                        Alert.alert(
+                            "Usuwanie usługi",
+                            "Czy napewno chcesz usunąć usługę?",
+                            [
+                                {
+                                    text: "Nie",
+                                    style: "cancel"
+                                },
+                                {
+                                    text: "Tak", onPress: async () => {
+                                        navigation.navigate('Works');
+                                        deleteWork(work.id);
+                                    }
+                                }
+                            ]
+                        );
                     }}>
                         <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Usuń</Text>
                     </TouchableOpacity>

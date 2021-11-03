@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { Context } from './context/UserContext';
 import { globalBackground, detailTitle, detailParagraph, button, buttonWrapper, buttonText } from '../../GlobalStyles';
 import { buttonIcons } from '../icons/Icons';
@@ -33,8 +33,22 @@ const UserDetail = ({ navigation }) => {
                         <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Edytuj</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={button} onPress={() => {
-                        navigation.navigate('Users')
-                        deleteUser(user.id)
+                        Alert.alert(
+                            "Usuwanie pracownika",
+                            "Czy napewno chcesz usunąć pracownika?",
+                            [
+                                {
+                                    text: "Nie",
+                                    style: "cancel"
+                                },
+                                {
+                                    text: "Tak", onPress: async () => {
+                                        navigation.navigate('Users');
+                                        deleteUser(user.id);
+                                    }
+                                }
+                            ]
+                        );
                     }}>
                         <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Usuń</Text>
                     </TouchableOpacity>
