@@ -42,7 +42,7 @@ const input = {
     shadowOffset: { width: 2, height: 4 },
     shadowOpacity: 0.7,
     shadowRadius: 3,
-    backgroundColor: '#FF00E4',
+    backgroundColor: '#F1D1D0',
 };
 
 const detailParagraph = {
