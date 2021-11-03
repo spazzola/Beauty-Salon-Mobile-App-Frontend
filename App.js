@@ -1,4 +1,4 @@
-import React, {Image, Text} from 'react';
+import React, { Image, Text } from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack'
 
@@ -35,6 +35,9 @@ import { Provider as AppointmentProvider } from './src/appointment/context/Appoi
 import AppointmentAdd from './src/appointment/AppointmentAdd';
 import AppointmentDetail from './src/appointment/AppointmentDetail';
 import AppointmentEdit from './src/appointment/AppointmentEdit';
+
+import ReportScreen from './src/report/ReportScreen';
+import { Provider as ReportProvider } from './src/report/context/ReportContext';
 
 const headerBackgroundColor = "#F1D1D0"
 
@@ -254,6 +257,15 @@ const navigator = createStackNavigator({
         backgroundColor: headerBackgroundColor,
       },
     }
+  },
+  Reports: {
+    screen: ReportScreen,
+    navigationOptions: {
+      title: 'Raport',
+      headerStyle: {
+        backgroundColor: headerBackgroundColor,
+      },
+    }
   }
 },
   {
@@ -264,17 +276,19 @@ const navigator = createStackNavigator({
 const App = createAppContainer(navigator);
 
 export default () => {
-  return <AppointmentProvider>
-    <WorkProvider>
-      <SolariumProvider>
-        <CostProvider>
-          <ClientProvider>
-            <UserProvider>
-              <App />
-            </UserProvider>
-          </ClientProvider>
-        </CostProvider>
-      </SolariumProvider>
-    </WorkProvider>
-  </AppointmentProvider>
+  return <ReportProvider>
+    <AppointmentProvider>
+      <WorkProvider>
+        <SolariumProvider>
+          <CostProvider>
+            <ClientProvider>
+              <UserProvider>
+                <App />
+              </UserProvider>
+            </ClientProvider>
+          </CostProvider>
+        </SolariumProvider>
+      </WorkProvider>
+    </AppointmentProvider>
+  </ReportProvider>
 };
