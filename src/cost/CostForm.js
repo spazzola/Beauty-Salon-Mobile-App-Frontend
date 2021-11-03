@@ -35,7 +35,7 @@ const CostForm = ({ onSubmit, initialValues, mode }) => {
           onChange={text => setValue(text)}
         />
 
-        <View style={{width: '90%'}}>
+        <View style={{ width: '90%' }}>
           <DateTimePicker
             value={addedDate}
             onChange={onChange}
@@ -45,7 +45,17 @@ const CostForm = ({ onSubmit, initialValues, mode }) => {
         </View>
 
         <View style={[buttonWrapper]}>
-          <TouchableOpacity style={[button]} onPress={() => { onSubmit(name, value, addedDate) }}>
+          <TouchableOpacity style={[button]} onPress={() => {
+            if (name.length === 0) {
+              alert("Podaj nazwę kosztu")
+            } 
+            else if (value <= 0) {
+              alert("Podaj wartość kosztu")
+            }
+            else {
+              onSubmit(name, value, addedDate)
+            }
+          }}>
             <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj koszt' : 'Dodaj koszt'}</Text>
           </TouchableOpacity>
         </View>
