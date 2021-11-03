@@ -76,7 +76,7 @@ const AppointmentCalendar = ({ navigation }) => {
                 <TouchableOpacity style={button} onPress={() => navigation.navigate('Works')}>
                     <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Usługi</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={button} onPress={() => navigation.navigate('')}>
+                <TouchableOpacity style={button} onPress={() => navigation.navigate('Reports')}>
                     <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Raporty</Text>
                 </TouchableOpacity>
             </View>
