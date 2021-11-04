@@ -1,5 +1,6 @@
 import createDataContext from '../../../createDataContext';
 //import axios from './SolariumApi';
+import { Alert } from 'react-native';
 import axios from '../../../axios-config';
 import { format } from 'date-fns'
 
@@ -20,8 +21,11 @@ const useSolarium = dispatch => {
             usedTime
         };
 
-        await axios.post('/solarium/use', solarium);
-        
+        await axios.post('/solarium/use', solarium)
+            .catch(error => {
+                Alert.alert("Błąd ", "Nie dodano użycia solarium. \nKod błędu: " + error.response.status);
+            });;
+
         if (callback) {
             callback();
         };

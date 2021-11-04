@@ -1,5 +1,6 @@
 import createDataContext from '../../../createDataContext';
 //import axios from './UserApi';
+import { Alert } from 'react-native';
 import axios from '../../../axios-config';
 
 const userReducer = (state, action) => {
@@ -26,7 +27,10 @@ const addUser = dispatch => {
             login,
             password
         };
-        await axios.post('/user/register', user);
+        await axios.post('/user/register', user)
+            .catch(error => {
+                Alert.alert("Błąd ", "Nie dodano pracownika. \nKod błędu: " + error.response.status);
+            });
 
         if (callback) {
             callback();
@@ -46,6 +50,8 @@ const deleteUser = dispatch => {
             params: {
                 id
             }
+        }).catch(error => {
+            Alert.alert("Błąd ", "Nie zaktualizowano pracownika. \nKod błędu: " + error.response.status);
         });
         getUsers();
         //dispatch({ type: 'delete_client', payload: id });
@@ -62,7 +68,11 @@ const editUser = dispatch => {
             login,
             password
         };
-        await axios.put('user/update', user);
+        await axios.put('user/update', user)
+            .catch(error => {
+                Alert.alert("Błąd ", "Nie usunięto pracownika. \nKod błędu: " + error.response.status);
+            });
+            
         dispatch({
             type: 'edit_user',
             payload: { id, name, surname, phoneNumber, login, password }

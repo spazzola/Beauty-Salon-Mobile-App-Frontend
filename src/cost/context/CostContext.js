@@ -1,5 +1,6 @@
 import createDataContext from '../../../createDataContext';
 //import axios from './CostApi';
+import { Alert } from 'react-native';
 import axios from '../../../axios-config';
 import { format } from 'date-fns'
 
@@ -20,14 +21,17 @@ const costReducer = (state, action) => {
 
 const addCost = dispatch => {
     return async (name, value, addedDate, callback) => {
-            addedDate = format(addedDate, 'dd.MM.yyyy hh:mm').replace(/\./g, '/');
+        addedDate = format(addedDate, 'dd.MM.yyyy hh:mm').replace(/\./g, '/');
         let cost = {
             name,
             value,
             addedDate
         };
 
-        await axios.post('/cost/create', cost);
+        await axios.post('/cost/create', cost)
+            .catch(error => {
+                Alert.alert("Błąd ", "Nie dodano kosztu. \nKod błędu: " + error.response.status);
+            });
 
         if (callback) {
             callback();
@@ -52,6 +56,8 @@ const deleteCost = dispatch => {
             params: {
                 id
             }
+        }).catch(error => {
+            Alert.alert("Błąd ", "Nie usunięto kosztu. \nKod błędu: " + error.response.status);
         });
         getCosts();
         //dispatch({ type: 'delete_client', payload: id });
@@ -67,7 +73,10 @@ const editCost = dispatch => {
             value,
             addedDate
         };
-        await axios.put('cost/update', cost);
+        await axios.put('cost/update', cost)
+            .catch(error => {
+                Alert.alert("Błąd ", "Nie zaktualizowano kosztu. \nKod błędu: " + error.response.status);
+            });
         dispatch({
             type: 'edit_cost',
             payload: { id, name, value }

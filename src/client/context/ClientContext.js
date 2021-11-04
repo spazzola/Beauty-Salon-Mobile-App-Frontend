@@ -1,4 +1,5 @@
 import createDataContext from '../../../createDataContext';
+import { Alert } from 'react-native';
 //import axios from './ClientApi';
 import axios from '../../../axios-config';
 
@@ -24,7 +25,10 @@ const addClient = dispatch => {
             surname,
             phoneNumber
         };
-        await axios.post('/client/create', client);
+        await axios.post('/client/create', client)
+            .catch(error => {
+                Alert.alert("Błąd ", "Nie dodano klienta. \nKod błędu: " + error.response.status);
+            });
 
         if (callback) {
             callback();
@@ -44,6 +48,8 @@ const deleteClient = dispatch => {
             params: {
                 id
             }
+        }).catch(error => {
+            Alert.alert("Błąd ", "Nie usunięto klienta. \nKod błędu: " + error.response.status);
         });
         getClients();
         //dispatch({ type: 'delete_client', payload: id });
@@ -58,7 +64,11 @@ const editClient = dispatch => {
             surname,
             phoneNumber
         };
-        await axios.put('client/update', client);
+        await axios.put('client/update', client)
+            .catch(error => {
+                Alert.alert("Błąd ", "Nie zaktualizowano klienta. \nKod błędu: " + error.response.status);
+            });
+
         dispatch({
             type: 'edit_client',
             payload: { id, name, surname, phoneNumber }

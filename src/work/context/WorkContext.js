@@ -1,5 +1,6 @@
 import createDataContext from '../../../createDataContext';
 //import axios from './WorkApi';
+import { Alert } from 'react-native';
 import axios from '../../../axios-config';
 
 const workReducer = (state, action) => {
@@ -27,7 +28,10 @@ const addWork = dispatch => {
             iconName
         };
 
-        await axios.post('/work/create', work);
+        await axios.post('/work/create', work)
+            .catch(error => {
+                Alert.alert("Błąd ", "Nie dodano usługi. \nKod błędu: " + error.response.status);
+            });
 
         if (callback) {
             callback();
@@ -47,6 +51,8 @@ const deleteWork = dispatch => {
             params: {
                 id
             }
+        }).catch(error => {
+            Alert.alert("Błąd ", "Nie usunięto usługi. \nKod błędu: " + error.response.status);
         });
         getWorks();
         //dispatch({ type: 'delete_client', payload: id });
@@ -63,7 +69,11 @@ const editWork = dispatch => {
             minutesDuration,
             iconName,
         };
-        await axios.put('work/update', work);
+        await axios.put('work/update', work)
+        .catch(error => {
+            Alert.alert("Błąd ", "Nie zaktualizowano usługi. \nKod błędu: " + error.response.status);
+        });
+
         dispatch({
             type: 'edit_work',
             payload: { id, name, price, hoursDuration, minutesDuration, iconName }

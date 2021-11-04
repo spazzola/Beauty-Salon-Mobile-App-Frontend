@@ -1,5 +1,6 @@
 import createDataContext from '../../../createDataContext';
 import axios from '../../../axios-config';
+import { Alert } from 'react-native';
 import { format } from 'date-fns'
 
 
@@ -31,13 +32,17 @@ const addAppointment = dispatch => {
             note
         };
 
-        await axios.post('/appointment/create', appointment);
+        await axios.post('/appointment/create', appointment)
+            .catch(error => {
+                Alert.alert("Błąd ", "Nie dodano wizyty. Sprawdź czy wybrana data nie koliduje z datą innej wizyty. \nKod błędu: " + error.response.status);
+            });
 
         if (callback) {
             callback();
         };
     };
 }
+
 const getAppointments = dispatch => {
     return async () => {
         const response = await axios.get('/appointment/getAll');
@@ -51,6 +56,8 @@ const deleteAppointment = dispatch => {
             params: {
                 id
             }
+        }).catch(error => {
+            Alert.alert("Błąd ", "Nie usunięto wizyty. \nKod błędu: " + error.response.status);
         });
         // ??? to delete?
         getAppointments();
@@ -71,8 +78,12 @@ const editAppointment = dispatch => {
             percentageValueToAdd,
             note
         };
-        console.log(appointment);
-        await axios.put('appointment/update', appointment);
+
+        await axios.put('appointment/update', appointment)
+            .catch(error => {
+                Alert.alert("Błąd ", "Nie zaktualizowano wizyty. Sprawdź czy wybrana data nie koliduje z datą innej wizyty. \nKod błędu: " + error.response.status);
+            });
+
         dispatch({
             type: 'edit_appointment',
             payload: { appointmentId, startDate, clientId, employeeId, workIds, percentageValueToAdd }
