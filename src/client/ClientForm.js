@@ -15,6 +15,7 @@ const ClientForm = ({ onSubmit, initialValues, mode }) => {
   const [name, setName] = useState(initialValues.name);
   const [surname, setSurname] = useState(initialValues.surname);
   const [phoneNumber, setPhoneNumber] = useState(initialValues.phoneNumber);
+  const [belatedCounter, setBelatedCounter] = useState(initialValues.belatedCounter);
 
   return (
     <View style={[globalBackground, { alignItems: 'center', height: '100%' }]}>
@@ -53,7 +54,7 @@ const ClientForm = ({ onSubmit, initialValues, mode }) => {
           else if (phoneNumber.length < 9 || phoneNumber.length > 13) {
             Alert.alert("Błąd", "Podana długość numeru kom. jest błędna");
           } else {
-            onSubmit(name, surname, phoneNumber);
+            onSubmit(name, surname, phoneNumber, belatedCounter);
           }
         }}>
           <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj klienta' : 'Dodaj klienta'}</Text>
@@ -68,7 +69,8 @@ ClientForm.defaultProps = {
   initialValues: {
     name: '',
     surname: '',
-    phoneNumber: ''
+    phoneNumber: '',
+    belatedCounter: ''
   }
 };
 

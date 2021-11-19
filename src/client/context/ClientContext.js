@@ -57,12 +57,13 @@ const deleteClient = dispatch => {
 };
 
 const editClient = dispatch => {
-    return async (id, name, surname, phoneNumber, callback) => {
+    return async (id, name, surname, phoneNumber, belatedCounter, callback) => {
         let client = {
             id,
             name,
             surname,
-            phoneNumber
+            phoneNumber,
+            belatedCounter
         };
         await axios.put('client/update', client)
             .catch(error => {
@@ -71,7 +72,7 @@ const editClient = dispatch => {
 
         dispatch({
             type: 'edit_client',
-            payload: { id, name, surname, phoneNumber }
+            payload: { id, name, surname, phoneNumber, belatedCounter }
         });
         if (callback) {
             callback();
