@@ -4,10 +4,31 @@ import NumericInput from 'react-native-numeric-input';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { input, globalBackground, detailTitle, button, buttonWrapper, buttonText } from '../../GlobalStyles';
 
+function extractDay(dateString) {
+  return dateString.substring(0, 2);
+}
+
+function extractMonth(dateString) {
+  return dateString.substring(3, 5);
+}
+
+function extractYear(dateString) {
+  return dateString.substring(6, 10);
+}
+
 const CostForm = ({ onSubmit, initialValues, mode }) => {
   const [name, setName] = useState(initialValues.name);
   const [value, setValue] = useState(initialValues.value);
-  const [addedDate, setAddedDate] = useState(initialValues.name === '' ? new Date(Date.now()) : new Date(initialValues.addedDate));
+
+  let day;
+  let month;
+  let year;
+  if (initialValues.addedDate !== undefined) {
+    day = extractDay(initialValues.addedDate);
+    month = extractMonth(initialValues.addedDate);
+    year = extractYear(initialValues.addedDate);
+  }
+  const [addedDate, setAddedDate] = useState(initialValues.name === '' ? new Date(Date.now()) : new Date(year, month - 1, day));
 
   const onChange = (event, selectedDate) => {
     let currentDate = selectedDate || addedDate;
@@ -40,6 +61,7 @@ const CostForm = ({ onSubmit, initialValues, mode }) => {
             value={addedDate}
             onChange={onChange}
             display='spinner'
+            locale={'pl'}
             style={{ backgroundColor: globalBackground.backgroundColor, marginTop: '5%' }}
           />
         </View>
