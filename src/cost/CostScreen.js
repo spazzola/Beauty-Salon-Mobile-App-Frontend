@@ -37,6 +37,7 @@ const CostScreen = ({ navigation }) => {
         <View style={[globalBackground, styles.container]}>
             <DateTimePicker
                 value={date}
+                locale={'pl'}
                 onChange={onChange}
             />
             <FlatList
