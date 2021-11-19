@@ -19,6 +19,8 @@ const UserForm = ({ onSubmit, initialValues, mode }) => {
   const [login, setLogin] = useState(initialValues.login);
   const [password, setPassword] = useState(initialValues.password);
   const [confirmPassword, setConfirmPassword] = useState(initialValues.confirmPassword);
+  const [role, setRole] = useState(initialValues.role);
+  const [visible, setVisible] = useState(initialValues.visible);
 
 
   return (
@@ -95,7 +97,7 @@ const UserForm = ({ onSubmit, initialValues, mode }) => {
               else if (password !== confirmPassword) {
                 Alert.alert("Błąd", "Podane hasła różnią się od siebie");
               } else {
-                onSubmit(name, surname, phoneNumber, login, password);
+                onSubmit(name, surname, phoneNumber, login, password, role, visible);
               }
             }}>
               <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj pracownika' : 'Dodaj pracownika'}</Text>
@@ -113,6 +115,8 @@ UserForm.defaultProps = {
     surname: '',
     phoneNumber: '',
     login: '',
+    role: 'USER',
+    visible: ''
   }
 };
 

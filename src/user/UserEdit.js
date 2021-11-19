@@ -13,9 +13,9 @@ const UserEdit = ({ navigation }) => {
   return (
     <UserForm
       mode={'edit'}
-      initialValues={{ name: user.name, surname: user.surname, phoneNumber: user.phoneNumber, login: user.login }}
-      onSubmit={(name, surname, phoneNumber, login, password) => {
-        editUser(id, name, surname, phoneNumber, login, password, () => navigation.pop());
+      initialValues={{ name: user.name, surname: user.surname, phoneNumber: user.phoneNumber, login: user.login, role: user.role, visible: user.visible }}
+      onSubmit={(name, surname, phoneNumber, login, password, role, visible) => {
+        editUser(id, name, surname, phoneNumber, login, password, role, visible, () => navigation.pop());
       }}
     />
   );

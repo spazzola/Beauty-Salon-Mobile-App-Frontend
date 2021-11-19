@@ -59,23 +59,26 @@ const deleteUser = dispatch => {
 };
 
 const editUser = dispatch => {
-    return async (id, name, surname, phoneNumber, login, password, callback) => {
+    return async (id, name, surname, phoneNumber, login, password, role, visible, callback) => {
         let user = {
             id,
             name,
             surname,
             phoneNumber,
             login,
-            password
+            password,
+            role,
+            visible
         };
+
         await axios.put('user/update', user)
             .catch(error => {
-                Alert.alert("Błąd ", "Nie usunięto pracownika. \nKod błędu: " + error.response.status);
+                Alert.alert("Błąd ", "Nie zaktualizowano pracownika. \nKod błędu: " + error.response.status);
             });
             
         dispatch({
             type: 'edit_user',
-            payload: { id, name, surname, phoneNumber, login, password }
+            payload: { id, name, surname, phoneNumber, login, password, role, visible }
         });
         if (callback) {
             callback();
