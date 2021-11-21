@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import createDataContext from '../../../createDataContext';
 import axios from '../../../axios-config';
 import { navigate } from '../../navigationRef';
+import { Alert } from 'react-native';
 
 const authReducer = (state, action) => {
     switch (action.type) {
@@ -19,7 +20,7 @@ const signin = dispatch => async ({ login, password }) => {
         dispatch({ type: 'signin', payload: response.data })
         navigate('mainFlow');
     } catch (err) {
-        console.log(err);
+        Alert.alert("Błąd ", "Logowanie nie powiodło się. Sprawdź login oraz hasło. \nKod błędu: " + error.response.status);
     }
 };
 
