@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { Context } from './context/CostContext';
 import CostForm from './CostForm';
+import { headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 
 const CostEdit = ({ navigation }) => {
   const id = navigation.getParam('id');
@@ -19,6 +20,17 @@ const CostEdit = ({ navigation }) => {
       }}
     />
   );
+};
+
+CostEdit.navigationOptions = {
+  title: 'Edytowanie kosztu',
+  headerTintColor: headerTitleColor,
+  headerTitleStyle: {
+    fontFamily: 'MerriWeatherBold'
+  },
+  headerStyle: {
+    backgroundColor: headerBackgroundColor,
+  },
 };
 
 const styles = StyleSheet.create({});

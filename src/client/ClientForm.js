@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, TextInput, Text, Alert } from 'react-native';
-import { input, globalBackground, button, buttonText, buttonWrapper } from '../../GlobalStyles';
+import { input, globalBackground, button, buttonText, buttonWrapper, headerBackgroundColor } from '../../GlobalStyles';
 
 function numberIsNotValid(phoneNumber) {
   const spaceIndex = phoneNumber.indexOf(" ");
@@ -10,6 +10,7 @@ function numberIsNotValid(phoneNumber) {
 
   return !isFinite(numberWithoutWhiteSpace);
 }
+
 
 const ClientForm = ({ onSubmit, initialValues, mode }) => {
   const [name, setName] = useState(initialValues.name);
@@ -73,6 +74,7 @@ ClientForm.defaultProps = {
     belatedCounter: ''
   }
 };
+
 
 const styles = StyleSheet.create({
   input: {

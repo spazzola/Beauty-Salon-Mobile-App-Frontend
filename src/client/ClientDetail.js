@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity, Alert } from 'react-native';
 import { Context } from './context/ClientContext';
-import { globalBackground, button, buttonWrapper, buttonText, detailTitle, detailParagraph } from '../../GlobalStyles';
+import { globalBackground, button, buttonWrapper, buttonText, detailTitle, detailParagraph, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 
 const ClientDetail = ({ navigation }) => {
     const { state, deleteClient } = useContext(Context);
@@ -58,6 +58,17 @@ const ClientDetail = ({ navigation }) => {
         </>
     );
 }
+
+ClientDetail.navigationOptions = {
+    title: 'Klient',
+    headerTintColor: headerTitleColor,
+    headerTitleStyle: {
+        fontFamily: 'MerriWeatherBold'
+    },
+    headerStyle: {
+        backgroundColor: headerBackgroundColor,
+    },
+};
 
 const styles = StyleSheet.create({
     paragraph: {

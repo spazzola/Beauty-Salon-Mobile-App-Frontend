@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { Context } from './context/UserContext';
 import UserForm from './UserForm';
+import { headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 
 const UserEdit = ({ navigation }) => {
   const id = navigation.getParam('id');
@@ -19,6 +20,17 @@ const UserEdit = ({ navigation }) => {
       }}
     />
   );
+};
+
+UserEdit.navigationOptions = {
+  title: 'Edytowanie pracownika',
+  headerTintColor: headerTitleColor,
+  headerTitleStyle: {
+      fontFamily: 'MerriWeatherBold'
+  },
+  headerStyle: {
+      backgroundColor: headerBackgroundColor,
+  },
 };
 
 const styles = StyleSheet.create({});

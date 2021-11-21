@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { Context } from './context/ClientContext';
 import ClientForm from './ClientForm';
+import { headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 
 const ClientEdit = ({ navigation }) => {
   const id = navigation.getParam('id');
@@ -19,6 +20,17 @@ const ClientEdit = ({ navigation }) => {
       }}
     />
   );
+};
+
+ClientEdit.navigationOptions = {
+  title: 'Edytowanie klienta',
+  headerTintColor: headerTitleColor,
+  headerTitleStyle: {
+      fontFamily: 'MerriWeatherBold'
+  },
+  headerStyle: {
+      backgroundColor: headerBackgroundColor,
+  },
 };
 
 const styles = StyleSheet.create({});

@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { Context } from './context/AppointmentContext';
 import AppointmentForm from './AppointmentForm';
+import { headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 
 const AppointmentAdd = ({ navigation }) => {
   const { addAppointment } = useContext(Context);
@@ -14,6 +15,17 @@ const AppointmentAdd = ({ navigation }) => {
       }}
     />
   );
+};
+
+AppointmentAdd.navigationOptions = {
+  title: 'Dodawanie wizyty',
+  headerTintColor: headerTitleColor,
+  headerTitleStyle: {
+      fontFamily: 'MerriWeatherBold'
+  },
+  headerStyle: {
+      backgroundColor: headerBackgroundColor,
+  },
 };
 
 const styles = StyleSheet.create({});

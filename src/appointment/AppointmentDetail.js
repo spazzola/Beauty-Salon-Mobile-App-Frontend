@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView, 
 import { Context as AppointmentContext } from './context/AppointmentContext';
 import { Context as WorkContext } from '../work/context/WorkContext';
 import { workIcons, buttonIcons } from '../icons/Icons';
-import { globalBackground, detailTitle, detailParagraph, button, buttonText, buttonWrapper } from '../../GlobalStyles';
+import { globalBackground, detailTitle, detailParagraph, button, buttonText, buttonWrapper, headerTitleColor, headerBackgroundColor } from '../../GlobalStyles';
 import Modal from 'react-native-modal';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker'
@@ -309,6 +309,17 @@ const AppointmentDetail = ({ navigation }) => {
         </>
     );
 }
+
+AppointmentDetail.navigationOptions = {
+    title: 'Wizyta',
+    headerTintColor: headerTitleColor,
+    headerTitleStyle: {
+        fontFamily: 'MerriWeatherBold'
+    },
+    headerStyle: {
+        backgroundColor: headerBackgroundColor,
+    },
+  };
 
 const styles = StyleSheet.create({
     modalContainer: {

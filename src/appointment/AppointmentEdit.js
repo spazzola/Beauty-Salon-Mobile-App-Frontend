@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Context } from './context/AppointmentContext';
 import AppointmentForm from './AppointmentForm';
+import { headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 
 function getWorkIds(worksList) {
     const resultList = [];
@@ -43,6 +44,17 @@ const AppointmentEdit = ({ navigation }) => {
         />
     );
 };
+
+AppointmentEdit.navigationOptions = {
+    title: 'Edytowanie wizyty',
+    headerTintColor: headerTitleColor,
+    headerTitleStyle: {
+        fontFamily: 'MerriWeatherBold'
+    },
+    headerStyle: {
+        backgroundColor: headerBackgroundColor,
+    },
+  };
 
 const styles = StyleSheet.create({});
 

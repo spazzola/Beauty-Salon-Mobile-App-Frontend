@@ -82,4 +82,19 @@ const buttonText = {
     color: '#F4F9F9'
 }
 
-export { globalBackground, itemContainer, itemParagraph, input, detailTitle, detailParagraph, button, buttonText, buttonWrapper };
+const headerBackgroundColor = "#F1D1D0";
+const headerTitleColor = '#F875AA';
+
+export { 
+    globalBackground, 
+    itemContainer, 
+    itemParagraph, 
+    input, 
+    detailTitle, 
+    detailParagraph, 
+    button, 
+    buttonText, 
+    buttonWrapper, 
+    headerBackgroundColor ,
+    headerTitleColor
+};

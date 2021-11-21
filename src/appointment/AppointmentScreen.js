@@ -5,7 +5,7 @@ import AppointmentItem from './AppointmentItem';
 import BaseRadioGroup from '../base_components/BaseRadioGroup';
 import { changeShowMode } from './AppointmentService';
 import { buttonIcons } from '../icons/Icons';
-import { globalBackground, buttonText, button } from '../../GlobalStyles';
+import { globalBackground, buttonText, button, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import { Context as AuthContext } from '../signin/context/AuthContext';
 
 // function extractHours(startDate) {
@@ -14,14 +14,13 @@ import { Context as AuthContext } from '../signin/context/AuthContext';
 
 //CONFIGURATION
 let boxHeight = 100;
-
 let hours = ["6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
-
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
+let headerTitle;
+
 function sortList(appointments, appointmentsToShow, selectedDay) {
-    console.log("Sorting appointments, day: " + selectedDay);
     if (appointmentsToShow.myAppointments && !appointmentsToShow.employeeAppointments) {
         return appointments.filter((appointment) =>
             appointment.employee.role === 'ADMIN' && appointment.finishDate.substring(8, 10) == selectedDay
@@ -33,7 +32,7 @@ function sortList(appointments, appointmentsToShow, selectedDay) {
         );
     }
     if (appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments) {
-        return appointments.filter((appo) =>  appo.finishDate.substring(8, 10) == selectedDay);
+        return appointments.filter((appo) => appo.finishDate.substring(8, 10) == selectedDay);
     }
     if (!appointmentsToShow.myAppointments && !appointmentsToShow.employeeAppointments) {
         return [];
@@ -52,9 +51,11 @@ const AppointmentScreen = ({ navigation }) => {
     function changeAppointmentsToShow(event) {
         setAppointmentsToShow(event);
     }
-
+    
     useEffect(() => {
         const date = navigation.getParam('selectedDate');
+        headerTitle = date.day + '/' + date.month + '/' + date.year;
+
         getAppointments(date.month, date.year, authState.state.id);
         // let selectedDate = navigation.getParam('selectedDate');
         // let formattedDate = selectedDate.day + "/" + selectedDate.month + "/" + selectedDate.year + " 00:00";
@@ -83,7 +84,7 @@ const AppointmentScreen = ({ navigation }) => {
             {authState.state.role === 'ADMIN' ?
                 <View style={[globalBackground, { marginBottom: 0, justifyContent: 'center', zIndex: 2 }]}>
                     <BaseRadioGroup navigation={navigation} changeAppointmentsToShow={changeAppointmentsToShow} />
-                </View>  : null
+                </View> : null
             }
             <ScrollView contentContainerStyle={{ height: 1800 }} showsVerticalScrollIndicator={false} >
                 <View style={[globalBackground, { position: 'absolute', zIndex: -2, height: 2000, top: authState.state.role === 'ADMIN' ? 30 : 0 }]}>
@@ -148,6 +149,19 @@ const AppointmentScreen = ({ navigation }) => {
         </>
     );
 }
+
+AppointmentScreen.navigationOptions = (navigation) => {
+    return {
+        title: headerTitle,
+        headerTintColor: headerTitleColor,
+        headerTitleStyle: {
+            fontFamily: 'MerriWeatherBold'
+        },
+        headerStyle: {
+            backgroundColor: headerBackgroundColor,
+        },
+    }
+};
 
 const styles = StyleSheet.create({
     wrapper: {

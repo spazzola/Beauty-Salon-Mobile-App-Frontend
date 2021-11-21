@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 import { Context } from './context/WorkContext';
 import WorkItem from './WorkItem';
-import { globalBackground, button, buttonText } from '../../GlobalStyles';
+import { globalBackground, button, buttonText, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 
 const WorkScreen = ({ navigation }) => {
     const { state, addClient, getWorks } = useContext(Context);
@@ -52,6 +52,17 @@ const WorkScreen = ({ navigation }) => {
         </View>
     );
 }
+
+WorkScreen.navigationOptions = {
+    title: 'Usługi',
+    headerTintColor: '#F875AA',
+    headerTitleStyle: {
+        fontFamily: 'MerriWeatherBold'
+    },
+    headerStyle: {
+        backgroundColor: headerBackgroundColor,
+    },
+};
 
 const styles = StyleSheet.create({
     container: {

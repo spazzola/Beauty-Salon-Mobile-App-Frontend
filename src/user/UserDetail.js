@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { Context } from './context/UserContext';
-import { globalBackground, detailTitle, detailParagraph, button, buttonWrapper, buttonText } from '../../GlobalStyles';
+import { globalBackground, detailTitle, detailParagraph, button, buttonWrapper, buttonText, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import { buttonIcons } from '../icons/Icons';
 
 const UserDetail = ({ navigation }) => {
@@ -57,6 +57,17 @@ const UserDetail = ({ navigation }) => {
         </>
     );
 }
+
+UserDetail.navigationOptions = {
+    title: 'Pracownik',
+    headerTintColor: headerTitleColor,
+    headerTitleStyle: {
+        fontFamily: 'MerriWeatherBold'
+    },
+    headerStyle: {
+        backgroundColor: headerBackgroundColor,
+    },
+};
 
 const styles = StyleSheet.create({
     paragraph: {

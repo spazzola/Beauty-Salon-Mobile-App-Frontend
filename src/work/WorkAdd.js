@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { Context } from './context/WorkContext';
 import WorkForm from './WorkForm';
+import { headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 
 const WorkAdd = ({ navigation }) => {
     const { addWork } = useContext(Context);
@@ -14,6 +15,17 @@ const WorkAdd = ({ navigation }) => {
             }}
         />
     );
+};
+
+WorkAdd.navigationOptions = {
+    title: 'Dodawanie usługi',
+    headerTintColor: headerTitleColor,
+    headerTitleStyle: {
+        fontFamily: 'MerriWeatherBold'
+    },
+    headerStyle: {
+        backgroundColor: headerBackgroundColor,
+    },
 };
 
 const styles = StyleSheet.create({});

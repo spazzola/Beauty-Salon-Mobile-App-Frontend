@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { Context } from './context/CostContext';
-import { detailParagraph, detailTitle, globalBackground, button, buttonWrapper, buttonText } from '../../GlobalStyles';
+import { detailParagraph, detailTitle, globalBackground, button, buttonWrapper, buttonText, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 
 const CostDetail = ({ navigation }) => {
     const { state, deleteCost } = useContext(Context);
@@ -52,6 +52,18 @@ const CostDetail = ({ navigation }) => {
         </View>
     );
 }
+
+CostDetail.navigationOptions = {
+    title: 'Koszt',
+    headerTintColor: headerTitleColor,
+    headerTitleStyle: {
+        fontFamily: 'MerriWeatherBold'
+    },
+    headerStyle: {
+        backgroundColor: headerBackgroundColor,
+    },
+};
+
 
 const styles = StyleSheet.create({
     buttonsContainer: {

@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Button, TouchableOpacity } from 'react-native';
 import { Context } from './context/SolariumContext';
 import SolariumItem from './SolariumItem';
+import { headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 
 const SolariumScreen = ({ navigation }) => {
     const { state, getMonthSolarium, useSolarium } = useContext(Context);
@@ -28,6 +29,17 @@ const SolariumScreen = ({ navigation }) => {
         </View>
     );
 }
+
+SolariumScreen.navigationOptions = {
+    title: 'Solarium',
+    headerTintColor: headerTitleColor,
+    headerTitleStyle: {
+        fontFamily: 'MerriWeatherBold'
+    },
+    headerStyle: {
+        backgroundColor: headerBackgroundColor,
+    },
+};
 
 const styles = StyleSheet.create({})
 

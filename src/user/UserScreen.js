@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { View, Image, StyleSheet, FlatList, TouchableOpacity, Text } from 'react-native';
 import { Context } from './context/UserContext';
 import UserItem from './UserItem';
-import { globalBackground, button, buttonText } from '../../GlobalStyles';
+import { globalBackground, button, buttonText, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import { buttonIcons } from '../icons/Icons';
 
 const UserScreen = ({ navigation }) => {
@@ -58,6 +58,17 @@ const UserScreen = ({ navigation }) => {
         </View>
     );
 }
+
+UserScreen.navigationOptions = {
+    title: 'Personel',
+    headerTintColor: headerTitleColor,
+    headerTitleStyle: {
+        fontFamily: 'MerriWeatherBold'
+    },
+    headerStyle: {
+        backgroundColor: headerBackgroundColor,
+    },
+};
 
 const styles = StyleSheet.create({
     container: {

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Context } from './context/ReportContext';
-import { globalBackground, button, buttonWrapper, buttonText, detailTitle } from '../../GlobalStyles';
+import { globalBackground, button, buttonWrapper, buttonText, detailTitle, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import ReportItem from './ReportItem';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -53,6 +53,17 @@ const ReportScreen = ({ navigation }) => {
         </View>
     );
 }
+
+ReportScreen.navigationOptions = {
+    title: 'Raporty',
+    headerTintColor: headerTitleColor,
+    headerTitleStyle: {
+        fontFamily: 'MerriWeatherBold'
+    },
+    headerStyle: {
+        backgroundColor: headerBackgroundColor,
+    },
+};
 
 const styles = StyleSheet.create({
     label: {

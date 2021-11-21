@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Context } from './context/CostContext';
 import CostItem from './CostItem';
-import { globalBackground, button, buttonText } from '../../GlobalStyles';
+import { globalBackground, button, buttonText, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 
 const CostScreen = ({ navigation }) => {
     const { state, addCost, getCosts } = useContext(Context);
@@ -59,6 +59,17 @@ const CostScreen = ({ navigation }) => {
         </View>
     );
 }
+
+CostScreen.navigationOptions = {
+    title: 'Koszty',
+    headerTintColor: headerTitleColor,
+    headerTitleStyle: {
+      fontFamily: 'MerriWeatherBold'
+    },
+    headerStyle: {
+      backgroundColor: headerBackgroundColor,
+    },
+  };
 
 const styles = StyleSheet.create({
     container: {

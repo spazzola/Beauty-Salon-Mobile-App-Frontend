@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { View, Image, StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native';
 import { Context } from './context/ClientContext';
 import ClientItem from './ClientItem';
-import { globalBackground, button, buttonText } from '../../GlobalStyles';
+import { globalBackground, button, buttonText, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import { useFonts } from 'expo-font';
 import { buttonIcons } from '../icons/Icons';
 
@@ -67,6 +67,17 @@ const ClientScreen = ({ navigation }) => {
         </View>
     );
 }
+
+ClientScreen.navigationOptions = {
+    title: 'Klienci',
+    headerTintColor: headerTitleColor,
+    headerTitleStyle: {
+        fontFamily: 'MerriWeatherBold'
+    },
+    headerStyle: {
+        backgroundColor: headerBackgroundColor,
+    },
+};
 
 const styles = StyleSheet.create({
     container: {

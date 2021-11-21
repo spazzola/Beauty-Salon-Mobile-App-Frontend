@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Calendar, CalendarList, Agenda, LocaleConfig } from 'react-native-calendars';
 import { buttonIcons } from '../icons/Icons';
 import { useFonts } from 'expo-font';
-import { globalBackground, itemParagraph, button, buttonText, buttonWrapper } from '../../GlobalStyles';
+import { globalBackground, itemParagraph, button, buttonText, buttonWrapper, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import { Context as AuthContext } from '../signin/context/AuthContext';
 
 const getData = async () => {
@@ -131,6 +131,17 @@ const AppointmentCalendar = ({ navigation }) => {
         </View>
     );
 }
+
+AppointmentCalendar.navigationOptions = {
+    title: 'Kalendarz',
+    headerTintColor: headerTitleColor,
+    headerTitleStyle: {
+        fontFamily: 'MerriWeatherBold'
+    },
+    headerStyle: {
+        backgroundColor: headerBackgroundColor,
+    },
+};
 
 const styles = StyleSheet.create({})
 

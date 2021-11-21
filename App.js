@@ -53,227 +53,78 @@ const switchNavigator = createSwitchNavigator({
   }),
   mainFlow: createStackNavigator({
     Clients: {
-      screen: ClientScreen,
-      navigationOptions: {
-        title: 'Klienci',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: ClientScreen
     },
     Client: {
-      screen: ClientDetail,
-      navigationOptions: {
-        title: 'Klient',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: ClientDetail
     },
     ClientAdd: {
-      screen: ClientAdd,
-      navigationOptions: {
-        title: 'Dodawanie klienta',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: ClientAdd
     },
     ClientEdit: {
-      screen: ClientEdit,
-      navigationOptions: {
-        title: 'Edytowanie klienta',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: ClientEdit
     },
 
     Users: {
-      screen: UserScreen,
-      navigationOptions: {
-        title: 'Personel',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: UserScreen
     },
     User: {
-      screen: UserDetail,
-      navigationOptions: {
-        title: 'Pracownik',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: UserDetail
     },
     UserAdd: {
-      screen: UserAdd,
-      navigationOptions: {
-        title: 'Dodawanie pracownika',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: UserAdd
     },
     UserEdit: {
-      screen: UserEdit,
-      navigationOptions: {
-        title: 'Edytowanie pracownika',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: UserEdit
     },
 
     Costs: {
-      screen: CostScreen,
-      navigationOptions: {
-        title: 'Koszty',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: CostScreen
     },
     Cost: {
-      screen: CostDetail,
-      navigationOptions: {
-        title: 'Koszt',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: CostDetail
     },
     CostAdd: {
-      screen: CostAdd,
-      navigationOptions: {
-        title: 'Dodawanie kosztu',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: CostAdd
     },
     CostEdit: {
-      screen: CostEdit,
-      navigationOptions: {
-        title: 'Edycja kosztu',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: CostEdit
     },
 
     Solarium: {
-      screen: SolariumScreen,
-      navigationOptions: {
-        title: 'Solarium',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: SolariumScreen
     },
 
     Works: {
-      screen: WorkScreen,
-      navigationOptions: {
-        title: 'Usługi',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: WorkScreen
     },
     Work: {
-      screen: WorkDetail,
-      navigationOptions: {
-        title: 'Usługa',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: WorkDetail
     },
     WorkAdd: {
-      screen: WorkAdd,
-      navigationOptions: {
-        title: 'Dodawanie usługi',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: WorkAdd
     },
     WorkEdit: {
-      screen: WorkEdit,
-      navigationOptions: {
-        title: 'Edytowanie usługi',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: WorkEdit
     },
 
     AppointmentCalendar: {
-      screen: AppointmentCalendar,
-      navigationOptions: {
-        title: 'Kalendarz',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-        headerBackTitleStyle: {
-          color: 'red'
-        }
-        // headerTitleStyle: {
-        //   fontFamily: 'Kalam-Bold'
-        // }
-      }
+      screen: AppointmentCalendar
     },
     Appointments: {
-      screen: AppointmentScreen,
-      navigationOptions: {
-        title: 'Wizyty',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: AppointmentScreen
     },
     AppointmentAdd: {
-      screen: AppointmentAdd,
-      navigationOptions: {
-        title: 'Dodawanie wizyty',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-        options: {
-          // headerBackTitleStyle: {
-          //   color: 'red'
-          // }
-        }
-      }
+      screen: AppointmentAdd
     },
     Appointment: {
-      screen: AppointmentDetail,
-      navigationOptions: {
-        title: 'Wizyta',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: AppointmentDetail
     },
     AppointmentEdit: {
-      screen: AppointmentEdit,
-      navigationOptions: {
-        title: 'Edytowanie wizyty',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: AppointmentEdit
     },
     Reports: {
-      screen: ReportScreen,
-      navigationOptions: {
-        title: 'Raport',
-        headerStyle: {
-          backgroundColor: headerBackgroundColor,
-        },
-      }
+      screen: ReportScreen
     }
   },
     {

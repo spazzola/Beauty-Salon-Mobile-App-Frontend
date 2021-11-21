@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import { Context } from './context/WorkContext';
 import { workIcons, buttonIcons } from '../icons/Icons';
-import { globalBackground, detailParagraph, detailTitle, button, buttonWrapper, buttonText } from '../../GlobalStyles';
+import { globalBackground, detailParagraph, detailTitle, button, buttonWrapper, buttonText, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 
 const WorkDetail = ({ navigation }) => {
     const { state, deleteWork } = useContext(Context);
@@ -59,6 +59,17 @@ const WorkDetail = ({ navigation }) => {
         </>
     );
 }
+
+WorkDetail.navigationOptions = {
+    title: 'Usługa',
+    headerTintColor: headerTitleColor,
+    headerTitleStyle: {
+        fontFamily: 'MerriWeatherBold'
+    },
+    headerStyle: {
+        backgroundColor: headerBackgroundColor,
+    },
+};
 
 const styles = StyleSheet.create({
     buttonsContainer: {
