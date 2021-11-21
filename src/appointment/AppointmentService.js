@@ -185,18 +185,23 @@ function changeShowMode(appointmentsToShow) {
     }
 }
 
-function calculateElementTop(item, mode, appointment) {
-    return (appointment.employee.role === 'ADMIN' && mode === 'double') ?
-        (
-            item.location[0] + 50
-        )
-        :
-        (
-            (appointment.employee.role === 'USER' && mode === 'double') ?
-                item.location[0] + 10
-                :
-                item.location[0]
-        )
+function calculateElementTop(item, mode, appointment, isAdmin) {
+    if (appointment.employee.role === 'ADMIN' && mode === 'single') {
+        return item.location[0];
+    }
+    if (appointment.employee.role === 'ADMIN' && mode === 'double') {
+        return item.location[0] + 50;
+    }
+    if (appointment.employee.role === 'USER' && mode === 'single' && !isAdmin) {
+        return item.location[0] - 30;
+    } 
+    if (appointment.employee.role === 'USER' && mode === 'single' && isAdmin) {
+        return item.location[0];
+    }
+
+    if (appointment.employee.role === 'USER' && mode === 'double') {
+        return item.location[0] + 10
+    }
 }
 
 function addBackgroundColor(mode, appointment) {

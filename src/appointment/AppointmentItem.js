@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { calculateDurationTime, createAppointmentBoxes, createBoxes, calculateElementTop, addBackgroundColor } from './AppointmentService';
 import { boxHeight } from './AppointmentScreen';
 import { workIcons } from '../icons/Icons';
+import { Context as AuthContext } from '../signin/context/AuthContext';
+
 
 const windowWidth = Dimensions.get('window').width;
 
 const AppointmentItem = ({ appointment, navigation, mode }) => {
     const [boxes, setBoxes] = useState([]);
+    const authState = useContext(AuthContext);
+    const [isAdmin, setIsAdmin] = useState(authState.state.role === 'ADMIN' ? true : false);
     //const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
 
@@ -35,7 +39,7 @@ const AppointmentItem = ({ appointment, navigation, mode }) => {
                         width: (windowWidth / 60) * (item.elementsNumber * 5),
                         height: mode === 'single' ? boxHeight : boxHeight / 2,
                         display: mode === 'none' ? 'none' : '',
-                        top: calculateElementTop(item, mode, appointment),
+                        top: calculateElementTop(item, mode, appointment, isAdmin),
                         left: (item.location[1] * (windowWidth / 60)),
                     }} onPress={() => navigation.navigate('Appointment', { id: item.appointmentId })}>
                         <View style={{}}>
@@ -57,7 +61,7 @@ const AppointmentItem = ({ appointment, navigation, mode }) => {
                                 <View style={{ height: '100%', flexDirection: 'row' }}>
                                     <View style={styles.label}>
                                         <Text style={[{ fontSize: mode === 'double' ? 20 : 30, fontFamily: 'MerriWeatherBold' }]}>
-                                            {appointment.client.name}
+                                            {item.clientName}
                                         </Text>
                                     </View>
 
@@ -70,10 +74,11 @@ const AppointmentItem = ({ appointment, navigation, mode }) => {
                                                 renderItem={({ item }) => {
                                                     return <View
                                                         style={{
-                                                            marginLeft: 20,
+                                                            marginLeft: 5,
                                                             alignItems: 'center', 
                                                             justifyContent: 'center',
-                                                            height: '110%'
+                                                            height: '110%',
+                                                            //backgroundColor: 'red'
                                                         }}>
                                                         <Image
                                                             style={[{

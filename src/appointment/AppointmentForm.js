@@ -11,12 +11,14 @@ import { buttonIcons } from '../icons/Icons';
 import { detailTitle, globalBackground, button, buttonText, buttonWrapper } from '../../GlobalStyles';
 import ClientForm from '../client/ClientForm';
 import { isAppointmentFormValid } from './AppointmentService';
+import { Context as AuthContext } from '../signin/context/AuthContext';
 
 
 const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, givenDate, mode, givenClientId, givenEmployeeId, givenWorkIds }) => {
   const clientContext = useContext(ClientContext);
   const userContext = useContext(UserContext);
   const workContext = useContext(WorkContext);
+  const authConext = useContext(AuthContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
 
@@ -63,7 +65,9 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
   const [clientItems, setClients] = useState([]);
 
   const [userDropDownOpen, setUserDropDownOpen] = useState(false);
-  const [employeeId, setUserId] = useState(givenEmployeeId ? givenEmployeeId : null);
+  const [employeeId, setUserId] = useState(givenEmployeeId ? givenEmployeeId :  authConext.state.id);
+  //const [employeeId, setUserId] = useState(authConext.state.role === 'USER' ? authConext.state.id : (givenEmployeeId ? givenEmployeeId : null));
+
   const [userItems, setUsers] = useState([]);
 
   const [workDropDownOpen, setWorkDropDownOpen] = useState(false);
@@ -177,35 +181,39 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                   </View>
                 </Modal>
               </View>
-              <DropDownPicker
-                searchable={true}
-                searchPlaceholder="Wyszukaj..."
-                searchContainerStyle={{
-                  borderWidth: 1,
-                  borderRadius: 6,
-                  backgroundColor: '#F1D1D0'
-                }}
-                style={[styles.dropDownPicker]}
-                textStyle={{
-                  fontFamily: 'MerriWeatherBold',
-                  textAlign: 'center',
-                  width: '50%',
-                  fontSize: 20
-                }}
-                dropDownContainerStyle={{
-                  backgroundColor: '#F1D1D0',
-                  width: '80%',
-                  borderWidth: 2
-                }}
-                dropDownDirection="TOP"
-                placeholder="Wybierz pracownika"
-                open={userDropDownOpen}
-                value={employeeId}
-                items={userContext.state.map(user => ({ label: `${user.name} ${user.surname}`, value: user.id }))}
-                setOpen={setUserDropDownOpen}
-                setValue={setUserId}
-                setItems={setUsers}
-              />
+              {authConext.state.role === 'ADMIN' ?
+                <DropDownPicker
+                  searchable={true}
+                  searchPlaceholder="Wyszukaj..."
+                  searchContainerStyle={{
+                    borderWidth: 1,
+                    borderRadius: 6,
+                    backgroundColor: '#F1D1D0'
+                  }}
+                  style={[styles.dropDownPicker]}
+                  textStyle={{
+                    fontFamily: 'MerriWeatherBold',
+                    textAlign: 'center',
+                    width: '50%',
+                    fontSize: 20
+                  }}
+                  dropDownContainerStyle={{
+                    backgroundColor: '#F1D1D0',
+                    width: '80%',
+                    borderWidth: 2
+                  }}
+                  dropDownDirection="TOP"
+                  placeholder="Wybierz pracownika"
+                  open={userDropDownOpen}
+                  value={employeeId}
+                  items={userContext.state.map(user => ({ label: `${user.name} ${user.surname}`, value: user.id }))}
+                  setOpen={setUserDropDownOpen}
+                  setValue={setUserId}
+                  setItems={setUsers}
+                />
+                :
+                null
+              }
 
               <DropDownPicker
                 searchable={true}
@@ -269,14 +277,26 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 mode === 'edit' ? async () => {
                   if (isAppointmentFormValid(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds)) {
                     await onSubmit(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds, note);
-                    navigation.navigate('Appointments');
+                    navigation.navigate('Appointments', {
+                      selectedDate: {
+                        year: startDate.substring(0, 4),
+                        month: startDate.substring(5, 7),
+                        day: startDate.substring(8, 10)
+                      }
+                    });
                   }
                 }
                   :
                   async () => {
                     if (isAppointmentFormValid(1, startDate, percentageValueToAdd, clientId, employeeId, workIds)) {
                       await onSubmit(startDate, percentageValueToAdd, clientId, employeeId, workIds, note);
-                      navigation.navigate('Appointments');
+                      navigation.navigate('Appointments', {
+                        selectedDate: {
+                          year: startDate.getFullYear(),
+                          month: startDate.getMonth() + 1,
+                          day: startDate.getDate()
+                        }
+                      });
                     }
                   }
               }
