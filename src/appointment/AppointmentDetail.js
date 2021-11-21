@@ -217,6 +217,7 @@ const AppointmentDetail = ({ navigation }) => {
                                     }
                                 );
                                 let json = await response.json();
+                                console.log(json);
                                 setAppointment(json);
                                 setIsEditDateModalVisible(false);
                             }}

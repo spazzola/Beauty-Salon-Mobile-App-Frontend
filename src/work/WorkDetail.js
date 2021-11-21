@@ -24,7 +24,7 @@ const WorkDetail = ({ navigation }) => {
 
                     <View>
                         <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {work.name}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {work.price}</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {work.price}zł</Text>
                         <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {work.hoursDuration}h {work.minutesDuration}min</Text>
                         <Text style={detailParagraph}> <Image style={{ marginLeft: 50, maxWidth: 30, maxHeight: 30 }} source={icon.uri} /></Text>
                     </View>
