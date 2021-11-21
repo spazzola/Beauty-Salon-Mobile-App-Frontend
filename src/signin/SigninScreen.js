@@ -5,7 +5,7 @@ import { input, globalBackground, buttonWrapper, button, buttonText } from '../.
 import { useFonts } from 'expo-font';
 
 const SigninScreen = ({ navigation }) => {
-    const { state, signin } = useContext(Context);
+    const { authState, signin } = useContext(Context);
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
 
@@ -61,9 +61,15 @@ const SigninScreen = ({ navigation }) => {
 //     }
 // }
 
-SigninScreen.navigationOptions = {
-    title: 'Jakies tam'
-}
+// SigninScreen.navigationOptions = {
+//     //title: 'Jakies tam'
+//     headerShow: false
+// }
+SigninScreen.navigationOptions = () => {
+    return {
+      headerShown: false,
+    };
+  };
 const styles = StyleSheet.create({
     container: {
         flex: 1,
