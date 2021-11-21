@@ -44,8 +44,14 @@ const addAppointment = dispatch => {
 }
 
 const getAppointments = dispatch => {
-    return async () => {
-        const response = await axios.get('/appointment/getAll');
+    return async (month, year, id) => {
+        const response = await axios.get('/appointment/getMonthAppointments', {
+            params: {
+                month,
+                year,
+                userId: id
+            }
+        });
         dispatch({ type: 'get_appointments', payload: response.data });
     };
 };
