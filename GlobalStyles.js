@@ -28,11 +28,12 @@ const itemParagraph = {
 
 const input = {
     fontSize: 18,
+    color: '#F875AA',
     textAlign: 'center',
     margin: 'auto',
     height: 60,
     width: '80%',
-    borderWidth: 2,
+    borderWidth: 0,
     borderRadius: 20,
     borderColor: 'black',
     marginBottom: 15,
@@ -48,13 +49,15 @@ const input = {
 const detailParagraph = {
     marginTop: 10,
     fontSize: 25,
-    textAlign: 'left'
+    textAlign: 'left',
+    color: '#F875AA'
 }
 
 const detailTitle = {
     marginTop: 10,
     fontSize: 25,
-    textAlign: 'right'
+    textAlign: 'right',
+    color: '#F875AA'
 }
 
 const buttonWrapper = {

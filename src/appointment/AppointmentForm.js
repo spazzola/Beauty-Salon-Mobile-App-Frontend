@@ -12,7 +12,7 @@ import { detailTitle, globalBackground, button, buttonText, buttonWrapper } from
 import ClientForm from '../client/ClientForm';
 import { isAppointmentFormValid } from './AppointmentService';
 import { Context as AuthContext } from '../signin/context/AuthContext';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, givenDate, mode, givenClientId, givenEmployeeId, givenWorkIds }) => {
   const clientContext = useContext(ClientContext);
@@ -65,7 +65,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
   const [clientItems, setClients] = useState([]);
 
   const [userDropDownOpen, setUserDropDownOpen] = useState(false);
-  const [employeeId, setUserId] = useState(givenEmployeeId ? givenEmployeeId :  authConext.state.id);
+  const [employeeId, setUserId] = useState(givenEmployeeId ? givenEmployeeId : authConext.state.id);
   //const [employeeId, setUserId] = useState(authConext.state.role === 'USER' ? authConext.state.id : (givenEmployeeId ? givenEmployeeId : null));
 
   const [userItems, setUsers] = useState([]);
@@ -122,21 +122,26 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 searchable={true}
                 searchPlaceholder="Wyszukaj..."
                 searchContainerStyle={{
-                  borderWidth: 1,
+                  borderWidth: 0,
+                  shadowColor: '#171717',
+                  shadowOffset: { width: 2, height: 4 },
+                  shadowOpacity: 0.7,
+                  shadowRadius: 3,
                   borderRadius: 6,
                   backgroundColor: '#F1D1D0'
                 }}
                 style={[styles.dropDownPicker]}
                 textStyle={{
-                  fontFamily: 'MerriWeatherBold',
+                  fontFamily: 'MerriWeather',
                   textAlign: 'center',
                   width: '50%',
-                  fontSize: 20
+                  fontSize: 20,
+                  color: '#F875AA'
                 }}
                 dropDownContainerStyle={{
                   backgroundColor: '#F1D1D0',
                   width: '80%',
-                  borderWidth: 2
+                  borderBottomWidth: 1
                 }}
                 dropDownDirection="TOP"
                 placeholder="Wybierz klienta"
@@ -152,10 +157,15 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                   <Text style={{ fontSize: 18, color: '#F875AA', fontFamily: 'MerriWeatherBold', marginTop: '3%' }}>Nowy klient</Text>
                 </TouchableOpacity>
                 <Modal isVisible={isModalVisible} onBackdropPress={() => setIsModalVisible(false)}>
-                  <View style={styles.modalContainer}>
-                    <View style={{ width: '100%', marginTop: '5%' }}>
+                  <View style={[styles.modalContainer, { height: '60%' }]}>
+                    <View style={[styles.headerWrapper, { height: '12%' }]}>
+                      <Text style={styles.modalHeader}>Dodawanie klienta</Text>
+                    </View>
+                    <View style={{ width: '100%', height: '60%', marginTop: '5%' }}>
                       <ClientForm
+                        backgroundColor={styles.modalContainer.backgroundColor}
                         onSubmit={async (name, surname, phoneNumber) => {
+                          const jwt = await AsyncStorage.getItem('jwt');
                           let client = {
                             name,
                             surname,
@@ -167,7 +177,8 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                               method: 'POST',
                               headers: {
                                 Accept: 'application/json',
-                                'Content-Type': 'application/json'
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + jwt
                               },
                               body: JSON.stringify(client)
                             }
@@ -186,21 +197,26 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                   searchable={true}
                   searchPlaceholder="Wyszukaj..."
                   searchContainerStyle={{
-                    borderWidth: 1,
+                    borderWidth: 0,
+                    shadowColor: '#171717',
+                    shadowOffset: { width: 2, height: 4 },
+                    shadowOpacity: 0.7,
+                    shadowRadius: 3,
                     borderRadius: 6,
                     backgroundColor: '#F1D1D0'
                   }}
                   style={[styles.dropDownPicker]}
                   textStyle={{
-                    fontFamily: 'MerriWeatherBold',
+                    fontFamily: 'MerriWeather',
                     textAlign: 'center',
                     width: '50%',
-                    fontSize: 20
+                    fontSize: 20,
+                    color: '#F875AA'
                   }}
                   dropDownContainerStyle={{
                     backgroundColor: '#F1D1D0',
                     width: '80%',
-                    borderWidth: 2
+                    borderBottomWidth: 1
                   }}
                   dropDownDirection="TOP"
                   placeholder="Wybierz pracownika"
@@ -219,21 +235,25 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 searchable={true}
                 searchPlaceholder="Wyszukaj..."
                 searchContainerStyle={{
-                  borderWidth: 1,
+                  borderWidth: 0,
+                  shadowColor: '#171717',
+                  shadowOffset: { width: 2, height: 4 },
+                  shadowOpacity: 0.7,
+                  shadowRadius: 3,
                   borderRadius: 6,
                   backgroundColor: '#F1D1D0'
                 }}
                 style={[styles.dropDownPicker]}
                 textStyle={{
-                  fontFamily: 'MerriWeatherBold',
+                  fontFamily: 'MerriWeather',
                   fontSize: 20,
                   textAlign: 'center',
-                  //width: '50%'
+                  color: '#F875AA'
                 }}
                 dropDownContainerStyle={{
                   backgroundColor: '#F1D1D0',
                   width: '80%',
-                  borderWidth: 2
+                  borderBottomWidth: 1
                 }}
                 dropDownDirection="TOP"
                 placeholder="Wybierz usługę"
@@ -341,8 +361,12 @@ const styles = StyleSheet.create({
   dropDownPicker: {
     marginTop: '10%',
     width: '80%',
-    borderWidth: 2,
-    backgroundColor: '#F1D1D0'
+    borderWidth: 0,
+    backgroundColor: '#F1D1D0',
+    shadowColor: '#171717',
+    shadowOffset: { width: 2, height: 4 },
+    shadowOpacity: 0.7,
+    shadowRadius: 3,
   },
   label: {
     marginTop: 20
@@ -353,13 +377,26 @@ const styles = StyleSheet.create({
     height: 90
   },
   modalContainer: {
+    width: '100%',
     height: '80%',
     //flex: 1, 
-    backgroundColor: globalBackground.backgroundColor,
+    backgroundColor: '#FBACCC',
     borderRadius: 30
   },
+  headerWrapper: {
+    height: '20%',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    backgroundColor: '#F875AA',
+    justifyContent: 'center'
+  },
+  modalHeader: {
+    textAlign: 'center',
+    fontSize: 25,
+    fontFamily: 'MerriWeatherBold'
+  },
   multilineInput: {
-    borderWidth: 2,
+    color: '#F875AA',
     borderRadius: 10,
     width: '80%',
     height: '15%',
@@ -367,6 +404,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'MerriWeather',
     padding: 5,
+    backgroundColor: '#F1D1D0',
+    shadowColor: '#171717',
+    shadowOffset: { width: 2, height: 4 },
+    shadowOpacity: 0.7,
+    shadowRadius: 3,
+    borderRadius: 6,
   }
 });
 
