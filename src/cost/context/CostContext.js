@@ -2,7 +2,8 @@ import createDataContext from '../../../createDataContext';
 //import axios from './CostApi';
 import { Alert } from 'react-native';
 import axios from '../../../axios-config';
-import { format } from 'date-fns'
+import { format } from 'date-fns';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const costReducer = (state, action) => {
     switch (action.type) {
@@ -21,6 +22,7 @@ const costReducer = (state, action) => {
 
 const addCost = dispatch => {
     return async (name, value, addedDate, callback) => {
+        const jwt = await AsyncStorage.getItem('jwt');
         addedDate = format(addedDate, 'dd.MM.yyyy hh:mm').replace(/\./g, '/');
         let cost = {
             name,
@@ -28,7 +30,11 @@ const addCost = dispatch => {
             addedDate
         };
 
-        await axios.post('/cost/create', cost)
+        await axios.post('/cost/create', cost, {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        })
             .catch(error => {
                 Alert.alert("Błąd ", "Nie dodano kosztu. \nKod błędu: " + error.response.status);
             });
@@ -40,10 +46,14 @@ const addCost = dispatch => {
 }
 const getCosts = dispatch => {
     return async (month, year) => {
+        const jwt = await AsyncStorage.getItem('jwt');
         const response = await axios.get('/cost/getMonthCosts', {
             params: {
                 month: month,
                 year: year
+            }, 
+            headers: {
+                'Authorization': 'Bearer ' + jwt
             }
         });
         dispatch({ type: 'get_costs', payload: response.data });
@@ -52,20 +62,25 @@ const getCosts = dispatch => {
 
 const deleteCost = dispatch => {
     return async id => {
+        const jwt = await AsyncStorage.getItem('jwt');
         await axios.delete('/cost/delete', {
             params: {
                 id
+            },
+            headers: {
+                'Authorization': 'Bearer ' + jwt
             }
         }).catch(error => {
             Alert.alert("Błąd ", "Nie usunięto kosztu. \nKod błędu: " + error.response.status);
         });
-        getCosts();
+        //getCosts();
         //dispatch({ type: 'delete_client', payload: id });
     };
 };
 
 const editCost = dispatch => {
     return async (id, name, value, addedDate, callback) => {
+        const jwt = await AsyncStorage.getItem('jwt');
         addedDate = format(addedDate, 'dd.MM.yyyy hh:mm').replace(/\./g, '/');
         let cost = {
             id,
@@ -73,7 +88,11 @@ const editCost = dispatch => {
             value,
             addedDate
         };
-        await axios.put('cost/update', cost)
+        await axios.put('cost/update', cost, {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        })
             .catch(error => {
                 Alert.alert("Błąd ", "Nie zaktualizowano kosztu. \nKod błędu: " + error.response.status);
             });

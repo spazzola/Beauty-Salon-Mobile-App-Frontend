@@ -8,6 +8,7 @@ import Modal from 'react-native-modal';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker'
 import { format } from 'date-fns'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function getWorkIds(worksList) {
     const resultList = [];
@@ -195,6 +196,7 @@ const AppointmentDetail = ({ navigation }) => {
                         />
                         <View style={[buttonWrapper, { width: '100%' }]}>
                             <TouchableOpacity style={button} onPress={async () => {
+                                const jwt = await AsyncStorage.getItem('jwt');
                                 const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
                                 const extractedDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
                                 let appointmentToUpdate = {
@@ -211,7 +213,8 @@ const AppointmentDetail = ({ navigation }) => {
                                         method: 'PUT',
                                         headers: {
                                             Accept: 'application/json',
-                                            'Content-Type': 'application/json'
+                                            'Content-Type': 'application/json',
+                                            'Authorization': 'Bearer ' + jwt
                                         },
                                         body: JSON.stringify(appointmentToUpdate)
                                     }
@@ -272,6 +275,7 @@ const AppointmentDetail = ({ navigation }) => {
                         />
                         <View style={[buttonWrapper, { width: '100%', marginTop: '10%' }]}>
                             <TouchableOpacity style={button} onPress={async () => {
+                                const jwt = await AsyncStorage.getItem('jwt');
                                 const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
                                 const extractedDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
                                 let appointmentToUpdate = {
@@ -288,7 +292,8 @@ const AppointmentDetail = ({ navigation }) => {
                                         method: 'PUT',
                                         headers: {
                                             Accept: 'application/json',
-                                            'Content-Type': 'application/json'
+                                            'Content-Type': 'application/json',
+                                            'Authorization': 'Bearer ' + jwt
                                         },
                                         body: JSON.stringify(appointmentToUpdate)
                                     }

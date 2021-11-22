@@ -2,6 +2,7 @@ import createDataContext from '../../../createDataContext';
 import { Alert } from 'react-native';
 //import axios from './ClientApi';
 import axios from '../../../axios-config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const clientReducer = (state, action) => {
     switch (action.type) {
@@ -20,12 +21,17 @@ const clientReducer = (state, action) => {
 
 const addClient = dispatch => {
     return async (name, surname, phoneNumber, callback) => {
+        const jwt = await AsyncStorage.getItem('jwt');
         let client = {
             name,
             surname,
             phoneNumber
         };
-        await axios.post('/client/create', client)
+        await axios.post('/client/create', client, {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        })
             .catch(error => {
                 Alert.alert("Błąd ", "Nie dodano klienta. \nKod błędu: " + error.response.status);
             });
@@ -37,13 +43,19 @@ const addClient = dispatch => {
 }
 const getClients = dispatch => {
     return async () => {
-        const response = await axios.get('/client/getAll');
+        const jwt = await AsyncStorage.getItem('jwt');
+        const response = await axios.get('/client/getAll', {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        });
         dispatch({ type: 'get_clients', payload: response.data });
     };
 };
 
 const deleteClient = dispatch => {
     return async id => {
+        const jwt = await AsyncStorage.getItem('jwt');
         await axios.delete('/client/delete', {
             params: {
                 id
@@ -58,6 +70,7 @@ const deleteClient = dispatch => {
 
 const editClient = dispatch => {
     return async (id, name, surname, phoneNumber, belatedCounter, callback) => {
+        const jwt = await AsyncStorage.getItem('jwt');
         let client = {
             id,
             name,
@@ -65,7 +78,11 @@ const editClient = dispatch => {
             phoneNumber,
             belatedCounter
         };
-        await axios.put('client/update', client)
+        await axios.put('client/update', client, {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        })
             .catch(error => {
                 Alert.alert("Błąd ", "Nie zaktualizowano klienta. \nKod błędu: " + error.response.status);
             });

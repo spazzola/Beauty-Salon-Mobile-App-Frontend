@@ -2,6 +2,7 @@ import createDataContext from '../../../createDataContext';
 //import axios from './UserApi';
 import { Alert } from 'react-native';
 import axios from '../../../axios-config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const userReducer = (state, action) => {
     switch (action.type) {
@@ -20,6 +21,7 @@ const userReducer = (state, action) => {
 
 const addUser = dispatch => {
     return async (name, surname, phoneNumber, login, password, callback) => {
+        const jwt = await AsyncStorage.getItem('jwt');
         let user = {
             name,
             surname,
@@ -27,7 +29,11 @@ const addUser = dispatch => {
             login,
             password
         };
-        await axios.post('/user/register', user)
+        await axios.post('/user/register', user, {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        })
             .catch(error => {
                 Alert.alert("Błąd ", "Nie dodano pracownika. \nKod błędu: " + error.response.status);
             });
@@ -39,16 +45,25 @@ const addUser = dispatch => {
 }
 const getUsers = dispatch => {
     return async () => {
-        const response = await axios.get('/user/getAll');
+        const jwt = await AsyncStorage.getItem('jwt');
+        const response = await axios.get('/user/getAll', {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        });
         dispatch({ type: 'get_users', payload: response.data });
     };
 };
 
 const deleteUser = dispatch => {
     return async id => {
+        const jwt = await AsyncStorage.getItem('jwt');
         await axios.delete('/user/delete', {
             params: {
                 id
+            },
+            headers: {
+                'Authorization': 'Bearer ' + jwt
             }
         }).catch(error => {
             Alert.alert("Błąd ", "Nie zaktualizowano pracownika. \nKod błędu: " + error.response.status);
@@ -60,6 +75,7 @@ const deleteUser = dispatch => {
 
 const editUser = dispatch => {
     return async (id, name, surname, phoneNumber, login, password, role, visible, callback) => {
+        const jwt = await AsyncStorage.getItem('jwt');
         let user = {
             id,
             name,
@@ -71,7 +87,11 @@ const editUser = dispatch => {
             visible
         };
 
-        await axios.put('user/update', user)
+        await axios.put('user/update', user, {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        })
             .catch(error => {
                 Alert.alert("Błąd ", "Nie zaktualizowano pracownika. \nKod błędu: " + error.response.status);
             });

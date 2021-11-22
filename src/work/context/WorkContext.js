@@ -2,6 +2,7 @@ import createDataContext from '../../../createDataContext';
 //import axios from './WorkApi';
 import { Alert } from 'react-native';
 import axios from '../../../axios-config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const workReducer = (state, action) => {
     switch (action.type) {
@@ -20,6 +21,7 @@ const workReducer = (state, action) => {
 
 const addWork = dispatch => {
     return async (name, price, hoursDuration, minutesDuration, iconName, callback) => {
+        const jwt = await AsyncStorage.getItem('jwt');
         let work = {
             name,
             price,
@@ -28,7 +30,11 @@ const addWork = dispatch => {
             iconName
         };
 
-        await axios.post('/work/create', work)
+        await axios.post('/work/create', work, {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        })
             .catch(error => {
                 Alert.alert("Błąd ", "Nie dodano usługi. \nKod błędu: " + error.response.status);
             });
@@ -40,16 +46,25 @@ const addWork = dispatch => {
 }
 const getWorks = dispatch => {
     return async () => {
-        const response = await axios.get('/work/getAll');
+        const jwt = await AsyncStorage.getItem('jwt');
+        const response = await axios.get('/work/getAll', {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        });
         dispatch({ type: 'get_works', payload: response.data });
     };
 };
 
 const deleteWork = dispatch => {
     return async id => {
+        const jwt = await AsyncStorage.getItem('jwt');
         await axios.delete('/work/delete', {
             params: {
                 id
+            },
+            headers: {
+                'Authorization': 'Bearer ' + jwt
             }
         }).catch(error => {
             Alert.alert("Błąd ", "Nie usunięto usługi. \nKod błędu: " + error.response.status);
@@ -61,6 +76,7 @@ const deleteWork = dispatch => {
 
 const editWork = dispatch => {
     return async (id, name, price, hoursDuration, minutesDuration, iconName, callback) => {
+        const jwt = await AsyncStorage.getItem('jwt');
         let work = {
             id,
             name,
@@ -69,7 +85,11 @@ const editWork = dispatch => {
             minutesDuration,
             iconName,
         };
-        await axios.put('work/update', work)
+        await axios.put('work/update', work, {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        })
         .catch(error => {
             Alert.alert("Błąd ", "Nie zaktualizowano usługi. \nKod błędu: " + error.response.status);
         });

@@ -1,8 +1,8 @@
 import createDataContext from '../../../createDataContext';
 import axios from '../../../axios-config';
 import { Alert } from 'react-native';
-import { format } from 'date-fns'
-
+import { format } from 'date-fns';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const appointmentReducer = (state, action) => {
     switch (action.type) {
@@ -21,6 +21,7 @@ const appointmentReducer = (state, action) => {
 
 const addAppointment = dispatch => {
     return async (startDate, percentageValueToAdd, clientId, employeeId, workIds, note, callback) => {
+        const jwt = await AsyncStorage.getItem('jwt');
         const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
         startDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
         let appointment = {
@@ -32,7 +33,11 @@ const addAppointment = dispatch => {
             note
         };
 
-        await axios.post('/appointment/create', appointment)
+        await axios.post('/appointment/create', appointment, {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        })
             .catch(error => {
                 Alert.alert("Błąd ", "Nie dodano wizyty. Sprawdź czy wybrana data nie koliduje z datą innej wizyty. \nKod błędu: " + error.response.status);
             });
@@ -45,11 +50,15 @@ const addAppointment = dispatch => {
 
 const getAppointments = dispatch => {
     return async (month, year, id) => {
+        const jwt = await AsyncStorage.getItem('jwt');
         const response = await axios.get('/appointment/getMonthAppointments', {
             params: {
                 month,
                 year,
                 userId: id
+            },
+            headers: {
+                'Authorization': 'Bearer ' + jwt
             }
         });
         dispatch({ type: 'get_appointments', payload: response.data });
@@ -58,21 +67,26 @@ const getAppointments = dispatch => {
 
 const deleteAppointment = dispatch => {
     return async id => {
+        const jwt = await AsyncStorage.getItem('jwt');
         await axios.delete('/appointment/delete', {
             params: {
                 id
+            },
+            headers: {
+                'Authorization': 'Bearer ' + jwt
             }
         }).catch(error => {
             Alert.alert("Błąd ", "Nie usunięto wizyty. \nKod błędu: " + error.response.status);
         });
         // ??? to delete?
-        getAppointments();
+        //getAppointments();
         //dispatch({ type: 'delete_client', payload: id });
     };
 };
 
 const editAppointment = dispatch => {
     return async (appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds, note, callback) => {
+        const jwt = await AsyncStorage.getItem('jwt');
         const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
         startDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
         let appointment = {
@@ -85,7 +99,11 @@ const editAppointment = dispatch => {
             note
         };
 
-        await axios.put('appointment/update', appointment)
+        await axios.put('appointment/update', appointment, {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        })
             .catch(error => {
                 Alert.alert("Błąd ", "Nie zaktualizowano wizyty. Sprawdź czy wybrana data nie koliduje z datą innej wizyty. \nKod błędu: " + error.response.status);
             });

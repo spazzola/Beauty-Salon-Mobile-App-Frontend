@@ -19,7 +19,7 @@ const signin = dispatch => async ({ login, password }) => {
         await AsyncStorage.setItem('jwt', response.data.jwt);
         dispatch({ type: 'signin', payload: response.data })
         navigate('mainFlow');
-    } catch (err) {
+    } catch (error) {
         Alert.alert("Błąd ", "Logowanie nie powiodło się. Sprawdź login oraz hasło. \nKod błędu: " + error.response.status);
     }
 };
