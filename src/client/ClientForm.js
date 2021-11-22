@@ -12,14 +12,14 @@ function numberIsNotValid(phoneNumber) {
 }
 
 
-const ClientForm = ({ onSubmit, initialValues, mode }) => {
+const ClientForm = ({ onSubmit, initialValues, mode, backgroundColor }) => {
   const [name, setName] = useState(initialValues.name);
   const [surname, setSurname] = useState(initialValues.surname);
   const [phoneNumber, setPhoneNumber] = useState(initialValues.phoneNumber);
   const [belatedCounter, setBelatedCounter] = useState(initialValues.belatedCounter);
 
   return (
-    <View style={[globalBackground, { alignItems: 'center', height: '100%' }]}>
+    <View style={[{ alignItems: 'center', height: '100%', backgroundColor: backgroundColor ? backgroundColor : globalBackground.backgroundColor }]}>
       <TextInput
         placeholder={'Imię'}
         style={[input, { fontFamily: 'MerriWeatherBold', marginTop: 20 }]}
