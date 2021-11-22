@@ -110,25 +110,30 @@ const AppointmentCalendar = ({ navigation }) => {
                 (
                     <>
                         <View style={buttonWrapper}>
-                            <TouchableOpacity style={button} onPress={() => navigation.navigate('AppointmentAdd')}>
+                            <TouchableOpacity style={[button, { width: 180, flexDirection: 'row' }]} onPress={() => navigation.navigate('AppointmentAdd')}>
+                            <Image style={{ width: 18, height: 18, marginRight: 10, }} source={buttonIcons.add.uri} />
                                 <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Dodaj wizytę</Text>
                             </TouchableOpacity>
                         </View>
 
                         <View style={buttonWrapper}>
-                            <TouchableOpacity style={button} onPress={() => navigation.navigate('Solarium')}>
+                            <TouchableOpacity style={[button, { flexDirection: 'row' }]} onPress={() => navigation.navigate('Solarium')}>
+                            <Image style={{ width: 30, height: 30, marginRight: 10 }} source={buttonIcons.solarium.uri} />
                                 <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Solarium</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={button} onPress={() => navigation.navigate('Costs')}>
+                            <TouchableOpacity style={[button, { flexDirection: 'row' }]} onPress={() => navigation.navigate('Costs')}>
+                            <Image style={{ width: 26, height: 26, marginRight: 10, marginLeft: -15 }} source={buttonIcons.lowPrice.uri} />
                                 <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Koszty</Text>
                             </TouchableOpacity>
                         </View>
 
                         <View style={buttonWrapper}>
-                            <TouchableOpacity style={button} onPress={() => navigation.navigate('Clients')}>
+                            <TouchableOpacity style={[button, { flexDirection: 'row' }]} onPress={() => navigation.navigate('Clients')}>
+                            <Image style={{ width: 26, height: 26, marginRight: 10, marginLeft: -15 }} source={buttonIcons.clients.uri} />
                                 <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Klienci</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={button} onPress={() => navigation.navigate('Works')}>
+                            <TouchableOpacity style={[button, { flexDirection: 'row' }]} onPress={() => navigation.navigate('Works')}>
+                            <Image style={{ width: 26, height: 26, marginRight: 10, marginLeft: -15 }} source={buttonIcons.works.uri} />
                                 <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Usługi</Text>
                             </TouchableOpacity>
                         </View>
