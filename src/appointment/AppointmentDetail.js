@@ -225,7 +225,7 @@ const AppointmentDetail = ({ navigation }) => {
                                 setIsEditDateModalVisible(false);
                             }}
                             >
-                                <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Przełóz</Text>
+                                <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Przełóż</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
