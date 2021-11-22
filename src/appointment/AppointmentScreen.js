@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions, ScrollView, Button } from 'react-native';
 import { Context } from './context/AppointmentContext';
 import AppointmentItem from './AppointmentItem';
 import BaseRadioGroup from '../base_components/BaseRadioGroup';
@@ -7,6 +7,7 @@ import { changeShowMode } from './AppointmentService';
 import { buttonIcons } from '../icons/Icons';
 import { globalBackground, buttonText, button, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import { Context as AuthContext } from '../signin/context/AuthContext';
+import { HeaderBackButton } from 'react-navigation-stack';
 
 // function extractHours(startDate) {
 //     return startDate.substring(11, 16);
@@ -51,7 +52,7 @@ const AppointmentScreen = ({ navigation }) => {
     function changeAppointmentsToShow(event) {
         setAppointmentsToShow(event);
     }
-    
+
     useEffect(() => {
         const date = navigation.getParam('selectedDate');
         headerTitle = date.day + '/' + date.month + '/' + date.year;
@@ -150,7 +151,7 @@ const AppointmentScreen = ({ navigation }) => {
     );
 }
 
-AppointmentScreen.navigationOptions = (navigation) => {
+AppointmentScreen.navigationOptions = ({navigation}) => {
     return {
         title: headerTitle,
         headerTintColor: headerTitleColor,
@@ -160,6 +161,23 @@ AppointmentScreen.navigationOptions = (navigation) => {
         headerStyle: {
             backgroundColor: headerBackgroundColor,
         },
+        headerLeft: (props) => (
+            <HeaderBackButton
+              {...props}
+              //style={styles.custom}
+              onPress={() => {
+              navigation.navigate('AppointmentCalendar');
+              }}
+            />
+          ),
+          headerBackTitle: 'Kalendarz'
+        // headerLeft: () => (
+        //     <Button
+        //       onPress={() => navigation.pop('Clients')}
+        //       title="Info"
+        //       color="#fff"
+        //     />
+        //   )
     }
 };
 
