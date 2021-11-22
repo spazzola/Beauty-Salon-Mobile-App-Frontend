@@ -6,6 +6,40 @@ import rzesy from './work_icons/rzesy.png';
 import usta from './work_icons/usta.png';
 import makeup from './work_icons/makeup.png';
 
+
+// BUTTON ICONS
+import add from './button_icons/add.png';
+import solarium from './button_icons/solarium.png';
+import lowPrice from './button_icons/low-price.png';
+import clients from './button_icons/clients.png';
+import reports from './button_icons/reports.png';
+import users from './button_icons/users.png';
+import works from './button_icons/works.png';
+
+const buttonIcons = {
+    add: {
+        uri: add
+    },
+    solarium: {
+        uri: solarium
+    },
+    lowPrice: {
+        uri: lowPrice
+    },
+    clients: {
+        uri: clients
+    },
+    reports: {
+        uri: reports
+    },
+    users: {
+        uri: users
+    },
+    works: {
+        uri: works
+    }
+}
+
 const workIcons = [
     {
         label: 'Brwi',
@@ -39,7 +73,7 @@ const workIcons = [
     }
 ]
 
-export { workIcons };
+export { workIcons, buttonIcons };
 
 // export default [
 //     {
