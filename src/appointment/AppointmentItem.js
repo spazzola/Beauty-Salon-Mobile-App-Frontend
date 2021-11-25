@@ -2,10 +2,10 @@ import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { calculateDurationTime, createAppointmentBoxes, createBoxes, calculateElementTop, addBackgroundColor } from './AppointmentService';
-import { boxHeight } from './AppointmentScreen';
 import { workIcons } from '../icons/Icons';
 import { Context as AuthContext } from '../signin/context/AuthContext';
 
+let boxHeight = 100;
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -70,9 +70,10 @@ const AppointmentItem = ({ appointment, navigation, mode }) => {
                                             <FlatList
                                                 horizontal
                                                 data={item.workIcons}
-                                                keyExtractor={(item, index) => index}
+                                                keyExtractor={(item, index) => index.toString()}
                                                 renderItem={({ item }) => {
                                                     return <View
+                                                        key={index}
                                                         style={{
                                                             marginLeft: 5,
                                                             alignItems: 'center', 
