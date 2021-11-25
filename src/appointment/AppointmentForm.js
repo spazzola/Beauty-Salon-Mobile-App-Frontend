@@ -144,7 +144,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                         <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Wybierz datę</Text>
                       </TouchableOpacity>
                     </View>
-                    <Text style={[detailParagraph, { fontSize: 17, marginTop: 0 }]}> Wybrana data: {startDate.getDate() + '/' + startDate.getMonth() + '/' + startDate.getFullYear()}</Text>
+                    <Text style={[detailParagraph, { fontSize: 17, marginTop: 0, fontFamily: 'MerriWeather' }]}> Wybrana data: {startDate.getDate() + '/' + (startDate.getMonth() + 1) + '/' + startDate.getFullYear()}</Text>
                     {
                       showAndroidDateModal ?
                         <DateTimePicker
@@ -162,7 +162,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                         <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Wybierz czas</Text>
                       </TouchableOpacity>
                     </View>
-                    <Text style={[detailParagraph, { fontSize: 17, marginTop: 0 }]}> Wybrany czas: {startDate.getHours() + ':' + startDate.getMinutes()}</Text>
+                    <Text style={[detailParagraph, { fontSize: 17, marginTop: 0, fontFamily: 'MerriWeather' }]}> Wybrany czas: {startDate.getHours() + ':' + startDate.getMinutes()}</Text>
                   </>
                 )
 
