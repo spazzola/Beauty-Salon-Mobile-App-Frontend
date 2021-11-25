@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, Button } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker'
 import { Context as ClientContext } from '../client/context/ClientContext';
@@ -8,7 +8,7 @@ import { Context as WorkContext } from '../work/context/WorkContext';
 import NumericInput from 'react-native-numeric-input';
 import Modal from 'react-native-modal';
 import { buttonIcons } from '../icons/Icons';
-import { detailTitle, globalBackground, button, buttonText, buttonWrapper } from '../../GlobalStyles';
+import { detailTitle, detailParagraph, globalBackground, button, buttonText, buttonWrapper } from '../../GlobalStyles';
 import ClientForm from '../client/ClientForm';
 import { isAppointmentFormValid } from './AppointmentService';
 import { Context as AuthContext } from '../signin/context/AuthContext';
@@ -21,6 +21,20 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
   const authConext = useContext(AuthContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const [showAndroidDateModal, setShowAndroidDateModal] = useState(false);
+  const [type, setType] = useState('date');
+
+  const showDateModal = (type) => {
+    setShowAndroidDateModal(!showAndroidDateModal);
+    setType(type);
+  };
+
+  const showDatePicker = () => {
+    showDateModal('date');
+  };
+  const showTimePicker = () => {
+    showDateModal('time');
+  };
 
   useEffect(() => {
     clientContext.getClients();
@@ -77,6 +91,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
   const onChangeDate = (event, selectedDate) => {
     let currentDate = selectedDate || startDate;
     setStartDate(currentDate);
+    setShowAndroidDateModal(false);
   };
 
   // const onChangeTime = (event, selectedTime) => {
@@ -93,29 +108,65 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
         <ScrollView showsVerticalScrollIndicator={false} style={globalBackground}>
           <View style={{ height: '100%', backgroundColor: globalBackground.backgroundColor, alignItems: 'center', justifyContent: 'space-around' }}>
 
-            <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', textAlign: 'center' }]}>Data rozpoczęcia:</Text>
-            <View style={{ width: '90%' }}>
-              <DateTimePicker
-                value={startDate}
-                onChange={onChangeDate}
-                display='spinner'
-                is24Hour={true}
-                locale={'pl'}
-                style={{ backgroundColor: globalBackground.backgroundColor, marginTop: '5%' }}
-              />
-            </View>
+            {
+              Platform.OS === 'ios' ? (
+                <>
+                  <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', textAlign: 'center' }]}>Data rozpoczęcia:</Text>
+                  <View style={{ width: '90%' }}>
+                    <DateTimePicker
+                      value={startDate}
+                      onChange={onChangeDate}
+                      display='spinner'
+                      is24Hour={true}
+                      locale={'pl'}
+                      style={{ backgroundColor: globalBackground.backgroundColor, marginTop: '5%' }}
+                    />
+                  </View>
 
-            <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', textAlign: 'center' }]}>Godzina rozpoczęcia:</Text>
-            <View style={{ width: '70%' }}>
-              <DateTimePicker
-                value={startDate}
-                onChange={onChangeDate}
-                mode='time'
-                display='spinner'
-                is24Hour={true}
-                style={{ marginTop: '5%' }}
-              />
-            </View>
+                  <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', textAlign: 'center' }]}>Godzina rozpoczęcia:</Text>
+                  <View style={{ width: '70%' }}>
+                    <DateTimePicker
+                      value={startDate}
+                      onChange={onChangeDate}
+                      mode='time'
+                      display='spinner'
+                      is24Hour={true}
+                      style={{ marginTop: '5%' }}
+                    />
+                  </View>
+                </>
+              )
+                :
+                (
+                  <>
+                    <View style={buttonWrapper}>
+                      <TouchableOpacity style={[button, { width: 180, flexDirection: 'row' }]} onPress={showDatePicker}>
+                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Wybierz datę</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <Text style={[detailParagraph, { fontSize: 17, marginTop: 0 }]}> Wybrana data: {startDate.getDate() + '/' + startDate.getMonth() + '/' + startDate.getFullYear()}</Text>
+                    {
+                      showAndroidDateModal ?
+                        <DateTimePicker
+                          testID="dateTimePicker"
+                          value={startDate}
+                          mode={type}
+                          is24Hour={true}
+                          display="default"
+                          onChange={onChangeDate}
+                        />
+                        : null
+                    }
+                    <View style={buttonWrapper}>
+                      <TouchableOpacity style={[button, { width: 180, flexDirection: 'row' }]} onPress={showTimePicker}>
+                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Wybierz czas</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <Text style={[detailParagraph, { fontSize: 17, marginTop: 0 }]}> Wybrany czas: {startDate.getHours() + ':' + startDate.getMinutes()}</Text>
+                  </>
+                )
+
+            }
 
             <View>
               <DropDownPicker
