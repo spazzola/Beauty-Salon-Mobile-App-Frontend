@@ -1,22 +1,33 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Image, StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native';
 import { Context } from './context/ClientContext';
 import ClientItem from './ClientItem';
 import { globalBackground, button, buttonText, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
+import SearchBar from './utility/SearchBar';
 import { useFonts } from 'expo-font';
 import { buttonIcons } from '../icons/Icons';
 
 
+
+function filterList(clients, name) {
+    let resultList = [];
+    if (name === '') {
+        return clients;
+    } else {
+        clients.filter(client => {
+            return client.name.includes(name) || client.surname.includes(name);
+        }).map(filteredClient => resultList.push(filteredClient));
+        
+        return resultList;
+    }
+}
+
 const ClientScreen = ({ navigation }) => {
     const { state, addClient, getClients } = useContext(Context);
-    // const [loaded] = useFonts({
-    //     KalamRegular: require('../../assets/fonts/Kalam-Regular.ttf'),
-    //     KalamBold: require('../../assets/fonts/Kalam-Bold.ttf'),
-    // });
+    const [name, setName] = useState('')
 
     useEffect(() => {
         getClients();
-
         const listener = navigation.addListener('didFocus', () => {
             getClients();
         });
@@ -26,15 +37,19 @@ const ClientScreen = ({ navigation }) => {
         };
     }, []);
 
-    // if (!loaded) {
-    //     return null;
-    // }
+    useEffect(() => {
+        filterList(state, name);
+    }, [name])
 
     return (
         <View style={[globalBackground, styles.container]}>
+            <SearchBar
+                term={name}
+                onTermChange={newName => setName(newName)}
+            />
             <FlatList
                 showsVerticalScrollIndicator={false}
-                data={state.sort((a, b) => {
+                data={filterList(state, name).sort((a, b) => {
                     let fa = a.name.toLowerCase(),
                         fb = b.name.toLowerCase(),
                         fasurname = a.surname.toLowerCase(),
