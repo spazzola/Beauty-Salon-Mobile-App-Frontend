@@ -59,14 +59,44 @@ const deleteClient = dispatch => {
         await axios.delete('/client/delete', {
             params: {
                 id
+            },
+            headers: {
+                'Authorization': 'Bearer ' + jwt
             }
         }).catch(error => {
             Alert.alert("Błąd ", "Nie usunięto klienta. \nKod błędu: " + error.response.status);
         });
-        getClients();
+        //getClients();
         //dispatch({ type: 'delete_client', payload: id });
     };
 };
+
+const sendBelated = dispatch => {
+    return async id => {
+        const jwt = await AsyncStorage.getItem('jwt');
+        await axios.put('/client/belated', null, {
+            params: {
+                id
+            },
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        }).then(response => {
+            const client = response.data;
+            const name = client.name;
+            const surname = client.surname;
+            const phoneNumber = client.phoneNumber;
+            const belatedCounter = client.belatedCounter;
+            dispatch({
+                type: 'edit_client',
+                payload: { id, name, surname, phoneNumber, belatedCounter }
+            });
+        }).catch(error => {
+            Alert.alert("Bład", "Nie dodano spóźnienia. \nKod błedu: " + error.response.status);
+        });
+        
+    }
+}
 
 const editClient = dispatch => {
     return async (id, name, surname, phoneNumber, belatedCounter, callback) => {
@@ -99,7 +129,7 @@ const editClient = dispatch => {
 
 export const { Context, Provider } = createDataContext(
     clientReducer,
-    { addClient, getClients, deleteClient, editClient },
+    { addClient, getClients, deleteClient, editClient, sendBelated },
     [])
 
 // {

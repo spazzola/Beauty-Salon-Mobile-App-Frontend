@@ -4,7 +4,7 @@ import { Context } from './context/ClientContext';
 import { globalBackground, button, buttonWrapper, buttonText, detailTitle, detailParagraph, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 
 const ClientDetail = ({ navigation }) => {
-    const { state, deleteClient } = useContext(Context);
+    const { state, deleteClient, sendBelated } = useContext(Context);
 
     const client = state.find((client) => client.id === navigation.getParam('id'));
 
@@ -28,6 +28,27 @@ const ClientDetail = ({ navigation }) => {
                     </View>
                 </View>
 
+                <View style={buttonWrapper}>
+                    <TouchableOpacity style={[button, { width: 200 }]} onPress={() => {
+                        Alert.alert(
+                            "Dodawanie spóźnienia",
+                            "Czy napewno chcesz dodać spóźnienie?",
+                            [
+                                {
+                                    text: "Nie",
+                                    style: "cancel"
+                                },
+                                {
+                                    text: "Tak", onPress: async () => {
+                                        sendBelated(client.id);
+                                    }
+                                }
+                            ]
+                        );
+                    }}>
+                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Dodaj spóźnienie</Text>
+                    </TouchableOpacity>
+                </View>
                 <View style={buttonWrapper}>
                     <TouchableOpacity style={button} onPress={() => navigation.navigate('ClientEdit', { id: navigation.getParam('id') })}>
                         <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Edytuj</Text>
