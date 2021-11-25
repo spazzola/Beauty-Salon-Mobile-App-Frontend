@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ScrollView, Alert, Platform } from 'react-native';
 import { Context as AppointmentContext } from './context/AppointmentContext';
 import { Context as WorkContext } from '../work/context/WorkContext';
 import { workIcons, buttonIcons } from '../icons/Icons';
@@ -33,6 +33,21 @@ const AppointmentDetail = ({ navigation }) => {
 
     const [isEditDateModalVisible, setIsEditDateModalVisible] = useState(false);
     const [isEditWorksModalVisible, setIsEditWorksModalVisible] = useState(false);
+
+    const [showAndroidDateModal, setShowAndroidDateModal] = useState(false);
+    const [type, setType] = useState('date');
+
+    const showDateModal = (type) => {
+        setShowAndroidDateModal(!showAndroidDateModal);
+        setType(type);
+    };
+
+    const showDatePicker = () => {
+        showDateModal('date');
+    };
+    const showTimePicker = () => {
+        showDateModal('time');
+    };
 
     const [workDropDownOpen, setWorkDropDownOpen] = useState(false);
     const [workIds, setWorkId] = useState(null);
@@ -70,13 +85,14 @@ const AppointmentDetail = ({ navigation }) => {
     const onChangeDate = (event, selectedDate) => {
         let currentDate = selectedDate || startDate;
         setStartDate(currentDate);
+        setShowAndroidDateModal(false);
     };
 
 
     return (
         <>
-            <ScrollView style={globalBackground} showsVerticalScrollIndicator={false}>
-                <View style={[globalBackground, { height: '100%' }]}>
+            <ScrollView style={[globalBackground, { height: '100%' }]} nestedScrollEnabled={true}>
+                <View style={globalBackground}>
                     <View style={[{ height: '20%', flexDirection: 'row', justifyContent: 'center' }]}>
                         <View>
                             <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Klient:</Text>
@@ -95,31 +111,35 @@ const AppointmentDetail = ({ navigation }) => {
                         </View>
                     </View>
 
-                    <View style={{ marginTop: '15%', height: '20%' }}>
+                    <View style={{ marginTop: 70 }}>
                         <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold', textAlign: 'center' }]}>Usługi:</Text>
-                        <Text style={{ marginLeft: 10, height: '80%' }}> <FlatList
+                        <FlatList
                             vertical={true}
-                            style={{ width: '200%' }}
+                            style={{ width: '200%', height: 150 }}
                             showsVerticalScrollIndicator={false}
                             data={appointment.appointmentDetails}
                             keyExtractor={(item, index) => 'key' + index}
                             renderItem={({ item, index }) => (
                                 <>
-                                    <View style={{ flexDirection: 'row', width: '100%' }}>
+                                    <View style={{ flexDirection: 'row', width: '100%', marginLeft: '2%', marginTop: '2%' }}>
                                         <Image style={styles.icon} source={(workIcons.find(icon => icon.name === item.work.iconName)).uri} />
-                                        <Text style={[styles.paragraph, { fontFamily: 'MerriWeather' }]} key={index} >{item.work.name}</Text>
+                                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather', marginTop: 5, marginLeft: 5 }]} key={index} >{item.work.name}</Text>
                                     </View>
                                 </>
                             )}
-                        /></Text>
+                        />
                     </View>
 
-                    <View style={{ height: '20%' }}>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold', textAlign: 'center', marginTop: '5%' }]}>Uwagi:</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather', marginLeft: '5%', marginRight: '5%' }]}> {appointment.note}</Text>
+                    <View>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold', textAlign: 'center' }]}>Uwagi:</Text>
+                        <ScrollView style={{}}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={[detailParagraph, { fontFamily: 'MerriWeather', marginLeft: '5%', marginRight: '5%' }]}> {appointment.note}</Text>
+                            </View>
+                        </ScrollView>
                     </View>
 
-                    <View style={{ marginBottom: '10%' }}>
+                    <View>
                         <View>
                             <View style={[buttonWrapper]}>
                                 <TouchableOpacity style={button} onPress={() => {
@@ -142,59 +162,91 @@ const AppointmentDetail = ({ navigation }) => {
                             </TouchableOpacity>
 
                         </View>
-
-                        <View>
-                            <View style={[buttonWrapper]}>
-                                <TouchableOpacity style={button} onPress={async () => {
-                                    Alert.alert(
-                                        "Usuwanie wizyty",
-                                        "Czy napewno chcesz usunąć wizytę?",
-                                        [
-                                            {
-                                                text: "Nie",
-                                                style: "cancel"
-                                            },
-                                            {
-                                                text: "Tak", onPress: async () => {
-                                                    await deleteAppointment(appointment.id);
-                                                    navigation.navigate('Appointments');
-                                                }
+                    </View>
+                    <View>
+                        <View style={[buttonWrapper]}>
+                            <TouchableOpacity style={button} onPress={async () => {
+                                Alert.alert(
+                                    "Usuwanie wizyty",
+                                    "Czy napewno chcesz usunąć wizytę?",
+                                    [
+                                        {
+                                            text: "Nie",
+                                            style: "cancel"
+                                        },
+                                        {
+                                            text: "Tak", onPress: async () => {
+                                                await deleteAppointment(appointment.id);
+                                                navigation.navigate('Appointments');
                                             }
-                                        ]
-                                    );
-                                }}
-                                >
-                                    <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Odwołaj wizytę</Text>
-                                </TouchableOpacity>
-                            </View>
+                                        }
+                                    ]
+                                );
+                            }}
+                            >
+                                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Odwołaj wizytę</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
+
                 </View>
             </ScrollView>
+
             <Modal isVisible={isEditDateModalVisible} onBackdropPress={() => setIsEditDateModalVisible(false)}>
-                <View style={[styles.modalContainer, { height: '90%' }]}>
-                    <View style={[styles.headerWrapper, { height: '8%' }]}>
+                <View style={[styles.modalContainer, { height: Platform.OS === 'ios' ? '85%' : '55%' }]}>
+                    <View style={[styles.headerWrapper, { height: Platform.OS === 'ios' ? '8%' : '15%' }]}>
                         <Text style={styles.modalHeader}>Przekładanie wizyty</Text>
                     </View>
                     <View style={{ width: '100%', marginTop: '5%' }}>
-                        <Text style={{ textAlign: 'center', fontSize: 20, fontFamily: 'MerriWeatherBold', marginBottom: '2%' }}>Wybierz datę</Text>
-                        <DateTimePicker
-                            value={startDate}
-                            onChange={onChangeDate}
-                            display='spinner'
-                            is24Hour={true}
-                            locale={'pl'}
-                            style={{ backgroundColor: '#FBACCC' }}
-                        />
-                        <Text style={{ textAlign: 'center', fontSize: 20, fontFamily: 'NotoSerif' }}>Wybierz godzinę</Text>
-                        <DateTimePicker
-                            value={startDate}
-                            onChange={onChangeDate}
-                            mode='time'
-                            display='spinner'
-                            is24Hour={true}
-                        />
-                        <View style={[buttonWrapper, { width: '100%' }]}>
+                        {Platform.OS === 'ios' ?
+                            <>
+                                <Text style={{ textAlign: 'center', fontSize: 20, fontFamily: 'MerriWeatherBold', marginBottom: '2%' }}>Wybierz datę</Text>
+                                <DateTimePicker
+                                    value={startDate}
+                                    onChange={onChangeDate}
+                                    display='spinner'
+                                    is24Hour={true}
+                                    locale={'pl'}
+                                    style={{ backgroundColor: '#FBACCC' }}
+                                />
+                                <Text style={{ textAlign: 'center', fontSize: 20, fontFamily: 'NotoSerif' }}>Wybierz godzinę</Text>
+                                <DateTimePicker
+                                    value={startDate}
+                                    onChange={onChangeDate}
+                                    mode='time'
+                                    display='spinner'
+                                    is24Hour={true}
+                                />
+                            </>
+                            :
+                            <View style={{ alignItems: 'center', justifyContent: 'space-around' }}>
+                                <View style={[buttonWrapper, { marginTop: 0 }]}>
+                                    <TouchableOpacity style={[button, { width: 180, flexDirection: 'row' }]} onPress={showDatePicker}>
+                                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Wybierz datę</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <Text style={[detailParagraph, { fontSize: 17, marginTop: 5, fontFamily: 'MerriWeather', color: globalBackground.backgroundColor, margin: 'auto' }]}> Wybrana data: {startDate.getDate() + '/' + (startDate.getMonth() + 1) + '/' + startDate.getFullYear()}</Text>
+                                {
+                                    showAndroidDateModal ?
+                                        <DateTimePicker
+                                            testID="dateTimePicker"
+                                            value={startDate}
+                                            mode={type}
+                                            is24Hour={true}
+                                            display="default"
+                                            onChange={onChangeDate}
+                                        />
+                                        : null
+                                }
+                                <View style={buttonWrapper}>
+                                    <TouchableOpacity style={[button, { width: 180, flexDirection: 'row' }]} onPress={showTimePicker}>
+                                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Wybierz czas</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <Text style={[detailParagraph, { fontSize: 17, marginTop: 5, fontFamily: 'MerriWeather', color: globalBackground.backgroundColor, margin: 'auto' }]}> Wybrany czas: {startDate.getHours() + ':' + startDate.getMinutes()}</Text>
+                            </View>
+                        }
+                        <View style={[buttonWrapper, { width: '100%', marginTop: Platform.OS === 'android' ? '15%' : 30 }]}>
                             <TouchableOpacity style={button} onPress={async () => {
                                 const jwt = await AsyncStorage.getItem('jwt');
                                 const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
@@ -324,7 +376,7 @@ AppointmentDetail.navigationOptions = {
     headerStyle: {
         backgroundColor: headerBackgroundColor,
     },
-  };
+};
 
 const styles = StyleSheet.create({
     modalContainer: {
@@ -354,10 +406,10 @@ const styles = StyleSheet.create({
     icon: {
         width: 40,
         height: 40,
-        marginTop: 10,
+        marginTop: 0,
     },
     paragraph: {
-        marginTop: 13,
+        //marginTop: 13,
         fontSize: 25,
         textAlign: 'left',
     },
