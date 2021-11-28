@@ -1,8 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Context } from './context/AuthContext';
-import { input, globalBackground, buttonWrapper, button, buttonText, headerTitleColor } from '../../GlobalStyles';
+import { input, globalBackground, buttonWrapper, button, buttonText } from '../../GlobalStyles';
 import { useFonts } from 'expo-font';
+import BaseSpinner from '../base_components/BaseSpinner';
 
 const SigninScreen = ({ navigation }) => {
     const { authState, signin } = useContext(Context);
@@ -54,9 +55,7 @@ const SigninScreen = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                     {showSpinner ?
-                        <View style={styles.loading}>
-                            <ActivityIndicator animating={showSpinner} size="large" color={headerTitleColor} />
-                        </View>
+                        <BaseSpinner />
                         : null}
                 </View>
             </TouchableWithoutFeedback>
