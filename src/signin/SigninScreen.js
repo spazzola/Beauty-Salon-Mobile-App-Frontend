@@ -1,13 +1,14 @@
-import React, { useState, useContext } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import { Context } from './context/AuthContext';
-import { input, globalBackground, buttonWrapper, button, buttonText } from '../../GlobalStyles';
+import { input, globalBackground, buttonWrapper, button, buttonText, headerTitleColor } from '../../GlobalStyles';
 import { useFonts } from 'expo-font';
 
 const SigninScreen = ({ navigation }) => {
     const { authState, signin } = useContext(Context);
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
+    const [showSpinner, setShowSpinner] = useState(false);
 
     const [loaded] = useFonts({
         MerriWeather: require('../../assets/fonts/Merriweather-Regular.ttf'),
@@ -17,6 +18,7 @@ const SigninScreen = ({ navigation }) => {
     if (!loaded) {
         return null;
     }
+
 
     return <>
         <KeyboardAvoidingView
@@ -43,12 +45,19 @@ const SigninScreen = ({ navigation }) => {
 
                     <View style={buttonWrapper}>
                         <TouchableOpacity style={[button, { width: 220 }]} onPress={() => {
+                            setShowSpinner(!showSpinner);
                             signin({ login, password });
+                            setShowSpinner(!showSpinner);
                             //navigation.navigate('mainFlow')
-                         }}>
+                        }}>
                             <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Zaloguj</Text>
                         </TouchableOpacity>
                     </View>
+                    {showSpinner ?
+                        <View style={styles.loading}>
+                            <ActivityIndicator animating={showSpinner} size="large" color={headerTitleColor} />
+                        </View>
+                        : null}
                 </View>
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
@@ -67,14 +76,24 @@ const SigninScreen = ({ navigation }) => {
 // }
 SigninScreen.navigationOptions = () => {
     return {
-      headerShown: false,
+        headerShown: false,
     };
-  };
+};
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
         marginBottom: '40%'
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: "#F5FCFF88"
     }
 });
 
