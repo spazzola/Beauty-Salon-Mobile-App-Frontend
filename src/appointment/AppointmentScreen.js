@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions, ScrollView, Button } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions, ScrollView, Platform, SafeAreaView } from 'react-native';
 import { Context } from './context/AppointmentContext';
 import AppointmentItem from './AppointmentItem';
 import BaseRadioGroup from '../base_components/BaseRadioGroup';
@@ -8,6 +8,7 @@ import { buttonIcons } from '../icons/Icons';
 import { globalBackground, buttonText, button, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import { Context as AuthContext } from '../signin/context/AuthContext';
 import { HeaderBackButton } from 'react-navigation-stack';
+import AndroidWeekView from './android_view/AndroidWeekView';
 
 // function extractHours(startDate) {
 //     return startDate.substring(11, 16);
@@ -82,65 +83,64 @@ const AppointmentScreen = ({ navigation }) => {
 
     return (
         <>
-            {authState.state.role === 'ADMIN' ?
-                <View style={[globalBackground, { marginBottom: 0, justifyContent: 'center', zIndex: 2 }]}>
-                    <BaseRadioGroup navigation={navigation} changeAppointmentsToShow={changeAppointmentsToShow} />
-                </View> : null
-            }
-            <ScrollView contentContainerStyle={{ height: 1800 }} showsVerticalScrollIndicator={false} >
-                <View style={[globalBackground, { position: 'absolute', zIndex: -2, height: 2000, top: authState.state.role === 'ADMIN' ? 30 : 0 }]}>
-                    <FlatList
-                        data={hours}
-                        keyExtractor={(item, index) => index}
-                        renderItem={({ item }) => {
-                            return (
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:00</Text>
-                                    <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:15</Text>
-                                    <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:30</Text>
-                                    <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:45</Text>
-                                </View>
+            {
+                Platform.OS === 'ios' ?
+                    <>
+                        {authState.state.role === 'ADMIN' ?
+                            <View style={[globalBackground, { marginBottom: 0, justifyContent: 'center', zIndex: 2 }]}>
+                                <BaseRadioGroup navigation={navigation} changeAppointmentsToShow={changeAppointmentsToShow} />
+                            </View> : null
+                        }
+                        <ScrollView contentContainerStyle={{ height: 1800 }} showsVerticalScrollIndicator={false}>
+                            <View style={[globalBackground, { position: 'absolute', zIndex: -2, height: 2000, top: authState.state.role === 'ADMIN' ? 30 : 0 }]}>
+                                <FlatList
+                                    data={hours}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={({ item, index }) => {
+                                        return (
+                                            <View key={index} style={{ flexDirection: 'row' }}>
+                                                <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:00</Text>
+                                                <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:15</Text>
+                                                <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:30</Text>
+                                                <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:45</Text>
+                                            </View>
 
-                            )
-                        }}
-                    />
-                </View>
-                <View style={{ position: 'absolute', width: windowWidth, height: 2000, zIndex: -1 }}>
-                    {/* <FlatList
-                    data={state}
-                    keyExtractor={item => item.id.toString()}
-                    renderItem={({ item }) => {
-                        return (
-                            <View style={{position: 'absolute',backgroundColor: 'yellow', height: windowHeight}}>
-                                <AppointmentItem appointment={item} navigation={navigation} />
+                                        )
+                                    }}
+                                />
                             </View>
-                        );
-                    }}
-                /> */}
-                    {appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments ?
-                        (
-                            sortList(state, appointmentsToShow, selectedDay).map((item, index) => {
-                                return (
-                                    <>
-                                        <View key={index} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
-                                            <AppointmentItem appointment={item} navigation={navigation} mode={'double'} selectedDate={navigation.getParam('selectedDate')} />
-                                        </View>
-                                    </>
-                                )
-                            })
-                        )
-                        :
-                        (
-                            sortList(state, appointmentsToShow, selectedDay).map((item, index) => {
-                                return (
-                                    <View key={index} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
-                                        <AppointmentItem appointment={item} navigation={navigation} mode={'single'} selectedDate={navigation.getParam('selectedDate')} />
-                                    </View>
-                                )
-                            })
-                        )}
-                </View>
-            </ScrollView>
+
+                            <View style={{ position: 'absolute', width: windowWidth, height: 2000, zIndex: -1 }}>
+                                {(appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments) ?
+                                    (
+                                        sortList(state, appointmentsToShow, selectedDay).map((item) => {
+                                            return (
+                                                <View key={item.id.toString()} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
+                                                    <AppointmentItem appointment={item} navigation={navigation} mode={'double'} selectedDate={navigation.getParam('selectedDate')} />
+                                                </View>
+                                            )
+                                        })
+
+                                    )
+                                    :
+                                    (
+                                        sortList(state, appointmentsToShow, selectedDay).map((item) => {
+                                            return (
+                                                <View key={item.id.toString()} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
+                                                    <AppointmentItem appointment={item} navigation={navigation} mode={'single'} selectedDate={navigation.getParam('selectedDate')} />
+                                                </View>
+                                            )
+                                        })
+                                    )}
+                            </View>
+                        </ScrollView>
+                    </>
+                    :
+                    <>
+                        <AndroidWeekView navigation={navigation} appointments={state} selectedDate={navigation.getParam('selectedDate')} />
+                    </>
+            }
+
             <TouchableOpacity style={[styles.wrapper, button]} onPress={() => {
                 console.log("clicked");
                 navigation.navigate('AppointmentAdd', { selectedDate: navigation.getParam('selectedDate') })
@@ -151,7 +151,7 @@ const AppointmentScreen = ({ navigation }) => {
     );
 }
 
-AppointmentScreen.navigationOptions = ({navigation}) => {
+AppointmentScreen.navigationOptions = ({ navigation }) => {
     return {
         title: headerTitle,
         headerTintColor: headerTitleColor,
@@ -163,14 +163,14 @@ AppointmentScreen.navigationOptions = ({navigation}) => {
         },
         headerLeft: (props) => (
             <HeaderBackButton
-              {...props}
-              //style={styles.custom}
-              onPress={() => {
-              navigation.navigate('AppointmentCalendar');
-              }}
+                {...props}
+                //style={styles.custom}
+                onPress={() => {
+                    navigation.navigate('AppointmentCalendar');
+                }}
             />
-          ),
-          headerBackTitle: 'Kalendarz'
+        ),
+        headerBackTitle: 'Kalendarz'
         // headerLeft: () => (
         //     <Button
         //       onPress={() => navigation.pop('Clients')}
@@ -199,3 +199,53 @@ const styles = StyleSheet.create({
 
 export { boxHeight };
 export default AppointmentScreen;
+
+
+// {authState.state.role === 'ADMIN' ?
+                //     <View style={[globalBackground, { marginBottom: 0, justifyContent: 'center', zIndex: 2 }]}>
+                //         <BaseRadioGroup navigation={navigation} changeAppointmentsToShow={changeAppointmentsToShow} />
+                //     </View> : null
+                // }
+                // <ScrollView contentContainerStyle={{ height: 1800 }} showsVerticalScrollIndicator={false}>
+                //     <View style={[globalBackground, { position: 'absolute', zIndex: -2, height: 2000, top: authState.state.role === 'ADMIN' ? 30 : 0 }]}>
+                //         <FlatList
+                //             data={hours}
+                //             keyExtractor={(item, index) => index.toString()}
+                //             renderItem={({ item, index }) => {
+                //                 return (
+                //                     <View key={index} style={{ flexDirection: 'row' }}>
+                //                         <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:00</Text>
+                //                         <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:15</Text>
+                //                         <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:30</Text>
+                //                         <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:45</Text>
+                //                     </View>
+
+                //                 )
+                //             }}
+                //         />
+                //     </View>
+
+                //     <View style={{ position: 'absolute', width: windowWidth, height: 2000, zIndex: -1 }}>
+                //         {(appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments) ?
+                //             (
+                //                 sortList(state, appointmentsToShow, selectedDay).map((item) => {
+                //                     return (
+                //                         <View key={item.id.toString()} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
+                //                             <AppointmentItem appointment={item} navigation={navigation} mode={'double'} selectedDate={navigation.getParam('selectedDate')} />
+                //                         </View>
+                //                     )
+                //                 })
+
+                //             )
+                //             :
+                //             (
+                //                 sortList(state, appointmentsToShow, selectedDay).map((item) => {
+                //                     return (
+                //                         <View key={item.id.toString()} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
+                //                             <AppointmentItem appointment={item} navigation={navigation} mode={'single'} selectedDate={navigation.getParam('selectedDate')} />
+                //                         </View>
+                //                     )
+                //                 })
+                //             )}
+                //     </View>
+                // </ScrollView>
