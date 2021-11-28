@@ -3,10 +3,13 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { detailTitle, buttonText, buttonWrapper, button } from '../../GlobalStyles';
+import BaseSpinner from '../base_components/BaseSpinner';
+
 
 const SolariumForm = ({ onSubmit, getSolarium, initialValues }) => {
   const [usedTime, setUsedTime] = useState(initialValues.usedTime);
   const [usedDate, setUsedDate] = useState(new Date(Date.now()));
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const onChange = (event, selectedDate) => {
     let currentDate = selectedDate || usedDate;
@@ -43,18 +46,26 @@ const SolariumForm = ({ onSubmit, getSolarium, initialValues }) => {
           if (usedTime === 0) {
             Alert.alert("Błąd", "Podaj ilość minut");
           } else {
-            onSubmit(usedTime, usedDate)
+            setShowSpinner(!showSpinner);
+            onSubmit(usedTime, usedDate);
+            setShowSpinner(false);
           }
         }}>
           <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Potwierdź solarium</Text>
         </TouchableOpacity>
       </View>
       <View style={buttonWrapper}>
-        <TouchableOpacity style={[button, { width: 220 }]} onPress={() => { getSolarium(usedDate) }}>
+        <TouchableOpacity style={[button, { width: 220 }]} onPress={() => {
+          setShowSpinner(!showSpinner);
+          getSolarium(usedDate);
+          setShowSpinner(false);
+        }}>
           <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Pobierz solarium</Text>
         </TouchableOpacity>
       </View>
-
+      {showSpinner ?
+        <BaseSpinner />
+        : null}
     </View>
   );
 };

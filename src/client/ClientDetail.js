@@ -1,10 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity, Alert } from 'react-native';
 import { Context } from './context/ClientContext';
 import { globalBackground, button, buttonWrapper, buttonText, detailTitle, detailParagraph, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
+import BaseSpinner from '../base_components/BaseSpinner';
+
 
 const ClientDetail = ({ navigation }) => {
     const { state, deleteClient, sendBelated } = useContext(Context);
+    const [showSpinner, setShowSpinner] = useState(false);
 
     const client = state.find((client) => client.id === navigation.getParam('id'));
 
@@ -40,7 +43,9 @@ const ClientDetail = ({ navigation }) => {
                                 },
                                 {
                                     text: "Tak", onPress: async () => {
+                                        setShowSpinner(!showSpinner);
                                         sendBelated(client.id);
+                                        setShowSpinner(false);
                                     }
                                 }
                             ]
@@ -64,8 +69,10 @@ const ClientDetail = ({ navigation }) => {
                                 },
                                 {
                                     text: "Tak", onPress: async () => {
-                                        navigation.navigate('Clients');
+                                        setShowSpinner(!showSpinner);
                                         deleteClient(client.id);
+                                        navigation.navigate('Clients');
+                                        setShowSpinner(!showSpinner);
                                     }
                                 }
                             ]
@@ -74,6 +81,9 @@ const ClientDetail = ({ navigation }) => {
                         <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Usuń</Text>
                     </TouchableOpacity>
                 </View>
+                {showSpinner ?
+                    <BaseSpinner />
+                    : null}
             </View>
 
         </>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, TextInput, Text, Alert } from 'react-native';
 import { input, globalBackground, button, buttonText, buttonWrapper, headerBackgroundColor } from '../../GlobalStyles';
+import BaseSpinner from '../base_components/BaseSpinner';
 
 function numberIsNotValid(phoneNumber) {
   const spaceIndex = phoneNumber.indexOf(" ");
@@ -17,6 +18,7 @@ const ClientForm = ({ onSubmit, initialValues, mode, backgroundColor }) => {
   const [surname, setSurname] = useState(initialValues.surname);
   const [phoneNumber, setPhoneNumber] = useState(initialValues.phoneNumber);
   const [belatedCounter, setBelatedCounter] = useState(initialValues.belatedCounter);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   return (
     <View style={[{ alignItems: 'center', height: '100%', backgroundColor: backgroundColor ? backgroundColor : globalBackground.backgroundColor }]}>
@@ -55,13 +57,17 @@ const ClientForm = ({ onSubmit, initialValues, mode, backgroundColor }) => {
           else if (phoneNumber.length < 9 || phoneNumber.length > 13) {
             Alert.alert("Błąd", "Podana długość numeru kom. jest błędna");
           } else {
+            setShowSpinner(!showSpinner);
             onSubmit(name, surname, phoneNumber, belatedCounter);
+            setShowSpinner(!showSpinner);
           }
         }}>
           <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj klienta' : 'Dodaj klienta'}</Text>
         </TouchableOpacity>
       </View>
-
+      {showSpinner ?
+        <BaseSpinner />
+        : null}
     </View>
   );
 };

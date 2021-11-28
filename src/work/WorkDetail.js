@@ -1,11 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import { Context } from './context/WorkContext';
 import { workIcons, buttonIcons } from '../icons/Icons';
 import { globalBackground, detailParagraph, detailTitle, button, buttonWrapper, buttonText, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
+import BaseSpinner from '../base_components/BaseSpinner';
+
 
 const WorkDetail = ({ navigation }) => {
     const { state, deleteWork } = useContext(Context);
+    const [showSpinner, setShowSpinner] = useState(false);
 
     const work = state.find((work) => work.id === navigation.getParam('id'));
     const icon = workIcons.find((icon) => icon.name === work.iconName);
@@ -45,8 +48,10 @@ const WorkDetail = ({ navigation }) => {
                                 },
                                 {
                                     text: "Tak", onPress: async () => {
-                                        navigation.navigate('Works');
+                                        setShowSpinner(!showSpinner);
                                         deleteWork(work.id);
+                                        navigation.navigate('Works');
+                                        setShowSpinner(!showSpinner);
                                     }
                                 }
                             ]
@@ -55,6 +60,9 @@ const WorkDetail = ({ navigation }) => {
                         <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Usuń</Text>
                     </TouchableOpacity>
                 </View>
+                {showSpinner ?
+                    <BaseSpinner />
+                    : null}
             </View>
         </>
     );

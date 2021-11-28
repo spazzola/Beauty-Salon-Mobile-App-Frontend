@@ -1,10 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { Context } from './context/CostContext';
 import { detailParagraph, detailTitle, globalBackground, button, buttonWrapper, buttonText, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
+import BaseSpinner from '../base_components/BaseSpinner';
+
 
 const CostDetail = ({ navigation }) => {
     const { state, deleteCost } = useContext(Context);
+    const [showSpinner, setShowSpinner] = useState(false);
 
     const cost = state.find((cost) => cost.id === navigation.getParam('id'));
 
@@ -38,8 +41,10 @@ const CostDetail = ({ navigation }) => {
                             },
                             {
                                 text: "Tak", onPress: async () => {
-                                    navigation.navigate('Costs');
+                                    setShowSpinner(!showSpinner);
                                     deleteCost(cost.id);
+                                    navigation.navigate('Costs');
+                                    setShowSpinner(!showSpinner);
                                 }
                             }
                         ]
@@ -48,7 +53,9 @@ const CostDetail = ({ navigation }) => {
                     <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Usuń</Text>
                 </TouchableOpacity>
             </View>
-
+            {showSpinner ?
+                <BaseSpinner />
+                : null}
         </View>
     );
 }

@@ -4,6 +4,7 @@ import NumericInput from 'react-native-numeric-input';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { workIcons } from '../icons/Icons';
 import { input, globalBackground, detailTitle, button, buttonText, buttonWrapper } from '../../GlobalStyles';
+import BaseSpinner from '../base_components/BaseSpinner';
 
 const WorkForm = ({ onSubmit, initialValues, mode }) => {
     const [name, setName] = useState(initialValues.name);
@@ -11,6 +12,7 @@ const WorkForm = ({ onSubmit, initialValues, mode }) => {
     const [hoursDuration, setHoursDuration] = useState(initialValues.hoursDuration);
     const [minutesDuration, setMinutesDuration] = useState(initialValues.minutesDuration);
     const [iconName, setIconName] = useState(initialValues.iconName);
+    const [showSpinner, setShowSpinner] = useState(false);
 
     const [myArray, setMyArray] = useState([]);
     const [open, setOpen] = useState(false);
@@ -92,7 +94,7 @@ const WorkForm = ({ onSubmit, initialValues, mode }) => {
                         </SafeAreaView>
 
                     </View>
-                    
+
                     <View style={[buttonWrapper, { marginBottom: 50, marginTop: 30 }]}>
                         <TouchableOpacity style={[button, { marginTop: '5%' }]} onPress={() => {
                             if (name.length === 0) {
@@ -108,12 +110,17 @@ const WorkForm = ({ onSubmit, initialValues, mode }) => {
                                 Alert.alert("Błąd", "Wybierz ikonę")
                             }
                             else {
+                                setShowSpinner(!showSpinner);
                                 onSubmit(name, price, hoursDuration, minutesDuration, iconName);
+                                setShowSpinner(!showSpinner);
                             }
-                            }}>
+                        }}>
                             <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj usługę' : 'Dodaj usługę'}</Text>
                         </TouchableOpacity>
                     </View>
+                    {showSpinner ?
+                        <BaseSpinner />
+                        : null}
                 </View>
             </ScrollView>
         </SafeAreaView>

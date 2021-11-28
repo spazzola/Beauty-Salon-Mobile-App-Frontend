@@ -13,6 +13,7 @@ import ClientForm from '../client/ClientForm';
 import { isAppointmentFormValid } from './AppointmentService';
 import { Context as AuthContext } from '../signin/context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BaseSpinner from '../base_components/BaseSpinner';
 
 const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, givenDate, mode, givenClientId, givenEmployeeId, givenWorkIds }) => {
   const clientContext = useContext(ClientContext);
@@ -20,6 +21,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
   const workContext = useContext(WorkContext);
   const authConext = useContext(AuthContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const [showAndroidDateModal, setShowAndroidDateModal] = useState(false);
   const [type, setType] = useState('date');
@@ -347,7 +349,9 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
               <TouchableOpacity style={[button, { marginTop: '5%' }]} onPress={
                 mode === 'edit' ? async () => {
                   if (isAppointmentFormValid(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds)) {
+                    setShowSpinner(!showSpinner);
                     await onSubmit(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds, note);
+                    setShowSpinner(!showSpinner);
                     navigation.navigate('Appointments', {
                       selectedDate: {
                         year: startDate.substring(0, 4),
@@ -360,7 +364,9 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                   :
                   async () => {
                     if (isAppointmentFormValid(1, startDate, percentageValueToAdd, clientId, employeeId, workIds)) {
+                      setShowSpinner(!showSpinner);
                       await onSubmit(startDate, percentageValueToAdd, clientId, employeeId, workIds, note);
+                      setShowSpinner(!showSpinner);
                       navigation.navigate('Appointments', {
                         selectedDate: {
                           year: startDate.getFullYear(),
@@ -375,7 +381,9 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj wizytę' : 'Dodaj wizytę'}</Text>
               </TouchableOpacity>
             </View>
-
+            {showSpinner ?
+            <BaseSpinner />
+            : null}
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>

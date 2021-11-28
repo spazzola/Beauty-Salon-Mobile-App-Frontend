@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, Alert } from 'react-native';
 import { buttonIcons } from '../icons/Icons';
 import { input, globalBackground, button, buttonText, buttonWrapper } from '../../GlobalStyles';
+import BaseSpinner from '../base_components/BaseSpinner';
 
 function numberIsNotValid(phoneNumber) {
   const spaceIndex = phoneNumber.indexOf(" ");
@@ -21,7 +22,7 @@ const UserForm = ({ onSubmit, initialValues, mode }) => {
   const [confirmPassword, setConfirmPassword] = useState(initialValues.confirmPassword);
   const [role, setRole] = useState(initialValues.role);
   const [visible, setVisible] = useState(initialValues.visible);
-
+  const [showSpinner, setShowSpinner] = useState(false);
 
   return (
     <KeyboardAvoidingView
@@ -79,16 +80,16 @@ const UserForm = ({ onSubmit, initialValues, mode }) => {
           <View style={[buttonWrapper, { marginBottom: 50, marginTop: 30 }]}>
             <TouchableOpacity style={[button, { marginTop: '5%', width: 210 }]} onPress={() => {
 
-              if(name.length === 0) {
+              if (name.length === 0) {
                 Alert.alert("Błąd", "Podaj imię pracownika");
-              } 
-              else if(surname.length === 0) {
+              }
+              else if (surname.length === 0) {
                 Alert.alert("Błąd", "Podaj nazwisko pracownika");
               }
               else if (numberIsNotValid(phoneNumber)) {
                 Alert.alert("Błąd", "Podany numer kom. zawiera błędne znaki");
               }
-              else if(phoneNumber.length < 9 || phoneNumber.length > 13) {
+              else if (phoneNumber.length < 9 || phoneNumber.length > 13) {
                 Alert.alert("Błąd", "Podana długość numeru kom. jest błędna");
               }
               else if (login.length === 0) {
@@ -97,12 +98,17 @@ const UserForm = ({ onSubmit, initialValues, mode }) => {
               else if (password !== confirmPassword) {
                 Alert.alert("Błąd", "Podane hasła różnią się od siebie");
               } else {
+                setShowSpinner(!showSpinner);
                 onSubmit(name, surname, phoneNumber, login, password, role, visible);
+                setShowSpinner(!showSpinner);
               }
             }}>
               <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj pracownika' : 'Dodaj pracownika'}</Text>
             </TouchableOpacity>
           </View>
+          {showSpinner ?
+            <BaseSpinner />
+            : null}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

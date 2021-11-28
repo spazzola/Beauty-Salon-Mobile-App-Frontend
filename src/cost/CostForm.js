@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'reac
 import NumericInput from 'react-native-numeric-input';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { input, globalBackground, detailTitle, button, buttonWrapper, buttonText } from '../../GlobalStyles';
+import BaseSpinner from '../base_components/BaseSpinner';
 
 function extractDay(dateString) {
   return dateString.substring(0, 2);
@@ -19,6 +20,7 @@ function extractYear(dateString) {
 const CostForm = ({ onSubmit, initialValues, mode }) => {
   const [name, setName] = useState(initialValues.name);
   const [value, setValue] = useState(initialValues.value);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   let day;
   let month;
@@ -70,17 +72,22 @@ const CostForm = ({ onSubmit, initialValues, mode }) => {
           <TouchableOpacity style={[button]} onPress={() => {
             if (name.length === 0) {
               Alert.alert("Błąd", "Podaj nazwę kosztu")
-            } 
+            }
             else if (value <= 0) {
               Alert.alert("Błąd", "Podaj wartość kosztu")
             }
             else {
-              onSubmit(name, value, addedDate)
+              setShowSpinner(!showSpinner);
+              onSubmit(name, value, addedDate);
+              setShowSpinner(!showSpinner);
             }
           }}>
             <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj koszt' : 'Dodaj koszt'}</Text>
           </TouchableOpacity>
         </View>
+        {showSpinner ?
+          <BaseSpinner />
+          : null}
       </View>
     </>
   );

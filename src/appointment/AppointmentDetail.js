@@ -9,6 +9,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker'
 import { format } from 'date-fns'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BaseSpinner from '../base_components/BaseSpinner';
 
 function getWorkIds(worksList) {
     const resultList = [];
@@ -30,6 +31,7 @@ const AppointmentDetail = ({ navigation }) => {
     const { state, deleteAppointment, editAppointment, getAppointments } = useContext(AppointmentContext);
     const workContext = useContext(WorkContext);
     const [appointment, setAppointment] = useState(state.find((appointment) => appointment.id === navigation.getParam('id')));
+    const [showSpinner, setShowSpinner] = useState(false);
 
     const [isEditDateModalVisible, setIsEditDateModalVisible] = useState(false);
     const [isEditWorksModalVisible, setIsEditWorksModalVisible] = useState(false);
@@ -176,7 +178,9 @@ const AppointmentDetail = ({ navigation }) => {
                                         },
                                         {
                                             text: "Tak", onPress: async () => {
+                                                setShowSpinner(!showSpinner);
                                                 await deleteAppointment(appointment.id);
+                                                setShowSpinner(!showSpinner);
                                                 navigation.navigate('Appointments');
                                             }
                                         }
@@ -188,7 +192,9 @@ const AppointmentDetail = ({ navigation }) => {
                             </TouchableOpacity>
                         </View>
                     </View>
-
+                    {showSpinner ?
+                        <BaseSpinner />
+                        : null}
                 </View>
             </ScrollView>
 
@@ -248,6 +254,8 @@ const AppointmentDetail = ({ navigation }) => {
                         }
                         <View style={[buttonWrapper, { width: '100%', marginTop: Platform.OS === 'android' ? '15%' : 30 }]}>
                             <TouchableOpacity style={button} onPress={async () => {
+                                setIsEditDateModalVisible(false);
+                                setShowSpinner(!showSpinner);
                                 const jwt = await AsyncStorage.getItem('jwt');
                                 const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
                                 const extractedDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
@@ -274,7 +282,7 @@ const AppointmentDetail = ({ navigation }) => {
                                 let json = await response.json();
                                 console.log(json);
                                 setAppointment(json);
-                                setIsEditDateModalVisible(false);
+                                setShowSpinner(false);
                             }}
                             >
                                 <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Przełóż</Text>
@@ -285,7 +293,7 @@ const AppointmentDetail = ({ navigation }) => {
             </Modal>
 
             <Modal isVisible={isEditWorksModalVisible} style={{ margin: '1%' }} onBackdropPress={() => setIsEditWorksModalVisible(false)}>
-                <View style={[styles.modalContainer, { height: '30%' }]}>
+                <View style={[styles.modalContainer, { height: Platform.OS === 'ios' ? '30%' : '35%' }]}>
                     <View style={styles.headerWrapper}>
                         <Text style={styles.modalHeader}>Zamiana usług</Text>
                     </View>
@@ -327,6 +335,8 @@ const AppointmentDetail = ({ navigation }) => {
                         />
                         <View style={[buttonWrapper, { width: '100%', marginTop: '10%' }]}>
                             <TouchableOpacity style={button} onPress={async () => {
+                                setIsEditWorksModalVisible(false);
+                                setShowSpinner(!showSpinner);
                                 const jwt = await AsyncStorage.getItem('jwt');
                                 const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
                                 const extractedDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
@@ -352,8 +362,7 @@ const AppointmentDetail = ({ navigation }) => {
                                 );
                                 let json = await response.json();
                                 setAppointment(json);
-                                setIsEditWorksModalVisible(false);
-
+                                setShowSpinner(false);
                                 // editAppointment(appointment.id, startDate, appointment.client.id, appointment.employee.id, workIds, appointment.percentageValueToAdd).then((response) => {console.log(response.data)});
                             }}
                             >

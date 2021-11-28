@@ -4,11 +4,13 @@ import { Context } from './context/ReportContext';
 import { globalBackground, button, buttonWrapper, buttonText, detailTitle, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import ReportItem from './ReportItem';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import BaseSpinner from '../base_components/BaseSpinner';
 
 const ReportScreen = ({ navigation }) => {
     const { state, generateMonthlyReport } = useContext(Context);
     const [date, setDate] = useState(new Date(Date.now()));
     const [showReportContent, setShowReportContent] = useState(false);
+    const [showSpinner, setShowSpinner] = useState(false);
 
     useEffect(() => {
         const listener = navigation.addListener('didFocus', () => {
@@ -32,14 +34,15 @@ const ReportScreen = ({ navigation }) => {
                 <DateTimePicker
                     value={date}
                     onChange={onChange}
-                    style={{width: '32%', marginTop: '5%'}}
+                    style={{ width: '32%', marginTop: '5%' }}
                 />
             </View>
 
             <View style={[buttonWrapper, { marginBottom: 50, marginTop: 30 }]}>
                 <TouchableOpacity style={[button, { marginTop: '5%', width: 190 }]} onPress={async () => {
-                    //setShowReportContent(false);
+                    setShowSpinner(!showSpinner);
                     await generateMonthlyReport(date.getMonth() + 1, date.getFullYear());
+                    setShowSpinner(false);
                     setShowReportContent(true);
                 }} title={'Generuj raport'}>
                     <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Generuj raport</Text>
@@ -49,7 +52,9 @@ const ReportScreen = ({ navigation }) => {
             {
                 showReportContent ? <ReportItem report={state} /> : null
             }
-
+            {showSpinner ?
+                <BaseSpinner />
+                : null}
         </View>
     );
 }

@@ -1,11 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { Context } from './context/UserContext';
 import { globalBackground, detailTitle, detailParagraph, button, buttonWrapper, buttonText, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import { buttonIcons } from '../icons/Icons';
+import BaseSpinner from '../base_components/BaseSpinner';
+
 
 const UserDetail = ({ navigation }) => {
     const { state, deleteUser } = useContext(Context);
+    const [showSpinner, setShowSpinner] = useState(false);
 
     const user = state.find((user) => user.id === navigation.getParam('id'));
 
@@ -43,8 +46,10 @@ const UserDetail = ({ navigation }) => {
                                 },
                                 {
                                     text: "Tak", onPress: async () => {
-                                        navigation.navigate('Users');
+                                        setShowSpinner(!showSpinner);
                                         deleteUser(user.id);
+                                        navigation.navigate('Users');
+                                        setShowSpinner(!showSpinner);
                                     }
                                 }
                             ]
@@ -53,6 +58,9 @@ const UserDetail = ({ navigation }) => {
                         <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Usuń</Text>
                     </TouchableOpacity>
                 </View>
+                {showSpinner ?
+                    <BaseSpinner />
+                    : null}
             </View>
         </>
     );

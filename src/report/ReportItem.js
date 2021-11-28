@@ -14,7 +14,7 @@ const ReportItem = ({ report }) => {
                 vertical={true}
                 showsVerticalScrollIndicator={false}
                 data={report.users}
-                keyExtractor={user => user.id}
+                keyExtractor={user => user.id.toString()}
                 renderItem={({ item, index }) => (
                     <Text style={[detailTitle, styles.customTitle]}>{item.name}: <Text style={[detailParagraph, styles.customParagraph]}>{item.workedHours} h</Text></Text>
                 )}
