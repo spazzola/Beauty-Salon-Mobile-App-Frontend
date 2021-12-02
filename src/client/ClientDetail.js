@@ -26,7 +26,7 @@ const ClientDetail = ({ navigation }) => {
                     <View>
                         <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.name}</Text>
                         <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.surname}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.phoneNumber}</Text>
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]} selectable> {client.phoneNumber}</Text>
                         <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.belatedCounter}</Text>
                     </View>
                 </View>
