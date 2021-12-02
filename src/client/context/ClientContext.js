@@ -41,6 +41,26 @@ const addClient = dispatch => {
         };
     };
 }
+
+const addClients = dispatch => {
+    return async (clients, callback) => {
+        const jwt = await AsyncStorage.getItem('jwt');
+
+        await axios.post('/client/createAll', clients, {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        })
+            .catch(error => {
+                Alert.alert("Błąd ", "Nie dodano klientów. \nKod błędu: " + error.response.status);
+            });
+
+        if (callback) {
+            callback();
+        };
+    };
+}
+
 const getClients = dispatch => {
     return async () => {
         const jwt = await AsyncStorage.getItem('jwt');
@@ -129,7 +149,7 @@ const editClient = dispatch => {
 
 export const { Context, Provider } = createDataContext(
     clientReducer,
-    { addClient, getClients, deleteClient, editClient, sendBelated },
+    { addClient, addClients, getClients, deleteClient, editClient, sendBelated },
     [])
 
 // {
