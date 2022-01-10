@@ -65,6 +65,21 @@ const getAppointments = dispatch => {
     };
 };
 
+const getIncomingAppointments = dispatch => {
+    return async (clientId) => {
+        const jwt = await AsyncStorage.getItem('jwt');
+        const response = await axios.get('/appointment/getIncomingAppointments', {
+            params: {
+                clientId
+            },
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        });
+        dispatch({ type: 'get_appointments', payload: response.data });
+    };
+};
+
 const deleteAppointment = dispatch => {
     return async id => {
         const jwt = await AsyncStorage.getItem('jwt');
@@ -120,7 +135,7 @@ const editAppointment = dispatch => {
 
 export const { Context, Provider } = createDataContext(
     appointmentReducer,
-    { addAppointment, getAppointments, deleteAppointment, editAppointment },
+    { addAppointment, getAppointments, getIncomingAppointments, deleteAppointment, editAppointment },
     [])
 // {
 //     "id": 1,
