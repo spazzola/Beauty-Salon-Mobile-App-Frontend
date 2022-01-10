@@ -65,12 +65,12 @@ const ClientDetail = ({ navigation }) => {
                         data={appointmentContext.state.sort((a, b) => new Date(b.startDate) - new Date(a.startDate))}
                         keyExtractor={(item, index) => item.id.toString()}
                         renderItem={({ item, index }) => (
-                            <IncomingAppointment navigation={navigation} appointment={item} key={index}/>
+                            <IncomingAppointment navigation={navigation} appointment={item} key={index} />
                         )}
                     />
                 </View>
 
-                <View style={[buttonWrapper, { marginTop: '15%'}]}>
+                <View style={[buttonWrapper, { marginTop: '15%' }]}>
                     <TouchableOpacity style={[button, { width: 200 }]} onPress={() => {
                         Alert.alert(
                             "Dodawanie spóźnienia",

@@ -23,7 +23,8 @@ const itemParagraph = {
     width: '100%',
     flexDirection: 'row',
     fontFamily: 'NotoSerif',
-    color: '#F4F9F9'
+    //color: '#F4F9F9'
+    color: 'black'
 };
 
 const input = {
@@ -56,7 +57,8 @@ const detailParagraph = {
 const detailTitle = {
     marginTop: 10,
     fontSize: 25,
-    textAlign: 'right',
+    //textAlign: 'right',
+    textAlign: 'left',
     color: '#F875AA'
 }
 

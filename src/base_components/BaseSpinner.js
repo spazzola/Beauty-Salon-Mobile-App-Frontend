@@ -13,6 +13,7 @@ const BaseSpinner = ({ }) => {
 
 const styles = StyleSheet.create({
     loading: {
+        height: '100%',
         position: 'absolute',
         left: 0,
         right: 0,

@@ -54,11 +54,12 @@ const SigninScreen = ({ navigation }) => {
                             <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Zaloguj</Text>
                         </TouchableOpacity>
                     </View>
-                    {showSpinner ?
-                        <BaseSpinner />
-                        : null}
                 </View>
+
             </TouchableWithoutFeedback>
+            {showSpinner ?
+                <BaseSpinner />
+                : null}
         </KeyboardAvoidingView>
     </>
 }

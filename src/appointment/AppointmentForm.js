@@ -118,7 +118,9 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                     <DateTimePicker
                       value={startDate}
                       onChange={onChangeDate}
-                      display='spinner'
+                      //display='spinner'
+                      display='calendar'
+                      mode='date'
                       is24Hour={true}
                       locale={'pl'}
                       style={{ backgroundColor: globalBackground.backgroundColor, marginTop: '5%' }}

@@ -60,7 +60,7 @@ const SolariumForm = ({ onSubmit, getSolarium, initialValues }) => {
           getSolarium(usedDate);
           setShowSpinner(false);
         }}>
-          <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Pobierz solarium</Text>
+          <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Pobierz zużycie</Text>
         </TouchableOpacity>
       </View>
       {showSpinner ?
