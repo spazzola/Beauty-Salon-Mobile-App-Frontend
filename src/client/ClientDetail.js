@@ -1,37 +1,76 @@
-import React, { useContext, useState } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity, Alert } from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import axios from '../../axios-config';
 import { Context } from './context/ClientContext';
+import { Context as AuthContext } from '../signin/context/AuthContext';
+import { Context as AppointmentContext } from '../appointment/context/AppointmentContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { globalBackground, button, buttonWrapper, buttonText, detailTitle, detailParagraph, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import BaseSpinner from '../base_components/BaseSpinner';
+import IncomingAppointment from './IncomingAppointment';
 
 
 const ClientDetail = ({ navigation }) => {
     const { state, deleteClient, sendBelated } = useContext(Context);
+    const appointmentContext = useContext(AppointmentContext);
     const [showSpinner, setShowSpinner] = useState(false);
+    const authConext = useContext(AuthContext);
+
 
     const client = state.find((client) => client.id === navigation.getParam('id'));
+
+    useEffect(() => {
+        const listener = navigation.addListener('didFocus', () => {
+
+        });
+
+        return () => {
+            listener.remove();
+        };
+    }, []);
 
     return (
         <>
             <View style={{ height: '100%', backgroundColor: globalBackground.backgroundColor }}>
-                <View style={[globalBackground, { height: '35%', flexDirection: 'row', justifyContent: 'center', maxWidth: '100%' }]}>
-
-                    <View>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Imię:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nazwisko:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nr.kom:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Ilość spóźnień:</Text>
+                <View style={[globalBackground, { height: '25%', flexDirection: 'row', justifyContent: 'center', maxWidth: '100%' }]}>
+                    <View style={{ width: '90%' }}>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Imię:
+                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.name}</Text>
+                        </Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nazwisko:
+                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.surname}</Text>
+                        </Text>
+                        {authConext.state.role === 'ADMIN' ?
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nr.kom:
+                                <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]} selectable> {client.phoneNumber}</Text>
+                            </Text>
+                            :
+                            null
+                        }
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Opuszczone wizyty:
+                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.belatedCounter}</Text>
+                        </Text>
                     </View>
-
-                    <View>
+                    {/* <View>
                         <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.name}</Text>
                         <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.surname}</Text>
                         <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]} selectable> {client.phoneNumber}</Text>
                         <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.belatedCounter}</Text>
-                    </View>
+                    </View> */}
                 </View>
 
-                <View style={buttonWrapper}>
+                <View style={{ flexDirection: 'column', alignSelf: 'center', width: '90%', }}>
+                    <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nadchodzące wizyty:</Text>
+                    <FlatList
+                        data={appointmentContext.state.sort((a, b) => new Date(b.startDate) - new Date(a.startDate))}
+                        keyExtractor={(item, index) => item.id.toString()}
+                        renderItem={({ item, index }) => (
+                            <IncomingAppointment navigation={navigation} appointment={item} key={index}/>
+                        )}
+                    />
+                </View>
+
+                <View style={[buttonWrapper, { marginTop: '15%'}]}>
                     <TouchableOpacity style={[button, { width: 200 }]} onPress={() => {
                         Alert.alert(
                             "Dodawanie spóźnienia",

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Image, StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native';
 import { Context } from './context/ClientContext';
+import { Context as AppointmentContext } from '../appointment/context/AppointmentContext';
 import ClientItem from './ClientItem';
 import { globalBackground, button, buttonText, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import SearchBar from './utility/SearchBar';
@@ -24,6 +25,7 @@ function filterList(clients, name) {
 
 const ClientScreen = ({ navigation }) => {
     const { state, addClient, getClients } = useContext(Context);
+    const appointmentContext = useContext(AppointmentContext);
     const [name, setName] = useState('')
 
     useEffect(() => {
@@ -70,7 +72,14 @@ const ClientScreen = ({ navigation }) => {
                 keyExtractor={client => client.id.toString()}
                 renderItem={({ item, index }) => {
                     return (
-                        <TouchableOpacity onPress={() => navigation.navigate('Client', { id: item.id })}>
+                        <TouchableOpacity onPress={async() => {
+                            //show spinner
+                            response = await appointmentContext.getIncomingAppointments(item.id);
+                            //load appointments
+                            //navigate
+                            //spinner = false
+                            navigation.navigate('Client', { id: item.id })
+                        }}>
                             <ClientItem client={item} index={index}></ClientItem>
                         </TouchableOpacity>
                     );
