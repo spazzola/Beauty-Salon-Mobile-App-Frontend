@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, Button } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, FlatList } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker'
 import { Context as ClientContext } from '../client/context/ClientContext';
@@ -15,12 +15,18 @@ import { Context as AuthContext } from '../signin/context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseSpinner from '../base_components/BaseSpinner';
 
+
+function getSelectedWorks(workConextState, workIds) {
+  return workIds != null ? workConextState.filter(work => workIds.includes(work.id)) : null;
+}
+
 const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, givenDate, mode, givenClientId, givenEmployeeId, givenWorkIds }) => {
   const clientContext = useContext(ClientContext);
   const userContext = useContext(UserContext);
   const workContext = useContext(WorkContext);
   const authConext = useContext(AuthContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isChangePriceModalVisible, setIsChangePriceModalVisible] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
 
   const [showAndroidDateModal, setShowAndroidDateModal] = useState(false);
@@ -87,8 +93,8 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
   const [userItems, setUsers] = useState([]);
 
   const [workDropDownOpen, setWorkDropDownOpen] = useState(false);
-  const [workIds, setWorkId] = useState(givenWorkIds ? givenWorkIds : null);
-  const [workItems, setWorks] = useState([]);
+  const [workIds, setWorkIds] = useState(givenWorkIds ? givenWorkIds : null);
+  const [workItems, setWorkItems] = useState([]);
 
   const onChangeDate = (event, selectedDate) => {
     let currentDate = selectedDate || startDate;
@@ -100,6 +106,12 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
   //   let currentTime = selectedTime || startTime;
   //   setStartTime(currentTime);
   // };
+
+  const handleUpdate = (index, providedPrice) => {
+    const newWorks = [...workItems];
+    newWorks[index].providedPrice = providedPrice;
+    setWorkItems(newWorks);
+  }
 
   return (
     <KeyboardAvoidingView
@@ -319,11 +331,66 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 showBadgeDot={false}
                 open={workDropDownOpen}
                 value={workIds}
-                items={workContext.state.map(work => ({ label: `${work.name} - ${work.price}zł`, value: work.id }))}
+                items={workContext.state.map(work => ({ label: `${work.name} - ${work.price}zł`, value: work.id, }))}
                 setOpen={setWorkDropDownOpen}
-                setValue={setWorkId}
-                setItems={setWorks}
+                setValue={(value) => {
+                  setWorkIds(value);
+                }}
               />
+              <View>
+                <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => setIsChangePriceModalVisible(true)} >
+                  <Text style={{ fontSize: 18, color: '#F875AA', fontFamily: 'MerriWeatherBold', marginTop: '3%' }}>Zmień cenę</Text>
+                </TouchableOpacity>
+                <Modal isVisible={isChangePriceModalVisible} onBackdropPress={() => setIsChangePriceModalVisible(false)} onShow={() => {
+                  let works = getSelectedWorks(workContext.state, workIds);
+                  works.map(work => work.providedPrice == null ? work.providedPrice = work.price : null);
+                  setWorkItems(works);
+                }}>
+                  <View style={[styles.modalContainer, { height: '50%' }]}>
+                    <View style={[styles.headerWrapper, { height: '12%' }]}>
+                      <Text style={styles.modalHeader}>Zmiana ceny</Text>
+                    </View>
+                    <View style={{ width: '100%', height: '75%', marginTop: '5%' }}>
+                      <FlatList
+                        data={workItems}
+                        keyExtractor={work => work.id.toString()}
+                        renderItem={({ item, index }) => {
+                          return (
+                            <View style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              marginTop: index == 0 ? 0 : '5%',
+                              marginLeft: '2%',
+                              marginRight: '2%'
+                            }}>
+                              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ marginRight: '3%' }}>
+                                <Text style={{ fontSize: 18, fontFamily: 'MerriWeatherBold', alignSelf: 'center' }}>{item.name}</Text>
+                              </ScrollView>
+                              <NumericInput
+                                inputStyle={{ fontFamily: 'MerriWeatherBold' }}
+                                minValue={0}
+                                rounded={true}
+                                rightButtonBackgroundColor='#F875AA'
+                                leftButtonBackgroundColor='#F1D1D0'
+                                //style={styles.input}
+                                totalHeight={50}
+                                totalWidth={120}
+                                value={item.providedPrice}
+                                onChange={(value) => {
+                                  handleUpdate(index, value);
+                                }}
+                              />
+                            </View>
+                          );
+                        }}
+                      />
+                      <TouchableOpacity style={[buttonWrapper, button, { alignSelf: 'center' }]} onPress={() => setIsChangePriceModalVisible(false)}>
+                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Zmień</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </Modal>
+              </View>
             </View>
 
             <TextInput
@@ -351,23 +418,25 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
               <TouchableOpacity style={[button, { marginTop: '5%' }]} onPress={
                 mode === 'edit' ? async () => {
                   if (isAppointmentFormValid(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds)) {
+                    let works = getSelectedWorks(workContext.state, workIds);
                     setShowSpinner(!showSpinner);
-                    await onSubmit(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds, note);
+                    await onSubmit(appointmentId, startDate, percentageValueToAdd, clientId, employeeId, works, note);
                     setShowSpinner(!showSpinner);
                     navigation.navigate('Appointments', {
                       selectedDate: {
-                        year: startDate.substring(0, 4),
-                        month: startDate.substring(5, 7),
-                        day: startDate.substring(8, 10)
+                        year: startDate.getFullYear(),
+                        month: startDate.getMonth() + 1,
+                        day: startDate.getDate()
                       }
                     });
                   }
                 }
                   :
                   async () => {
-                    if (isAppointmentFormValid(1, startDate, percentageValueToAdd, clientId, employeeId, workIds)) {
+                    let works = getSelectedWorks(workContext.state, workIds);
+                    if (isAppointmentFormValid(1, startDate, percentageValueToAdd, clientId, employeeId, works)) {
                       setShowSpinner(!showSpinner);
-                      await onSubmit(startDate, percentageValueToAdd, clientId, employeeId, workIds, note);
+                      await onSubmit(startDate, percentageValueToAdd, clientId, employeeId, works, note);
                       setShowSpinner(!showSpinner);
                       navigation.navigate('Appointments', {
                         selectedDate: {
@@ -384,8 +453,8 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
               </TouchableOpacity>
             </View>
             {showSpinner ?
-            <BaseSpinner />
-            : null}
+              <BaseSpinner />
+              : null}
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
@@ -413,6 +482,14 @@ const styles = StyleSheet.create({
     //marginBottom: 15,
     //padding: 5,
     //margin: 5
+  },
+  wrapper: {
+    zIndex: 1,
+    borderRadius: 20,
+    shadowColor: '#171717',
+    shadowOffset: { width: 2, height: 4 },
+    shadowOpacity: 0.7,
+    shadowRadius: 3
   },
   label: {
     fontSize: 20,
