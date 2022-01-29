@@ -56,7 +56,7 @@ const AppointmentDetail = ({ navigation }) => {
     const [workItems, setWorks] = useState([]);
 
     useEffect(() => {
-        getAppointments();
+        //getAppointments();
         const listener = navigation.addListener('didFocus', () => {
         });
         return () => {
@@ -96,20 +96,22 @@ const AppointmentDetail = ({ navigation }) => {
             <ScrollView style={[globalBackground, { height: '100%' }]} nestedScrollEnabled={true}>
                 <View style={globalBackground}>
                     <View style={[{ height: '20%', flexDirection: 'row', justifyContent: 'center' }]}>
-                        <View>
-                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Klient:</Text>
-                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nr kom:</Text>
-                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Wartość:</Text>
-                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Data:</Text>
-                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Godzina:</Text>
-                        </View>
-
-                        <View>
-                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.client.name} {appointment.client.surname}</Text>
-                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.client.phoneNumber}</Text>
-                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.worksSum} zł</Text>
-                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {formatDate(appointment.startDate)}</Text>
-                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.startDate.substring(11, 16)}</Text>
+                        <View style={{ width: '90%' }}>
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Klient:
+                                <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.client.name} {appointment.client.surname}</Text>
+                            </Text>
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]} selectable>Nr kom:
+                                <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.client.phoneNumber}</Text>
+                            </Text>
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Wartość:
+                                <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.worksSum} zł</Text>
+                            </Text>
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Data:
+                                <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {formatDate(appointment.startDate)}</Text>
+                            </Text>
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Godzina:
+                                <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.startDate.substring(11, 16)}</Text>
+                            </Text>
                         </View>
                     </View>
 
@@ -254,8 +256,8 @@ const AppointmentDetail = ({ navigation }) => {
                         }
                         <View style={[buttonWrapper, { width: '100%', marginTop: Platform.OS === 'android' ? '15%' : 30 }]}>
                             <TouchableOpacity style={button} onPress={async () => {
-                                setIsEditDateModalVisible(false);
                                 setShowSpinner(!showSpinner);
+                                let works = workContext.state.filter(work => workIds.includes(work.id));
                                 const jwt = await AsyncStorage.getItem('jwt');
                                 const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
                                 const extractedDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
@@ -264,7 +266,7 @@ const AppointmentDetail = ({ navigation }) => {
                                     startDate: extractedDate,
                                     clientId: appointment.client.id,
                                     employeeId: appointment.employee.id,
-                                    workIds,
+                                    works,
                                     percentageValueToAdd: appointment.percentageValueToAdd
                                 };
                                 let response = await fetch(
@@ -280,9 +282,14 @@ const AppointmentDetail = ({ navigation }) => {
                                     }
                                 );
                                 let json = await response.json();
-                                console.log(json);
-                                setAppointment(json);
                                 setShowSpinner(false);
+                                json.error ?
+                                    Alert.alert("Błąd", "Nie można było przełożyć wizyty. \nSprawdź czy godzina rozpoczęcia bądź zakończenia nie koliduje z inną wizytą.")
+                                    :
+                                    (() => {
+                                        setAppointment(json);
+                                        setIsEditDateModalVisible(false);
+                                    })
                             }}
                             >
                                 <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Przełóż</Text>
@@ -335,8 +342,9 @@ const AppointmentDetail = ({ navigation }) => {
                         />
                         <View style={[buttonWrapper, { width: '100%', marginTop: '10%' }]}>
                             <TouchableOpacity style={button} onPress={async () => {
-                                setIsEditWorksModalVisible(false);
+                                //setIsEditWorksModalVisible(false);
                                 setShowSpinner(!showSpinner);
+                                let works = workContext.state.filter(work => workIds.includes(work.id));
                                 const jwt = await AsyncStorage.getItem('jwt');
                                 const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
                                 const extractedDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
@@ -345,7 +353,7 @@ const AppointmentDetail = ({ navigation }) => {
                                     startDate: extractedDate,
                                     clientId: appointment.client.id,
                                     employeeId: appointment.employee.id,
-                                    workIds,
+                                    works,
                                     percentageValueToAdd: appointment.percentageValueToAdd
                                 };
                                 let response = await fetch(
@@ -361,8 +369,14 @@ const AppointmentDetail = ({ navigation }) => {
                                     }
                                 );
                                 let json = await response.json();
-                                setAppointment(json);
                                 setShowSpinner(false);
+                                json.error ?
+                                    Alert.alert("Błąd", "Nie można było zmienić usług. \nSprawdź czy zakończenie usługi nie koliduje z godziną rozpoczęcia innej.")
+                                    :
+                                    (() => {
+                                        setAppointment(json);
+                                        setIsEditWorksModalVisible(false);
+                                    })
                                 // editAppointment(appointment.id, startDate, appointment.client.id, appointment.employee.id, workIds, appointment.percentageValueToAdd).then((response) => {console.log(response.data)});
                             }}
                             >
