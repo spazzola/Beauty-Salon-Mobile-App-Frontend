@@ -20,7 +20,7 @@ const appointmentReducer = (state, action) => {
 }
 
 const addAppointment = dispatch => {
-    return async (startDate, percentageValueToAdd, clientId, employeeId, workIds, note, callback) => {
+    return async (startDate, percentageValueToAdd, clientId, employeeId, works, note, callback) => {
         const jwt = await AsyncStorage.getItem('jwt');
         const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
         startDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
@@ -29,7 +29,7 @@ const addAppointment = dispatch => {
             percentageValueToAdd,
             clientId,
             employeeId,
-            workIds,
+            works,
             note
         };
 
@@ -100,7 +100,7 @@ const deleteAppointment = dispatch => {
 };
 
 const editAppointment = dispatch => {
-    return async (appointmentId, startDate, percentageValueToAdd, clientId, employeeId, workIds, note, callback) => {
+    return async (appointmentId, startDate, percentageValueToAdd, clientId, employeeId, works, note, callback) => {
         const jwt = await AsyncStorage.getItem('jwt');
         const formattedDate = format(startDate, 'dd.MM.yyyy HH:mm').replace(/\./g, '/');
         startDate = formattedDate.substring(0, 10) + " " + formattedDate.substring(11, 16);
@@ -109,7 +109,7 @@ const editAppointment = dispatch => {
             startDate,
             clientId,
             employeeId,
-            workIds,
+            works,
             percentageValueToAdd,
             note
         };
@@ -125,7 +125,7 @@ const editAppointment = dispatch => {
 
         dispatch({
             type: 'edit_appointment',
-            payload: { appointmentId, startDate, clientId, employeeId, workIds, percentageValueToAdd }
+            payload: { appointmentId, startDate, clientId, employeeId, works, percentageValueToAdd }
         });
         if (callback) {
             callback();

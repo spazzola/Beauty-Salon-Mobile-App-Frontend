@@ -10,8 +10,8 @@ const AppointmentAdd = ({ navigation }) => {
   return (
     <AppointmentForm
       navigation={navigation}
-      onSubmit={(startDate, startTime, percentageValueToAdd, clientId, userId, workIds, note) => {
-        addAppointment(startDate, startTime, percentageValueToAdd, clientId, userId, workIds, note, () => navigation.navigate('Appointments'));
+      onSubmit={(startDate, startTime, percentageValueToAdd, clientId, userId, works, note) => {
+        addAppointment(startDate, startTime, percentageValueToAdd, clientId, userId, works, note, () => navigation.navigate('Appointments'));
       }}
     />
   );
