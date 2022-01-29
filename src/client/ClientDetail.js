@@ -7,6 +7,7 @@ import { Context as AppointmentContext } from '../appointment/context/Appointmen
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { globalBackground, button, buttonWrapper, buttonText, detailTitle, detailParagraph, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import BaseSpinner from '../base_components/BaseSpinner';
+import ScrollableText from '../base_components/ScrollableText';
 import IncomingAppointment from './IncomingAppointment';
 
 
@@ -32,14 +33,18 @@ const ClientDetail = ({ navigation }) => {
     return (
         <>
             <View style={{ height: '100%', backgroundColor: globalBackground.backgroundColor }}>
-                <View style={[globalBackground, { height: '25%', flexDirection: 'row', justifyContent: 'center', maxWidth: '100%' }]}>
-                    <View style={{ width: '90%' }}>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Imię:
-                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.name}</Text>
-                        </Text>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nazwisko:
-                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.surname}</Text>
-                        </Text>
+                <View style={[globalBackground, { height: '25%', flexDirection: 'column', justifyContent: 'center', maxWidth: '100%' }]}>
+                    <View style={{ width: '100%', padding: 10 }}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Imię:</Text>
+                            <ScrollableText text={client.name} />
+                        </View>
+
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nazwisko:</Text>
+                            <ScrollableText text={client.surname} />
+                        </View>
+
                         {authConext.state.role === 'ADMIN' ?
                             <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nr.kom:
                                 <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]} selectable> {client.phoneNumber}</Text>
@@ -59,7 +64,7 @@ const ClientDetail = ({ navigation }) => {
                     </View> */}
                 </View>
 
-                <View style={{ flexDirection: 'column', alignSelf: 'center', width: '90%', }}>
+                <View style={{ flexDirection: 'column', alignSelf: 'center', width: '100%', padding: 10 }}>
                     <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nadchodzące wizyty:</Text>
                     <FlatList
                         data={appointmentContext.state.sort((a, b) => new Date(b.startDate) - new Date(a.startDate))}

@@ -4,6 +4,7 @@ import { Context } from './context/UserContext';
 import { globalBackground, detailTitle, detailParagraph, button, buttonWrapper, buttonText, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import { buttonIcons } from '../icons/Icons';
 import BaseSpinner from '../base_components/BaseSpinner';
+import ScrollableText from '../base_components/ScrollableText';
 
 
 const UserDetail = ({ navigation }) => {
@@ -16,18 +17,23 @@ const UserDetail = ({ navigation }) => {
         <>
             <View style={{ height: '100%', backgroundColor: globalBackground.backgroundColor }}>
                 <View style={[globalBackground, { height: '35%', flexDirection: 'row', justifyContent: 'center', maxWidth: '100%' }]}>
-                    <View>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Imię:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nazwisko:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nr.kom:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Login:</Text>
-                    </View>
+                    <View style={{ width: '100%', padding: 10 }}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Imię:</Text>
+                            <ScrollableText text={user.name} />
+                        </View>
 
-                    <View>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {user.name}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {user.surname}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {user.phoneNumber}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {user.login}</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nazwisko:</Text>
+                            <ScrollableText text={user.surname} />
+                        </View>
+
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nr.kom:
+                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {user.phoneNumber}</Text>
+                        </Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Login:
+                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {user.login}</Text>
+                        </Text>
                     </View>
                 </View>
 

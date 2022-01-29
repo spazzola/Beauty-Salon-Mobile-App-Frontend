@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
 import { Context } from './context/WorkContext';
 import { workIcons, buttonIcons } from '../icons/Icons';
 import { globalBackground, detailParagraph, detailTitle, button, buttonWrapper, buttonText, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import BaseSpinner from '../base_components/BaseSpinner';
+import ScrollableText from '../base_components/ScrollableText';
 
 
 const WorkDetail = ({ navigation }) => {
@@ -16,20 +17,24 @@ const WorkDetail = ({ navigation }) => {
     return (
         <>
             <View style={{ height: '100%', backgroundColor: globalBackground.backgroundColor }}>
-                <View style={[globalBackground, { height: '35%', flexDirection: 'row', justifyContent: 'center', maxWidth: '100%' }]}>
+                <View style={[globalBackground, { height: '35%', justifyContent: 'center', maxWidth: '100%' }]}>
+                    <View style={{ width: '100%', flexDirection: 'column', padding: 10, marginTop: '-15%' }}>
+                        <View style={{ flexDirection: 'row'}}>
+                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nazwa: </Text>
+                            <ScrollableText text={work.name}/>
+                        </View>
 
-                    <View>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nazwa:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Wartość:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Czas trwania:</Text>
-                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Wybrana ikona:</Text>
-                    </View>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Wartość:
+                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {work.price}zł</Text>
+                        </Text>
 
-                    <View>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {work.name}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {work.price}zł</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {work.hoursDuration}h {work.minutesDuration}min</Text>
-                        <Text style={detailParagraph}> <Image style={{ marginLeft: 50, maxWidth: 30, maxHeight: 30 }} source={icon.uri} /></Text>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Czas trwania:
+                            <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {work.hoursDuration}h {work.minutesDuration}min</Text>
+                        </Text>
+
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Wybrana ikona:
+                            <Text style={detailParagraph}> <Image style={{ marginLeft: 50, maxWidth: 30, maxHeight: 30 }} source={icon.uri} /></Text>
+                        </Text>
                     </View>
                 </View>
 

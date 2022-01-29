@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { Context } from './context/CostContext';
 import { detailParagraph, detailTitle, globalBackground, button, buttonWrapper, buttonText, headerBackgroundColor, headerTitleColor } from '../../GlobalStyles';
 import BaseSpinner from '../base_components/BaseSpinner';
+import ScrollableText from '../base_components/ScrollableText';
 
 
 const CostDetail = ({ navigation }) => {
@@ -14,15 +15,15 @@ const CostDetail = ({ navigation }) => {
     return (
         <View style={{ height: '100%', backgroundColor: globalBackground.backgroundColor }}>
             <View style={[globalBackground, { height: '20%', flexDirection: 'row', justifyContent: 'center', maxWidth: '100%' }]}>
+                <View style={{ width: '100%', flexDirection: 'column', padding: 10 }}>
+                    <View style={{ flexDirection: 'row'}}>
+                        <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nazwa:</Text>
+                        <ScrollableText text={cost.name} />
+                    </View>
 
-                <View>
-                    <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Nazwa:</Text>
-                    <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Wartość:</Text>
-                </View>
-
-                <View>
-                    <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {cost.name}</Text>
-                    <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {cost.value} zł</Text>
+                    <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Wartość:
+                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {cost.value} zł</Text>
+                    </Text>
                 </View>
             </View>
 
