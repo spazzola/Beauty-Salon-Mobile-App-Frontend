@@ -327,7 +327,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 multiple={true}
                 min={1}
                 mode="BADGE"
-                badgeColors={["#6ECB63", "#FFEDED", "#95DAC1", "#FD6F96", "#FF67E7"]}
+                badgeColors={["#dc7c71", "#FFEDED", "#95DAC1", "#e4ac90"]}
                 showBadgeDot={false}
                 open={workDropDownOpen}
                 value={workIds}
@@ -401,7 +401,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
               onChangeText={text => setNote(text)}
               style={styles.multilineInput} />
 
-            <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', marginTop: '10%', marginBottom: '5%' }]}>Kara procentowa (%):</Text>
+            <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', marginTop: '10%', marginBottom: '5%' }]}>Dodatkowa opłata (%):</Text>
             <NumericInput
               inputStyle={{ fontFamily: 'MerriWeatherBold' }}
               containerStyle={{ marginTop: 10 }}

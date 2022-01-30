@@ -142,7 +142,6 @@ const AppointmentScreen = ({ navigation }) => {
             }
 
             <TouchableOpacity style={[styles.wrapper, button]} onPress={() => {
-                console.log("clicked");
                 navigation.navigate('AppointmentAdd', { selectedDate: navigation.getParam('selectedDate') })
             }}>
                 <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Dodaj wizytę</Text>

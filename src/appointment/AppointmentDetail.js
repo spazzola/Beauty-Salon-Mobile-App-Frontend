@@ -10,6 +10,7 @@ import DropDownPicker from 'react-native-dropdown-picker'
 import { format } from 'date-fns'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseSpinner from '../base_components/BaseSpinner';
+import ScrollableText from '../base_components/ScrollableText';
 
 function getWorkIds(worksList) {
     const resultList = [];
@@ -96,10 +97,12 @@ const AppointmentDetail = ({ navigation }) => {
             <ScrollView style={[globalBackground, { height: '100%' }]} nestedScrollEnabled={true}>
                 <View style={globalBackground}>
                     <View style={[{ height: '20%', flexDirection: 'row', justifyContent: 'center' }]}>
-                        <View style={{ width: '90%' }}>
-                            <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Klient:
-                                <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.client.name} {appointment.client.surname}</Text>
-                            </Text>
+                        <View style={{ width: '100%', padding: 10 }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]}>Klient:</Text>
+                                <ScrollableText text={appointment.client.name + ' ' + appointment.client.surname} />
+                            </View>
+
                             <Text style={[detailTitle, { fontFamily: 'MerriWeatherBold' }]} selectable>Nr kom:
                                 <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {appointment.client.phoneNumber}</Text>
                             </Text>
@@ -127,7 +130,10 @@ const AppointmentDetail = ({ navigation }) => {
                                 <>
                                     <View style={{ flexDirection: 'row', width: '100%', marginLeft: '2%', marginTop: '2%' }}>
                                         <Image style={styles.icon} source={(workIcons.find(icon => icon.name === item.work.iconName)).uri} />
-                                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather', marginTop: 5, marginLeft: 5 }]} key={index} >{item.work.name}</Text>
+                                        <View style={[detailParagraph, { fontFamily: 'MerriWeather', marginTop: '-1%', marginLeft: 5, width: '40%' }]} key={index}>
+                                            <ScrollableText text={item.work.name} />
+                                        </View>
+
                                     </View>
                                 </>
                             )}
@@ -283,13 +289,12 @@ const AppointmentDetail = ({ navigation }) => {
                                 );
                                 let json = await response.json();
                                 setShowSpinner(false);
-                                json.error ?
-                                    Alert.alert("Błąd", "Nie można było przełożyć wizyty. \nSprawdź czy godzina rozpoczęcia bądź zakończenia nie koliduje z inną wizytą.")
-                                    :
-                                    (() => {
-                                        setAppointment(json);
-                                        setIsEditDateModalVisible(false);
-                                    })
+                                if (json.error != undefined) {
+                                    Alert.alert("Błąd", "Nie można było przełożyć wizyty. \nSprawdź czy godzina rozpoczęcia bądź zakończenia nie koliduje z inną wizytą.");
+                                } else {
+                                    setAppointment(json);
+                                    setIsEditDateModalVisible(false);
+                                }
                             }}
                             >
                                 <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Przełóż</Text>
@@ -309,29 +314,32 @@ const AppointmentDetail = ({ navigation }) => {
                             searchable={true}
                             searchPlaceholder="Wyszukaj..."
                             searchContainerStyle={{
-                                borderWidth: 1,
+                                borderWidth: 0,
+                                shadowColor: '#171717',
+                                shadowOffset: { width: 2, height: 4 },
+                                shadowOpacity: 0.7,
+                                shadowRadius: 3,
                                 borderRadius: 6,
                                 backgroundColor: '#F1D1D0'
                             }}
                             style={[styles.dropDownPicker]}
                             textStyle={{
-                                fontFamily: 'NotoSerif',
+                                fontFamily: 'MerriWeather',
                                 fontSize: 20,
                                 textAlign: 'center',
-                                //width: '50%'
+                                color: '#F875AA'
                             }}
                             dropDownContainerStyle={{
                                 backgroundColor: '#F1D1D0',
                                 width: '100%',
-                                borderWidth: 2,
-                                alignItems: 'stretch',
+                                borderBottomWidth: 1
                             }}
                             dropDownDirection="TOP"
                             placeholder="Wybierz usługę"
                             multiple={true}
                             min={1}
                             mode="BADGE"
-                            badgeColors={["#6ECB63", "#FFEDED", "#95DAC1", "#FD6F96", "#FF67E7"]}
+                            badgeColors={["#dc7c71", "#FFEDED", "#95DAC1", "#e4ac90"]}
                             showBadgeDot={false}
                             open={workDropDownOpen}
                             value={workIds}
@@ -370,14 +378,12 @@ const AppointmentDetail = ({ navigation }) => {
                                 );
                                 let json = await response.json();
                                 setShowSpinner(false);
-                                json.error ?
-                                    Alert.alert("Błąd", "Nie można było zmienić usług. \nSprawdź czy zakończenie usługi nie koliduje z godziną rozpoczęcia innej.")
-                                    :
-                                    (() => {
-                                        setAppointment(json);
-                                        setIsEditWorksModalVisible(false);
-                                    })
-                                // editAppointment(appointment.id, startDate, appointment.client.id, appointment.employee.id, workIds, appointment.percentageValueToAdd).then((response) => {console.log(response.data)});
+                                if (json.error != undefined) {
+                                    Alert.alert("Błąd", "Nie można było zmienić usług. \nSprawdź czy zakończenie usługi nie koliduje z godziną rozpoczęcia innej.");
+                                } else {
+                                    setAppointment(json);
+                                    setIsEditWorksModalVisible(false);
+                                }
                             }}
                             >
                                 <Text style={[buttonText, { fontFamily: 'NotoSerif' }]}>Zmień</Text>
@@ -447,8 +453,12 @@ const styles = StyleSheet.create({
     dropDownPicker: {
         marginTop: 30,
         width: '100%',
-        borderWidth: 2,
-        backgroundColor: '#F1D1D0'
+        borderWidth: 0,
+        backgroundColor: '#F1D1D0',
+        shadowColor: '#171717',
+        shadowOffset: { width: 2, height: 4 },
+        shadowOpacity: 0.7,
+        shadowRadius: 3,
     },
     shadow: {
         shadowColor: '#171717',

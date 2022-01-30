@@ -11,7 +11,6 @@ const getData = async () => {
     try {
         const value = await AsyncStorage.getItem('jwt')
         if (value !== null) {
-            console.log(value);
         }
     } catch (e) {
         // error reading value

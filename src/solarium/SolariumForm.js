@@ -20,7 +20,7 @@ const SolariumForm = ({ onSubmit, getSolarium, initialValues }) => {
     <View style={{ flexDirection: 'column', alignItems: 'center' }}>
 
       <View>
-        <Text style={[detailTitle, styles.label, { fontFamily: 'NotoSerif', textAlign: 'center' }]}>Minuty:</Text>
+        <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', textAlign: 'center' }]}>Minuty:</Text>
         <NumericInput
           minValue={0}
           rounded={true}

@@ -22,7 +22,7 @@ const ClientDetail = ({ navigation }) => {
 
     useEffect(() => {
         const listener = navigation.addListener('didFocus', () => {
-
+            appointmentContext.getIncomingAppointments(navigation.getParam('id'));
         });
 
         return () => {
@@ -56,12 +56,6 @@ const ClientDetail = ({ navigation }) => {
                             <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.belatedCounter}</Text>
                         </Text>
                     </View>
-                    {/* <View>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.name}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.surname}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]} selectable> {client.phoneNumber}</Text>
-                        <Text style={[detailParagraph, { fontFamily: 'MerriWeather' }]}> {client.belatedCounter}</Text>
-                    </View> */}
                 </View>
 
                 <View style={{ flexDirection: 'column', alignSelf: 'center', width: '100%', padding: 10 }}>
@@ -76,10 +70,10 @@ const ClientDetail = ({ navigation }) => {
                 </View>
 
                 <View style={[buttonWrapper, { marginTop: '15%' }]}>
-                    <TouchableOpacity style={[button, { width: 200 }]} onPress={() => {
+                    <TouchableOpacity style={[button, { width: 280 }]} onPress={() => {
                         Alert.alert(
-                            "Dodawanie spóźnienia",
-                            "Czy napewno chcesz dodać spóźnienie?",
+                            "Opuszczona wizyta",
+                            "Czy napewno chcesz dodać opuszczoną wizytę?",
                             [
                                 {
                                     text: "Nie",
@@ -95,7 +89,7 @@ const ClientDetail = ({ navigation }) => {
                             ]
                         );
                     }}>
-                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Dodaj spóźnienie</Text>
+                        <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Dodaj opuszczoną wizytę</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={buttonWrapper}>
