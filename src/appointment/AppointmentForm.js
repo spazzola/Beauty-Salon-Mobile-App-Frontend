@@ -14,11 +14,19 @@ import { isAppointmentFormValid } from './AppointmentService';
 import { Context as AuthContext } from '../signin/context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseSpinner from '../base_components/BaseSpinner';
-
+import { Calendar, CalendarList, Agenda, LocaleConfig } from 'react-native-calendars';
 
 function getSelectedWorks(workConextState, workIds) {
   return workIds != null ? workConextState.filter(work => workIds.includes(work.id)) : null;
 }
+
+LocaleConfig.locales['pl'] = {
+  monthNames: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
+  monthNamesShort: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Czer', 'Lip.', 'Sier.', 'Wrz.', 'Paź.', 'Lis.', 'Gru.'],
+  dayNames: ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela'],
+  dayNamesShort: ['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Ndz'],
+  //today: 'Aujourd\'hui'
+};
 
 const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, givenDate, mode, givenClientId, givenEmployeeId, givenWorkIds }) => {
   const clientContext = useContext(ClientContext);
@@ -44,11 +52,36 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
     showDateModal('time');
   };
 
+  const prepareDate = () => {
+    let date = startDate || selectedDate;
+    let month = date.getMonth();
+    if (month < 10) {
+      if (month == 9) {
+        month = "10"
+      } else {
+        month =  month = "0" + (month + 1).toString();
+      }
+    }
+    return date.getFullYear() + "-" + month + "-" + date.getDate();
+  }
+  const setInitialDate = () => {
+    let date = prepareDate();
+    setMarkedDay({
+      [date]: {
+        selected: true,
+        marked: true,
+        selectedColor: '#F875AA'
+      }
+    });
+  }
+
   useEffect(() => {
     clientContext.getClients();
     userContext.getUsers();
     workContext.getWorks();
 
+    setInitialDate();
+    
     const listener = navigation.addListener('didFocus', () => {
       clientContext.getClients();
       userContext.getUsers();
@@ -62,7 +95,6 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
 
   useEffect(() => {
     clientContext.getClients();
-
     const listener = navigation.addListener('didFocus', () => {
     });
 
@@ -97,14 +129,20 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
   const [workItems, setWorkItems] = useState([]);
 
   const onChangeDate = (event, selectedDate) => {
-    let currentDate = selectedDate || startDate;
-    setStartDate(currentDate);
+    // let currentDate = selectedDate || startDate;
+    // setStartDate(currentDate);
+    // setShowAndroidDateModal(false);
+    //console.log();
+    setStartDate(new Date(event));
     setShowAndroidDateModal(false);
   };
 
+  const [markedDay, setMarkedDay] = useState();
+
   // const onChangeTime = (event, selectedTime) => {
-  //   let currentTime = selectedTime || startTime;
-  //   setStartTime(currentTime);
+  //   console.log(event.getHours() + ":" + event.getMinutes());
+  //   // let currentTime = selectedTime || startTime;
+  //   // setStartTime(currentTime);
   // };
 
   const handleUpdate = (index, providedPrice) => {
@@ -127,7 +165,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 <>
                   <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', textAlign: 'center' }]}>Data rozpoczęcia:</Text>
                   <View style={{ width: '90%' }}>
-                    <DateTimePicker
+                    {/* <DateTimePicker
                       value={startDate}
                       onChange={onChangeDate}
                       //display='spinner'
@@ -136,6 +174,38 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                       is24Hour={true}
                       locale={'pl'}
                       style={{ backgroundColor: globalBackground.backgroundColor, marginTop: '5%' }}
+                    /> */}
+                    <Calendar
+                      //onDayPress={(selectedDate) => { onChangeDate(selectedDate.dateString + 'T00:00:00.000Z') }}
+                      current={prepareDate()}
+                      onDayPress={(markedDate => {
+                        setMarkedDay({
+                          [markedDate.dateString]: {
+                            selected: true,
+                            marked: true,
+                            selectedColor: '#F875AA'
+                          }
+                        });
+                        let date = startDate || selectedDate;
+                        date.setFullYear(markedDate.year, (markedDate.month - 1), markedDate.day);
+                        setStartDate(date);
+                      })}
+                      style={[globalBackground, { marginTop: '7%' }]}
+                      scrollEnabled={true}
+                      markedDates={markedDay}
+                      theme={{
+                        calendarBackground: globalBackground.backgroundColor,
+                        textSectionTitleColor: '#F875AA',
+                        dayTextColor: '#F875AA',
+                        //dayTextColor: 'black',
+                        todayTextColor: '#F875AA',
+                        arrowColor: '#F875AA',
+                        textDisabledColor: '#bab5b5',
+                        textDayFontFamily: 'MerriWeather',
+                        textDayHeaderFontFamily: 'MerriWeatherBold',
+                        textMonthFontFamily: 'MerriWeatherBold',
+                        monthTextColor: '#FBACCC'
+                      }}
                     />
                   </View>
 
@@ -143,7 +213,11 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                   <View style={{ width: '70%' }}>
                     <DateTimePicker
                       value={startDate}
-                      onChange={onChangeDate}
+                      onChange={(event, selectedTime) => {
+                        let date = startDate || selectedDate;
+                        date.setHours(selectedTime.getHours(), selectedTime.getMinutes());
+                        setStartDate(date);
+                      }}
                       mode='time'
                       display='spinner'
                       is24Hour={true}
@@ -239,7 +313,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                             phoneNumber
                           };
                           let response = await fetch(
-                            'http://188.68.237.171:8080/myfront/client/create',
+                            'http://51.83.185.78:8080/myfront/client/create',
                             {
                               method: 'POST',
                               headers: {
@@ -401,7 +475,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
               onChangeText={text => setNote(text)}
               style={styles.multilineInput} />
 
-            <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', marginTop: '10%', marginBottom: '5%' }]}>Dodatkowa opłata (%):</Text>
+            <Text style={[detailTitle, styles.label, { fontFamily: 'MerriWeatherBold', marginBottom: '7%', marginTop: '15%' }]}>Dodatkowa opłata (%):</Text>
             <NumericInput
               inputStyle={{ fontFamily: 'MerriWeatherBold' }}
               containerStyle={{ marginTop: 10 }}
@@ -507,7 +581,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   label: {
-    marginTop: 20
+    marginTop: '10%'
   },
   button: {
     marginTop: 20,
