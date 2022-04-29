@@ -46,9 +46,9 @@ const SigninScreen = ({ navigation }) => {
 
                     <View style={buttonWrapper}>
                         <TouchableOpacity style={[button, { width: 220 }]} onPress={() => {
-                            setShowSpinner(!showSpinner);
+                            //setShowSpinner(!showSpinner);
                             signin({ login, password });
-                            setShowSpinner(!showSpinner);
+                            //setShowSpinner(!showSpinner);
                             //navigation.navigate('mainFlow')
                         }}>
                             <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Zaloguj</Text>
