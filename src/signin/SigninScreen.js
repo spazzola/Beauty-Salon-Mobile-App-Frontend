@@ -54,12 +54,16 @@ const SigninScreen = ({ navigation }) => {
                             <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Zaloguj</Text>
                         </TouchableOpacity>
                     </View>
+                    <Text style={[styles.versionInfo, { fontFamily: 'MerriWeather' }]}>
+                        Wersja 1.3
+                    </Text>
                 </View>
 
             </TouchableWithoutFeedback>
             {showSpinner ?
                 <BaseSpinner />
                 : null}
+
         </KeyboardAvoidingView>
     </>
 }
@@ -94,6 +98,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: "#F5FCFF88"
+    },
+    versionInfo: {
+        top: '40%',
+        alignSelf: 'center',
+        color: '#F875AA'
     }
 });
 
