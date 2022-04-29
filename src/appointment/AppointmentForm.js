@@ -132,7 +132,6 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
     // let currentDate = selectedDate || startDate;
     // setStartDate(currentDate);
     // setShowAndroidDateModal(false);
-    //console.log();
     setStartDate(new Date(event));
     setShowAndroidDateModal(false);
   };

@@ -2,7 +2,7 @@
   "expo": {
     "name": "pomalowane",
     "slug": "pomalowane",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,13 +17,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "host.exp.pomalowane"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "host.exp.pomalowane"
     },
     "web": {
       "favicon": "./assets/favicon.png"
