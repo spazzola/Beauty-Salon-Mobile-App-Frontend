@@ -59,10 +59,19 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
       if (month == 9) {
         month = "10"
       } else {
-        month =  month = "0" + (month + 1).toString();
+        month = "0" + (month + 1).toString();
       }
     }
-    return date.getFullYear() + "-" + month + "-" + date.getDate();
+
+    let day = date.getDate();
+    if (day < 10) {
+      if (day == 9) {
+        day = "10"
+      } else {
+        day = "0" + (day).toString();
+      }
+    }
+    return date.getFullYear() + "-" + month + "-" + day;
   }
   const setInitialDate = () => {
     let date = prepareDate();
@@ -178,6 +187,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                       //onDayPress={(selectedDate) => { onChangeDate(selectedDate.dateString + 'T00:00:00.000Z') }}
                       current={prepareDate()}
                       onDayPress={(markedDate => {
+                        console.log(markedDate);
                         setMarkedDay({
                           [markedDate.dateString]: {
                             selected: true,
