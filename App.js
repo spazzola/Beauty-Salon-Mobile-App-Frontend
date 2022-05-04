@@ -46,7 +46,6 @@ import { setNavigator } from './src/navigationRef';
 
 const headerBackgroundColor = "#F1D1D0"
 
-
 const switchNavigator = createSwitchNavigator({
   loginFlow: createStackNavigator({
     Signin: SigninScreen
