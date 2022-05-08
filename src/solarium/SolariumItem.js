@@ -1,15 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import SolariumForm from './SolariumForm';
 import { Context } from './context/SolariumContext';
 import { itemContainer, detailTitle, itemParagraph, globalBackground } from '../../GlobalStyles';
-import { useState } from 'react/cjs/react.development';
 
 const SolariumItem = ({ solarium, onSubmit, initialValues, navigation }) => {
     const { useSolarium, getMonthSolarium } = useContext(Context);
-    const [displayedText, setDisplayedText] = useState("Obecnie użyto:")
+    const [displayedText, setDisplayedText] = useState("Obecnie użyto:");
 
     return (
         <View style={[globalBackground, { height: '100%' }]}>
@@ -37,7 +36,7 @@ const SolariumItem = ({ solarium, onSubmit, initialValues, navigation }) => {
                     if (currentMonth !== (usedDate.getMonth() + 1) || currentYear !== usedDate.getFullYear()) {
                         setDisplayedText("W " + (usedDate.getMonth() + 1) + "/" + usedDate.getFullYear() + " użyto:");
                     } else {
-                        setDisplayedText("Obecnie użyto:")
+                        setDisplayedText("Obecnie użyto:");
                     }
                 }}
             />
