@@ -20,7 +20,6 @@ const SigninScreen = ({ navigation }) => {
         return null;
     }
 
-
     return <>
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'margin' : 'height'}
@@ -47,7 +46,6 @@ const SigninScreen = ({ navigation }) => {
                     <View style={buttonWrapper}>
                         <TouchableOpacity style={[button, { width: 220 }]} onPress={() => {
                             //setShowSpinner(!showSpinner);
-                            Wert.add;
                             signin({ login, password });
                             //setShowSpinner(!showSpinner);
                             //navigation.navigate('mainFlow')
@@ -56,7 +54,7 @@ const SigninScreen = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                     <Text style={[styles.versionInfo, { fontFamily: 'MerriWeather' }]}>
-                        Wersja 1.6
+                        Wersja 1.6.5
                     </Text>
                 </View>
 
