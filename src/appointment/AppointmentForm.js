@@ -90,7 +90,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
     workContext.getWorks();
 
     setInitialDate();
-    
+
     const listener = navigation.addListener('didFocus', () => {
       clientContext.getClients();
       userContext.getUsers();
@@ -134,7 +134,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
   const [userItems, setUsers] = useState([]);
 
   const [workDropDownOpen, setWorkDropDownOpen] = useState(false);
-  const [workIds, setWorkIds] = useState(givenWorkIds ? givenWorkIds : null);
+  const [workIds, setWorkIds] = useState(givenWorkIds ? givenWorkIds : []);
   const [workItems, setWorkItems] = useState([]);
 
   const onChangeDate = (event, selectedDate) => {
@@ -187,7 +187,6 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                       //onDayPress={(selectedDate) => { onChangeDate(selectedDate.dateString + 'T00:00:00.000Z') }}
                       current={prepareDate()}
                       onDayPress={(markedDate => {
-                        console.log(markedDate);
                         setMarkedDay({
                           [markedDate.dateString]: {
                             selected: true,
@@ -419,7 +418,24 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 setValue={(value) => {
                   setWorkIds(value);
                 }}
+                //setValue={setWorkIds}
               />
+              {/* <DropDownPicker
+            open={open}
+            multiple={true}
+            min={1}
+            value={value}
+            items={workContext.state.map(work => ({ label: `${work.name} - ${work.price}zł`, value: work.id, }))}
+            setOpen={setOpen}
+            setValue={setWorkIds}
+            mode="BADGE"
+            badgeColors={["#dc7c71", "#FFEDED", "#95DAC1", "#e4ac90"]}
+            showBadgeDot={false}
+            searchable={true}
+            searchPlaceholder="Wyszukaj..."
+            dropDownDirection="TOP"
+            placeholder="Wybierz usługę"
+          /> */}
               <View>
                 <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => setIsChangePriceModalVisible(true)} >
                   <Text style={{ fontSize: 18, color: '#F875AA', fontFamily: 'MerriWeatherBold', marginTop: '3%' }}>Zmień cenę</Text>
@@ -519,6 +535,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                     let works = getSelectedWorks(workContext.state, workIds);
                     if (isAppointmentFormValid(1, startDate, percentageValueToAdd, clientId, employeeId, works)) {
                       setShowSpinner(!showSpinner);
+                      console.log(startDate, percentageValueToAdd, clientId, employeeId, works, note);
                       await onSubmit(startDate, percentageValueToAdd, clientId, employeeId, works, note);
                       setShowSpinner(!showSpinner);
                       navigation.navigate('Appointments', {
