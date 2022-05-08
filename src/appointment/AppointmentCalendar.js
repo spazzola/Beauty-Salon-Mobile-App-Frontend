@@ -46,6 +46,7 @@ const AppointmentCalendar = ({ navigation }) => {
                 onDayPress={(selectedDate) => { navigation.navigate('Appointments', { selectedDate }) }}
                 style={globalBackground}
                 scrollEnabled={true}
+                firstDay={7}
                 theme={{
                     calendarBackground: globalBackground.backgroundColor,
                     textSectionTitleColor: '#F875AA',
