@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Calendar, CalendarList, Agenda, LocaleConfig } from 'react-native-calendars';
@@ -25,8 +25,90 @@ LocaleConfig.locales['pl'] = {
 };
 LocaleConfig.defaultLocale = 'pl';
 
+function buildMarkedDateObject(year, month, day) {
+    var date = year;
+    if (month < 10) {
+        date += '-0' + month;
+    } else {
+        date += '-' + month;
+    }
+
+    if (day < 10) {
+        date += '-0' + day;
+    } else {
+        date += '-' + day;
+    }
+
+    return date;
+}
+
+const convertArrayToObject = (array, key) => {
+    const initialValue = {};
+    return array.reduce((obj, item) => {
+      return {
+        ...obj,
+        [item[key]]: item,
+      };
+    }, initialValue);
+  };
+
 const AppointmentCalendar = ({ navigation }) => {
     const { state } = useContext(AuthContext);
+
+    const [saturdays, setSaturdays] = useState();
+    const [sundays, setSundays] = useState();
+    const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+    const [isMonthChanged, setIsMonthChanged] = useState(false);
+
+    useEffect(() => {
+        var currentDate = new Date();
+        var month = selectedMonth;
+        var year = currentDate.getFullYear();
+        var daysInMonth = new Date(year, month, 0).getDate();
+        var extractedSaturdays = [];
+        var extractedSundays = [];
+
+        for (var i = 1; i <= daysInMonth; i++) {
+            var dayToCheck = new Date(year, month - 1, i).getDay();
+
+            if (dayToCheck == 0 ) {
+                extractedSundays.push(buildMarkedDateObject(year, month, i));
+            }
+            if (dayToCheck == 6) {
+                extractedSaturdays.push(buildMarkedDateObject(year, month, i));
+            }
+            // extractedSaturdays.forEach(saturday => {
+            //     console.log(saturday);
+            // })
+        }
+
+
+            var markedSundays = extractedSundays.reduce((c, v) => Object.assign(c, {[v]: {
+                customStyles: {
+                    text: {
+                        color: '#F31A09'
+                    }
+                }
+            }}
+            ), {});
+            setSundays(markedSundays);
+
+            var markedSaturdays = extractedSaturdays.reduce((c, v) => Object.assign(c, {[v]: {
+                customStyles: {
+                    text: {
+                        color: '#0F8BDE'
+                    }
+                }
+            }}
+            ), {});
+            setSaturdays(markedSaturdays);
+        
+        const listener = navigation.addListener('didFocus', () => {
+        });
+        return () => {
+            listener.remove();
+        };
+    }, [selectedMonth])
 
     const [loaded] = useFonts({
         NotoSerif: require('../../assets/fonts/Noto-Serif.ttf'),
@@ -44,12 +126,40 @@ const AppointmentCalendar = ({ navigation }) => {
             <Text style={[itemParagraph, { fontSize: 20, color: '#F875AA' }]}> Witaj, {state.name} {state.surname} </Text>
             <Calendar
                 onDayPress={(selectedDate) => { navigation.navigate('Appointments', { selectedDate }) }}
+                onPressArrowRight={addMonth => {
+                    setSelectedMonth(selectedMonth + 1);
+                    addMonth();
+                }}
+                onPressArrowLeft={subtractMonth => {
+                    setSelectedMonth(selectedMonth - 1);
+                    subtractMonth();
+                }}
                 style={globalBackground}
                 scrollEnabled={true}
                 firstDay={7}
+                markingType={'custom'}
+                markedDates={Object.assign(saturdays, sundays)}
                 theme={{
+                    'stylesheet.calendar.header': {
+                        sundayDayHeader: {
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            color: '#F31A09',
+                            fontWeight: 'bold'
+                          },
+                        saturdayDayHeader: {
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            color: '#0F8BDE',
+                            fontWeight: 'bold'
+                        },
+                        dayHeader: {
+                            color: '#F875AA',
+                            fontWeight: 'bold'
+                        }
+                    },
                     calendarBackground: globalBackground.backgroundColor,
-                    textSectionTitleColor: '#F875AA',
+                    //textSectionTitleColor: '#F875AA',
                     dayTextColor: '#F875AA',
                     //dayTextColor: 'black',
                     todayTextColor: '#F1D1D0',
@@ -58,7 +168,7 @@ const AppointmentCalendar = ({ navigation }) => {
                     textDayFontFamily: 'MerriWeather',
                     textDayHeaderFontFamily: 'MerriWeatherBold',
                     textMonthFontFamily: 'MerriWeatherBold',
-                    monthTextColor: '#FBACCC'
+                    monthTextColor: '#FBACCC',
                 }}
             />
 
