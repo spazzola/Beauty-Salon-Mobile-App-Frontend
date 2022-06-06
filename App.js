@@ -42,6 +42,12 @@ import { Provider as AuthProvider } from './src/signin/context/AuthContext';
 import ReportScreen from './src/report/ReportScreen';
 import { Provider as ReportProvider } from './src/report/context/ReportContext';
 
+import SettingsScreen from './src/settings/SettingsScreen';
+import { Provider as SettingsProvider } from './src/settings/context/SettingsContext';
+
+import VacationScreen from './src/settings/vacation/VacationScreen';
+import VacationAdd from './src/settings/vacation/VacationAdd';
+
 import { setNavigator } from './src/navigationRef';
 
 
@@ -123,8 +129,19 @@ const switchNavigator = createSwitchNavigator({
     AppointmentEdit: {
       screen: AppointmentEdit
     },
+
     Reports: {
       screen: ReportScreen
+    },
+
+    Settings: {
+      screen: SettingsScreen
+    },
+    Vacation: {
+      screen: VacationScreen
+    },
+    VacationAdd: {
+      screen: VacationAdd
     }
   },
     {
@@ -143,7 +160,9 @@ export default () => {
             <CostProvider>
               <ClientProvider>
                 <UserProvider>
-                  <App ref={(navigator) => { setNavigator(navigator) }}/>
+                  <SettingsProvider>
+                    <App ref={(navigator) => { setNavigator(navigator) }}/>
+                  </SettingsProvider>
                 </UserProvider>
               </ClientProvider>
             </CostProvider>

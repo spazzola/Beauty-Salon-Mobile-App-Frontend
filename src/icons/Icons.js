@@ -15,6 +15,7 @@ import clients from './button_icons/clients.png';
 import reports from './button_icons/reports.png';
 import users from './button_icons/users.png';
 import works from './button_icons/works.png';
+import settings from './button_icons/settings.png';
 
 const buttonIcons = {
     add: {
@@ -37,6 +38,9 @@ const buttonIcons = {
     },
     works: {
         uri: works
+    },
+    settings: {
+        uri: settings
     }
 }
 
