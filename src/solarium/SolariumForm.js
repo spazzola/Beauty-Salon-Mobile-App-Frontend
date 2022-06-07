@@ -38,6 +38,7 @@ const SolariumForm = ({ onSubmit, getSolarium, initialValues }) => {
           display={'spinner'}
           value={usedDate}
           onChange={onChange}
+          locale={'pl'}
         />
       </View>
 
