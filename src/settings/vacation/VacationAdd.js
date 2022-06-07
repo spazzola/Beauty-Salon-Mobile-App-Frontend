@@ -5,13 +5,14 @@ import VacationForm from './VacationForm';
 import { headerBackgroundColor, headerTitleColor } from '../../../GlobalStyles';
 
 const VacationAdd = ({ navigation }) => {
-    //const { addCost } = useContext(Context);
+    const { createVacation } = useContext(Context);
 
     return (
         <VacationForm
             navigation={navigation}
-            onSubmit={(name, value, addedDate) => {
-                addCost(name, value, addedDate, () => navigation.navigate('VacationScreen'));
+            onSubmit={(startDate, finishDate, userId) => {
+                createVacation(startDate, finishDate, userId, () => navigation.navigate('VacationScreen'));
+                navigation.navigate('Vacation');
             }}
         />
     );

@@ -13,22 +13,21 @@ const settingsReducer = (state, action) => {
     }
 }
 
-const createVacations = dispatch => {
-    return async (usedTime, usedDate, callback) => {
+const createVacation = dispatch => {
+    return async (startDate, finishDate, userId, callback) => {
         const jwt = await AsyncStorage.getItem('jwt');
-        usedDate = format(usedDate, 'dd.MM.yyyy hh:mm').replace(/\./g, '/');
-        let solarium = {
-            usedDate,
-            usedTime
-        };
-
-        await axios.post('/solarium/use', solarium, {
+        var vacation= {
+            startDate,
+            finishDate,
+            employeeId: userId
+        }
+        await axios.post('/vacation/create', vacation, {
             headers: {
                 'Authorization': 'Bearer ' + jwt
             }
         })
             .catch(error => {
-                Alert.alert("Błąd ", "Nie dodano użycia solarium. \nKod błędu: " + error.response.status);
+                Alert.alert("Błąd ", "Nie dodano urlopu. \nKod błędu: " + error.response.status);
             });;
 
         if (callback) {
@@ -54,5 +53,5 @@ const createVacations = dispatch => {
 
 export const { Context, Provider } = createDataContext(
     settingsReducer,
-    { createVacations },
+    { createVacation },
     []);
