@@ -6,8 +6,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const settingsReducer = (state, action) => {
     switch (action.type) {
-        case 'get_month_solarium':
+        case 'get_all_vacations':
             return action.payload;
+        case 'edit_vacation':
+            return state.map(vacation => {
+                return vacation.id === action.payload.id ? action.payload : vacation;
+            });
         default:
             return state;
     }
@@ -16,7 +20,7 @@ const settingsReducer = (state, action) => {
 const createVacation = dispatch => {
     return async (startDate, finishDate, userId, callback) => {
         const jwt = await AsyncStorage.getItem('jwt');
-        var vacation= {
+        var vacation = {
             startDate,
             finishDate,
             employeeId: userId
@@ -35,23 +39,62 @@ const createVacation = dispatch => {
         };
     };
 }
-// const getMonthSolarium = dispatch => {
-//     return async (month, year) => {
-//         const jwt = await AsyncStorage.getItem('jwt');
-//         const response = await axios.get('/solarium/getMonthSolarium', {
-//             params: {
-//                 month: month,
-//                 year: year
-//             },
-//             headers: {
-//                 'Authorization': 'Bearer ' + jwt
-//             }
-//         });
-//         dispatch({ type: 'get_month_solarium', payload: response.data });
-//     };
-// };
+const getAllVacations = dispatch => {
+    return async () => {
+        const jwt = await AsyncStorage.getItem('jwt');
+        const response = await axios.get('/vacation/getAll', {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        });
+        dispatch({ type: 'get_all_vacations', payload: response.data });
+    };
+};
+
+const deleteVacation = dispatch => {
+    return async id => {
+        const jwt = await AsyncStorage.getItem('jwt');
+        await axios.delete('/vacation/delete', {
+            params: {
+                id
+            },
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        }).catch(error => {
+            Alert.alert("Błąd ", "Nie usunięto urlopu. \nKod błędu: " + error.response.status);
+        });
+    };
+};
+
+const editVacation = dispatch => {
+    return async (id, startDate, finishDate, employeeId, callback) => {
+        const jwt = await AsyncStorage.getItem('jwt');
+        let vacation = {
+            id,
+            startDate,
+            finishDate,
+            employeeId
+        };
+        await axios.put('vacation/update', vacation, {
+            headers: {
+                'Authorization': 'Bearer ' + jwt
+            }
+        }).catch(error => {
+            Alert.alert("Błąd ", "Nie zaktualizowano urlopu. \nKod błędu: " + error.response.status);
+        });
+
+        dispatch({
+            type: 'edit_vacation',
+            payload: { id, startDate, finishDate, employee: {id: employeeId} }
+        });
+        if (callback) {
+            callback();
+        }
+    };
+};
 
 export const { Context, Provider } = createDataContext(
     settingsReducer,
-    { createVacation },
+    { createVacation, getAllVacations, deleteVacation, editVacation },
     []);
