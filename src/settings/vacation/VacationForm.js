@@ -12,7 +12,7 @@ const VacationForm = ({ onSubmit, initialValues, mode, backgroundColor, givenEmp
     const [isOneDayVacationSelected, setOneDayVacationSelected] = useState(false);
 
     const [startYearDropDownOpen, setStartYearDropDownOpen] = useState(false);
-    const [startSelectedYear, setStartSelectedYear] = useState();
+    const [startSelectedYear, setStartSelectedYear] = useState(initialValues.selectedFinishYear);
     const [years, setYears] = useState([
         { label: '2022', value: '2022' },
         { label: '2023', value: '2023' },
@@ -22,7 +22,7 @@ const VacationForm = ({ onSubmit, initialValues, mode, backgroundColor, givenEmp
     ]);
 
     const [startMonthDropDownOpen, setStartMonthDropDownOpen] = useState(false);
-    const [startSelectedMonth, setStartSelectedMonth] = useState();
+    const [startSelectedMonth, setStartSelectedMonth] = useState(initialValues.selectedStartMonth);
     const [months, setMonths] = useState([
         { label: 'Styczeń', value: '01' },
         { label: 'Luty', value: '02' },
@@ -39,11 +39,11 @@ const VacationForm = ({ onSubmit, initialValues, mode, backgroundColor, givenEmp
     ]);
 
     const [startDayDropDownOpen, setStartDayDropDownOpen] = useState(false);
-    const [startSelectedDay, setStartSelectedDay] = useState();
+    const [startSelectedDay, setStartSelectedDay] = useState(initialValues.selectedStartDay);
     const [startDays, setStartDays] = useState([]);
 
     const [startHourDropDownOpen, setStartHourDropDownOpen] = useState(false);
-    const [startSelectedHour, setStartSelectedHour] = useState();
+    const [startSelectedHour, setStartSelectedHour] = useState(initialValues.selectedStartHour);
     const [hours, setHours] = useState([
         { label: 'Cały dzień', value: 'allDay' },
         { label: '6', value: '06' },
@@ -64,7 +64,7 @@ const VacationForm = ({ onSubmit, initialValues, mode, backgroundColor, givenEmp
     ]);
 
     const [startMinuteDropDownOpen, setStartMinuteDropDownOpen] = useState(false);
-    const [startSelectedMinute, setStartSelectedMinute] = useState();
+    const [startSelectedMinute, setStartSelectedMinute] = useState(initialValues.selectedStartMinute);
     const [minutes, setMinutes] = useState([
         { label: '00', value: '00' },
         { label: '15', value: '15' },
@@ -74,30 +74,31 @@ const VacationForm = ({ onSubmit, initialValues, mode, backgroundColor, givenEmp
 
 
     const [finishYearDropDownOpen, setFinishYearDropDownOpen] = useState(false);
-    const [finishSelectedYear, setFinishSelectedYear] = useState();
+    const [finishSelectedYear, setFinishSelectedYear] = useState(initialValues.selectedFinishYear);
 
     const [finishMonthDropDownOpen, setFinishMonthDropDownOpen] = useState(false);
-    const [finishSelectedMonth, setFinishSelectedMonth] = useState();
+    const [finishSelectedMonth, setFinishSelectedMonth] = useState(initialValues.selectedFinishMonth);
 
     const [finishDayDropDownOpen, setFinishDayDropDownOpen] = useState(false);
-    const [finishSelectedDay, setFinishSelectedDay] = useState();
+    const [finishSelectedDay, setFinishSelectedDay] = useState(initialValues.selectedFinishDay);
     const [finishDays, setFinishDays] = useState([]);
 
     const [finishHourDropDownOpen, setFinishHourDropDownOpen] = useState(false);
-    const [finishSelectedHour, setFinishSelectedHour] = useState();
+    const [finishSelectedHour, setFinishSelectedHour] = useState(initialValues.selectedFinishHour);
 
     const [finishMinuteDropDownOpen, setFinishMinuteDropDownOpen] = useState(false);
-    const [finishSelectedMinute, setFinishSelectedMinute] = useState();
+    const [finishSelectedMinute, setFinishSelectedMinute] = useState(initialValues.selectedFinishMinute);
 
     const userContext = useContext(UserContext);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [userDropDownOpen, setUserDropDownOpen] = useState(false);
-    const [employeeId, setUserId] = useState();
+    const [employeeId, setUserId] = useState(initialValues.employeeId);
     const [userItems, setUsers] = useState([]);
 
     useEffect(() => {
         userContext.getUsers();
-        var currentDate = startSelectedYear == null ? new Date() : new Date(startSelectedYear, startSelectedMonth, 0);
+
+        var currentDate = startSelectedYear == '' ? new Date() : new Date(startSelectedYear, startSelectedMonth, 0);
         var currentYear = currentDate.getFullYear();
         setStartSelectedYear(currentYear.toString());
         setFinishSelectedYear(currentYear.toString());
@@ -107,7 +108,7 @@ const VacationForm = ({ onSubmit, initialValues, mode, backgroundColor, givenEmp
         for (var i = 1; i <= daysInMonth; i++) {
             var day = i
             i < 10 ? i = "0" + i : i.toString();
-            currentDays.push({ label: day, value: i });
+            currentDays.push({ label: day, value: i.toString() });
         }
         setStartDays(currentDays);
 
@@ -398,9 +399,6 @@ const VacationForm = ({ onSubmit, initialValues, mode, backgroundColor, givenEmp
                             borderBottomWidth: 1,
                             width: '100%'
                         }}
-                        onChangeValue={item => {
-                            item == 'allDay' ? console.log("all day selected") : null
-                        }}
                     />
                 </View>
                 <View style={{ width: '30%', marginTop: '1%' }}>
@@ -517,7 +515,7 @@ const VacationForm = ({ onSubmit, initialValues, mode, backgroundColor, givenEmp
                     setShowSpinner(!showSpinner);
                 }
             }}>
-                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Dodaj urlop</Text>
+                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>{mode === 'edit' ? 'Edytuj urlop' : 'Dodaj urlop'}</Text>
             </TouchableOpacity>
 
             {showSpinner ?
@@ -529,10 +527,17 @@ const VacationForm = ({ onSubmit, initialValues, mode, backgroundColor, givenEmp
 
 VacationForm.defaultProps = {
     initialValues: {
-        name: '',
-        surname: '',
-        phoneNumber: '',
-        belatedCounter: ''
+        selectedStartYear: '',
+        selectedStartMonth: '',
+        selectedStartDay: '',
+        selectedStartHour: '',
+        selectedStartMinute: '',
+        selectedFinishYear: '',
+        selectedFinishMonth: '',
+        selectedFinishDay: '',
+        selectedFinishHour: '',
+        selectedFinishMinute: '',
+        employeeId: ''
     }
 };
 
