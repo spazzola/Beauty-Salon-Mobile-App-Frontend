@@ -47,6 +47,7 @@ import { Provider as SettingsProvider } from './src/settings/context/SettingsCon
 
 import VacationScreen from './src/settings/vacation/VacationScreen';
 import VacationAdd from './src/settings/vacation/VacationAdd';
+import VacationEdit from './src/settings/vacation/VacationEdit';
 
 import { setNavigator } from './src/navigationRef';
 
@@ -142,6 +143,9 @@ const switchNavigator = createSwitchNavigator({
     },
     VacationAdd: {
       screen: VacationAdd
+    },
+    VacationEdit: {
+      screen: VacationEdit
     }
   },
     {
