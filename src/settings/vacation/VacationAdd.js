@@ -1,20 +1,28 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Context } from '../context/SettingsContext';
 import VacationForm from './VacationForm';
+import BaseSpinner from '../../base_components/BaseSpinner';
 import { headerBackgroundColor, headerTitleColor } from '../../../GlobalStyles';
 
 const VacationAdd = ({ navigation }) => {
-    const { createVacation } = useContext(Context);
+    const { state, createVacation, getAllVacations } = useContext(Context);
+    const [showSpinner, setShowSpinner] = useState(false);
 
     return (
+        <>
         <VacationForm
             navigation={navigation}
-            onSubmit={(startDate, finishDate, userId) => {
+            onSubmit={async(startDate, finishDate, userId) => {
                 createVacation(startDate, finishDate, userId, () => navigation.navigate('VacationScreen'));
+                await getAllVacations();
                 navigation.navigate('Vacation');
             }}
         />
+        {showSpinner ?
+            <BaseSpinner />
+            : null}
+        </>
     );
 };
 

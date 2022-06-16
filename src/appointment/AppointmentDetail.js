@@ -155,7 +155,7 @@ const AppointmentDetail = ({ navigation }) => {
                                 <TouchableOpacity style={button} onPress={() => {
                                     setIsEditDateModalVisible(true);
                                 }}>
-                                    <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Przełóz wizytę</Text>
+                                    <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Przełóż wizytę</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -276,7 +276,7 @@ const AppointmentDetail = ({ navigation }) => {
                                     percentageValueToAdd: appointment.percentageValueToAdd
                                 };
                                 let response = await fetch(
-                                    'http://188.68.237.171:8080/myfront/appointment/update',
+                                    'http://51.83.185.78:8080/myfront/appointment/update',
                                     {
                                         method: 'PUT',
                                         headers: {
@@ -365,7 +365,7 @@ const AppointmentDetail = ({ navigation }) => {
                                     percentageValueToAdd: appointment.percentageValueToAdd
                                 };
                                 let response = await fetch(
-                                    'http://188.68.237.171:8080/myfront/appointment/update',
+                                    'http://51.83.185.78:8080/myfront/appointment/update',
                                     {
                                         method: 'PUT',
                                         headers: {

@@ -127,7 +127,7 @@ const VacationForm = ({ onSubmit, initialValues, mode, backgroundColor, givenEmp
         for (var i = 1; i <= daysInMonth; i++) {
             var day = i
             i < 10 ? i = "0" + i : i.toString();
-            currentDays.push({ label: day, value: i });
+            currentDays.push({ label: day, value: i.toString() });
         }
         setFinishDays(currentDays);
 

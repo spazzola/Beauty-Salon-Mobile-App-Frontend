@@ -42,23 +42,12 @@ function buildMarkedDateObject(year, month, day) {
     return date;
 }
 
-const convertArrayToObject = (array, key) => {
-    const initialValue = {};
-    return array.reduce((obj, item) => {
-      return {
-        ...obj,
-        [item[key]]: item,
-      };
-    }, initialValue);
-  };
-
 const AppointmentCalendar = ({ navigation }) => {
     const { state } = useContext(AuthContext);
 
     const [saturdays, setSaturdays] = useState();
     const [sundays, setSundays] = useState();
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
-    const [isMonthChanged, setIsMonthChanged] = useState(false);
 
     useEffect(() => {
         var currentDate = new Date();
@@ -77,31 +66,27 @@ const AppointmentCalendar = ({ navigation }) => {
             if (dayToCheck == 6) {
                 extractedSaturdays.push(buildMarkedDateObject(year, month, i));
             }
-            // extractedSaturdays.forEach(saturday => {
-            //     console.log(saturday);
-            // })
         }
 
-
-            var markedSundays = extractedSundays.reduce((c, v) => Object.assign(c, {[v]: {
-                customStyles: {
-                    text: {
-                        color: '#F31A09'
-                    }
+        var markedSundays = extractedSundays.reduce((c, v) => Object.assign(c, {[v]: {
+            customStyles: {
+                text: {
+                    //color: '#F31A09'
+                    color: 'black'
                 }
-            }}
+            }
+        }}
             ), {});
             setSundays(markedSundays);
 
-            var markedSaturdays = extractedSaturdays.reduce((c, v) => Object.assign(c, {[v]: {
-                customStyles: {
-                    text: {
-                        color: '#0F8BDE'
-                    }
+        var markedSaturdays = extractedSaturdays.reduce((c, v) => Object.assign(c, {[v]: {
+            customStyles: {
+                text: {
+                    color: '#0F8BDE'
                 }
-            }}
-            ), {});
-            setSaturdays(markedSaturdays);
+            }
+        }}), {});
+        setSaturdays(markedSaturdays);
         
         const listener = navigation.addListener('didFocus', () => {
         });
@@ -109,6 +94,7 @@ const AppointmentCalendar = ({ navigation }) => {
             listener.remove();
         };
     }, [selectedMonth])
+    
 
     const [loaded] = useFonts({
         NotoSerif: require('../../assets/fonts/Noto-Serif.ttf'),
@@ -144,7 +130,7 @@ const AppointmentCalendar = ({ navigation }) => {
                         sundayDayHeader: {
                             flexDirection: 'row',
                             justifyContent: 'space-between',
-                            color: '#F31A09',
+                            color: 'black',
                             fontWeight: 'bold'
                           },
                         saturdayDayHeader: {
@@ -212,6 +198,13 @@ const AppointmentCalendar = ({ navigation }) => {
                             <TouchableOpacity style={[button, { flexDirection: 'row' }]} onPress={() => navigation.navigate('Reports')}>
                                 <Image style={{ width: 26, height: 26, marginRight: 10, marginLeft: -15 }} source={buttonIcons.reports.uri} />
                                 <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Raporty</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View style={buttonWrapper}>
+                            <TouchableOpacity style={[button, { width: 180, flexDirection: 'row' }]} onPress={() => navigation.navigate('Settings')}>
+                                <Image style={{ width: 23, height: 23, marginRight: 10, }} source={buttonIcons.settings.uri}/>
+                                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Ustawienia</Text>
                             </TouchableOpacity>
                         </View>
                     </>

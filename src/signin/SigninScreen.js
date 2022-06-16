@@ -54,7 +54,7 @@ const SigninScreen = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                     <Text style={[styles.versionInfo, { fontFamily: 'MerriWeather' }]}>
-                        Wersja 1.6.5
+                        Wersja 2.1
                     </Text>
                 </View>
 

@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState, useLayoutEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Button, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { Context } from '../context/SettingsContext';
-import { headerBackgroundColor, headerTitleColor, buttonWrapper, button, buttonText, globalBackground } from '../../../GlobalStyles';
+import { headerBackgroundColor, headerTitleColor, button, buttonText, globalBackground } from '../../../GlobalStyles';
 import VacationItem from './VacationItem';
 
 function sortByIncomingOrPast(vacations, areIncomingSelected) {
@@ -26,7 +26,7 @@ function sortByIncomingOrPast(vacations, areIncomingSelected) {
         } else {
             new Date(startYear, startMonth, startDay, startHour, startMinute) < new Date(currentYear, currentMonth, currentDay, currentHour, currentMinute) ? resultVacations.push(vacation) : null
         }
-        
+
     });
 
     return resultVacations;
@@ -34,22 +34,20 @@ function sortByIncomingOrPast(vacations, areIncomingSelected) {
 
 const VacationScreen = ({ navigation }) => {
     const { state, getAllVacations } = useContext(Context);
-    const [vacations, setVacations] = useState();
+    const [vacations, setVacations] = useState(state);
     const [areIncomingSelected, setAreIncomingSelected] = useState(true);
     const [arePastSelected, setArePastSelected] = useState(false);
     const [shouldRerenderState, setShouldRerenderState] = useState(false);
 
     useEffect(() => {
-        getAllVacations()
-        console.log("a");
         const listener = navigation.addListener('didFocus', () => {
-            getAllVacations();
+            setVacations(state);
         });
 
         return () => {
             listener.remove();
         };
-    }, [shouldRerenderState]);
+    }, [state]);
 
 
     var touchIncomingProps = {
@@ -98,17 +96,18 @@ const VacationScreen = ({ navigation }) => {
         </View>
         <FlatList
             showsVerticalScrollIndicator={false}
-            data={sortByIncomingOrPast(state, areIncomingSelected).sort((a, b) => new Date(a.startDate) - new Date(b.startDate))}
+            data={sortByIncomingOrPast(vacations, areIncomingSelected).sort((a, b) => new Date(a.startDate) - new Date(b.startDate))}
+            //data={TEMP_DATA}
             keyExtractor={vacation => vacation.id.toString()}
             renderItem={({ item, index }) => {
                 return (
-                    <VacationItem vacation={item} index={index} navigation={navigation} onDelete={() => {
-                        setShouldRerenderState(!shouldRerenderState);
-                        console.log(shouldRerenderState);
+                    <VacationItem vacation={item} index={index} navigation={navigation} onDelete={async () => {
+                        const filteredData = vacations.filter(vacation => vacation.id !== item.id);
+                        setVacations(filteredData);
                     }}></VacationItem>
                 );
             }}
-            ListFooterComponent={() => <View style={{ marginTop: '30%'}}></View>}
+            ListFooterComponent={() => <View style={{ marginTop: '30%' }}></View>}
         />
         <TouchableOpacity style={[styles.wrapper, button]} onPress={() => navigation.navigate('VacationAdd')}>
             <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Dodaj urlop</Text>

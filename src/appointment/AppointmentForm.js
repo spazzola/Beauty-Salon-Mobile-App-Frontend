@@ -20,6 +20,23 @@ function getSelectedWorks(workConextState, workIds) {
   return workIds != null ? workConextState.filter(work => workIds.includes(work.id)) : null;
 }
 
+function buildMarkedDateObject(year, month, day) {
+  var date = year;
+  if (month < 10) {
+    date += '-0' + month;
+  } else {
+    date += '-' + month;
+  }
+
+  if (day < 10) {
+    date += '-0' + day;
+  } else {
+    date += '-' + day;
+  }
+
+  return date;
+}
+
 LocaleConfig.locales['pl'] = {
   monthNames: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
   monthNamesShort: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Czer', 'Lip.', 'Sier.', 'Wrz.', 'Paź.', 'Lis.', 'Gru.'],
@@ -73,16 +90,69 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
     }
     return date.getFullYear() + "-" + month + "-" + day;
   }
-  const setInitialDate = () => {
-    let date = prepareDate();
-    setMarkedDay({
-      [date]: {
-        selected: true,
-        marked: true,
-        selectedColor: '#F875AA'
+  const setInitialDate = (markedDate, givenMonth) => {
+    var currentDate = new Date();
+    var month = givenMonth == undefined ? currentDate.getMonth() + 1 : givenMonth;
+    var year = currentDate.getFullYear();
+    var daysInMonth = new Date(year, month, 0).getDate();
+    var extractedSaturdays = [];
+    var extractedSundays = [];
+
+    for (var i = 1; i <= daysInMonth; i++) {
+      var dayToCheck = new Date(year, month - 1, i).getDay();
+
+      if (dayToCheck == 0) {
+        extractedSundays.push(buildMarkedDateObject(year, month, i));
       }
-    });
+      if (dayToCheck == 6) {
+        extractedSaturdays.push(buildMarkedDateObject(year, month, i));
+      }
+    }
+
+    var markedSundays = extractedSundays.reduce((c, v) => Object.assign(c, {
+      [v]: {
+        customStyles: {
+          text: {
+            //color: '#F31A09'
+            color: 'black'
+          }
+        }
+      }
+    }), {});
+
+    setMarkedDay(markedSundays);
+
+    var markedSaturdays = extractedSaturdays.reduce((c, v) => Object.assign(c, {
+      [v]: {
+        customStyles: {
+          text: {
+            color: '#0F8BDE'
+          }
+        }
+      }
+    }), {});
+
+    if (markedDate == undefined) {
+      markedDate = prepareDate();
+    }
+    
+    let currentMarkedDate = {
+      [markedDate]: {
+        selectedColor: '#F875AA',
+        selected: true
+        
+      }
+    }
+    let markedDates = Object.assign(markedSundays, markedSaturdays);
+    markedDates = Object.assign(markedDates, currentMarkedDate);
+    setMarkedDay(markedDates);
+
   }
+
+  const [markedDay, setMarkedDay] = useState();
+  const [saturdays, setSaturdays] = useState();
+  const [sundays, setSundays] = useState();
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
 
   useEffect(() => {
     clientContext.getClients();
@@ -145,13 +215,12 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
     setShowAndroidDateModal(false);
   };
 
-  const [markedDay, setMarkedDay] = useState();
-
   // const onChangeTime = (event, selectedTime) => {
   //   console.log(event.getHours() + ":" + event.getMinutes());
   //   // let currentTime = selectedTime || startTime;
   //   // setStartTime(currentTime);
   // };
+
 
   const handleUpdate = (index, providedPrice) => {
     const newWorks = [...workItems];
@@ -186,22 +255,45 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                     <Calendar
                       //onDayPress={(selectedDate) => { onChangeDate(selectedDate.dateString + 'T00:00:00.000Z') }}
                       current={prepareDate()}
-                      onDayPress={(markedDate => {
-                        setMarkedDay({
-                          [markedDate.dateString]: {
-                            selected: true,
-                            marked: true,
-                            selectedColor: '#F875AA'
-                          }
-                        });
-                        let date = startDate || selectedDate;
-                        date.setFullYear(markedDate.year, (markedDate.month - 1), markedDate.day);
-                        setStartDate(date);
-                      })}
+                      // onDayPress={(markedDate => {
+                      //   setMarkedDay({
+                      //     ...markedDay,
+                      //     [markedDate.dateString]: {
+                      //       selected: true,
+                      //       marked: true,
+                      //       selectedColor: '#F875AA'
+                      //     }
+                      //   });
+                      //   let date = startDate || selectedDate;
+                      //   date.setFullYear(markedDate.year, (markedDate.month - 1), markedDate.day);
+                      //   setStartDate(date);
+                      // })}
+                      onDayPress={markedDate => setInitialDate(markedDate.dateString, markedDate.month)}
+                      onMonthChange={date => setInitialDate(undefined, date.month)}
                       style={[globalBackground, { marginTop: '7%' }]}
                       scrollEnabled={true}
+                      markingType={'custom'}
                       markedDates={markedDay}
                       theme={{
+                        'stylesheet.calendar.header': {
+                          sundayDayHeader: {
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            //color: '#F31A09',
+                            color: 'black',
+                            fontWeight: 'bold'
+                          },
+                          saturdayDayHeader: {
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            color: '#0F8BDE',
+                            fontWeight: 'bold'
+                          },
+                          dayHeader: {
+                            color: '#F875AA',
+                            fontWeight: 'bold'
+                          }
+                        },
                         calendarBackground: globalBackground.backgroundColor,
                         textSectionTitleColor: '#F875AA',
                         dayTextColor: '#F875AA',
@@ -418,7 +510,7 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                 setValue={(value) => {
                   setWorkIds(value);
                 }}
-                //setValue={setWorkIds}
+              //setValue={setWorkIds}
               />
               {/* <DropDownPicker
             open={open}
@@ -535,7 +627,6 @@ const AppointmentForm = ({ onSubmit, initialValues, navigation, appointmentId, g
                     let works = getSelectedWorks(workContext.state, workIds);
                     if (isAppointmentFormValid(1, startDate, percentageValueToAdd, clientId, employeeId, works)) {
                       setShowSpinner(!showSpinner);
-                      console.log(startDate, percentageValueToAdd, clientId, employeeId, works, note);
                       await onSubmit(startDate, percentageValueToAdd, clientId, employeeId, works, note);
                       setShowSpinner(!showSpinner);
                       navigation.navigate('Appointments', {

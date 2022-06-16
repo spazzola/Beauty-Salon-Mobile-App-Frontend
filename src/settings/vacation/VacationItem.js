@@ -5,8 +5,8 @@ import { buttonWrapper, button, buttonText, globalBackground, headerTitleColor, 
 
 
 const VacationItem = ({ vacation, index, navigation, onDelete }) => {
-    const { deleteVacation } = useContext(Context);
-
+    const { deleteVacation, getAllVacations } = useContext(Context);
+    
     return (
         <>
             <View style={{ marginTop: index == 0 ? '5%' : '0%' }}>
@@ -33,7 +33,7 @@ const VacationItem = ({ vacation, index, navigation, onDelete }) => {
                                         style: "cancel"
                                     },
                                     {
-                                        text: "Tak", onPress: async () => {
+                                        text: "Tak", onPress: () => {
                                             deleteVacation(vacation.id);
                                             onDelete();
                                         }
