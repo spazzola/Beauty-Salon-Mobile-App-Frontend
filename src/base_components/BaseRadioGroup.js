@@ -59,7 +59,7 @@ const BaseRadioGroup = ({ navigation, changeAppointmentsToShow }) => {
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => changeToEmployeeAppointments()}
-                style={[styles.button, { backgroundColor: isEmployeeAppointmentsSelected ? '#F1D1D0' : '#d0c3c8', marginLeft: '50%' }]}>
+                style={[styles.button, { backgroundColor: isEmployeeAppointmentsSelected ? '#1C6DD0' : '#d0c3c8', marginLeft: '50%' }]}>
                 <Text style={{ color: '#F4F9F9', fontFamily: 'MerriWeatherBold' }}>Wizyty pracownika</Text>
             </TouchableOpacity>
         </View>

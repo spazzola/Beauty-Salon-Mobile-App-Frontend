@@ -210,12 +210,12 @@ function addBackgroundColor(mode, appointment) {
         :
         (
             (appointment.employee.role === 'USER' && mode === 'double') ?
-                ('#F1D1D0')
+                ('#1C6DD0')
                 :
                 appointment.employee.role === 'ADMIN' && mode === 'single' ?
                     ('#FBACCC')
                     :
-                    ('#F1D1D0')
+                    ('#1C6DD0')
         )
 }
 
