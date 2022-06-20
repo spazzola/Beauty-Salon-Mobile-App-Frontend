@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Platform } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { detailTitle, buttonText, buttonWrapper, button } from '../../GlobalStyles';
+import { detailTitle, detailParagraph, buttonText, buttonWrapper, button } from '../../GlobalStyles';
 import BaseSpinner from '../base_components/BaseSpinner';
 
 
@@ -10,10 +10,17 @@ const SolariumForm = ({ onSubmit, getSolarium, initialValues }) => {
   const [usedTime, setUsedTime] = useState(initialValues.usedTime);
   const [usedDate, setUsedDate] = useState(new Date(Date.now()));
   const [showSpinner, setShowSpinner] = useState(false);
+  const [showAndroidDateModal, setShowAndroidDateModal] = useState(false);
 
   const onChange = (event, selectedDate) => {
     let currentDate = selectedDate || usedDate;
     setUsedDate(currentDate);
+    setShowAndroidDateModal(false);
+  };
+
+  const onChangeDate = (event, selectedDate) => {
+    setUsedDate(new Date(event));
+    setShowAndroidDateModal(false);
   };
 
   return (
@@ -33,14 +40,41 @@ const SolariumForm = ({ onSubmit, getSolarium, initialValues }) => {
         />
       </View>
 
-      <View style={{ width: '100%', marginTop: 20 }}>
-        <DateTimePicker
-          display={'spinner'}
-          value={usedDate}
-          onChange={onChange}
-          locale={'pl'}
-        />
-      </View>
+      {Platform.OS === 'ios' ? (
+        <View style={{ width: '100%', marginTop: 20 }}>
+          <DateTimePicker
+            display={'spinner'}
+            value={usedDate}
+            onChange={onChange}
+            locale={'pl'}
+          />
+        </View>
+      )
+        :
+        (
+          <>
+            <View style={buttonWrapper}>
+              <TouchableOpacity style={[button, { width: 180, flexDirection: 'row' }]} onPress={() => setShowAndroidDateModal(!showAndroidDateModal)}>
+                <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Wybierz datę</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={[detailParagraph, { fontSize: 17, marginTop: 0, fontFamily: 'MerriWeather' }]}> Wybrana data: {usedDate.getDate() + '/' + (usedDate.getMonth() + 1) + '/' + usedDate.getFullYear()}</Text>
+            {
+              showAndroidDateModal ?
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={usedDate}
+                  mode={'date'}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChange}
+                />
+                : null
+            }
+          </>
+        )
+      }
+
 
       <View style={buttonWrapper}>
         <TouchableOpacity style={[button, { width: 220 }]} onPress={() => {
@@ -52,7 +86,7 @@ const SolariumForm = ({ onSubmit, getSolarium, initialValues }) => {
             setShowSpinner(false);
           }
         }}>
-          <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Potwierdź solarium</Text>
+          <Text style={[buttonText, { fontFamily: 'MerriWeatherBold' }]}>Dodaj zużycie</Text>
         </TouchableOpacity>
       </View>
       <View style={buttonWrapper}>
