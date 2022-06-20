@@ -30,13 +30,27 @@ const ClientAdd = ({ navigation }) => {
               const { data } = await Contacts.getContactsAsync({});
               if (data.length > 0) {
                 clients = data.map(contact => {
-                  if (contact.firstName !== undefined && contact.lastName !== undefined && contact.phoneNumbers !== undefined) {
-                    return {
-                      name: contact.firstName,
-                      surname: contact.lastName,
-                      phoneNumber: contact.phoneNumbers[0].number
-                    };
+                  if (contact.firstName == undefined) {
+                    contact.firstName = " "
                   }
+                  if (contact.lastName == undefined) {
+                    contact.lastName = " "
+                  }
+                  if (contact.phoneNumbers == undefined) {
+                    contact.phoneNumbers[0].number = " "
+                  }
+                  return {
+                    name: contact.firstName,
+                    surname: contact.lastName,
+                    phoneNumber: contact.phoneNumbers[0].number
+                  };
+                  // if (contact.firstName !== undefined && contact.lastName !== undefined && contact.phoneNumbers !== undefined) {
+                  //   return {
+                  //     name: contact.firstName,
+                  //     surname: contact.lastName,
+                  //     phoneNumber: contact.phoneNumbers[0].number
+                  //   };
+                  // }
                 });
                 const filteredContacts = clients.filter(client => client !== undefined);
                 const response = await addClients(filteredContacts);
