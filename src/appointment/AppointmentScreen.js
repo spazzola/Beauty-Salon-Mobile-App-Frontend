@@ -22,25 +22,73 @@ const windowHeight = Dimensions.get('window').height;
 
 let headerTitle;
 
+// function sortList(appointments, appointmentsToShow, selectedDay) {
+//     if (appointmentsToShow.myAppointments && !appointmentsToShow.employeeAppointments) {
+//         return appointments.filter((appointment) =>
+//             appointment.employee.role === 'ADMIN' && appointment.finishDate.substring(8, 10) == selectedDay
+//         );
+//     }
+//     if (!appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments) {
+//         return appointments.filter((appointment) =>
+//             appointment.employee.role === 'USER' && appointment.finishDate.substring(8, 10) == selectedDay
+//         );
+//     }
+//     if (appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments) {
+//         return appointments.filter((appo) => appo.finishDate.substring(8, 10) == selectedDay);
+//     }
+//     if (!appointmentsToShow.myAppointments && !appointmentsToShow.employeeAppointments) {
+//         return [];
+//     }
+// }
 function sortList(appointments, appointmentsToShow, selectedDay) {
     if (appointmentsToShow.myAppointments && !appointmentsToShow.employeeAppointments) {
         return appointments.filter((appointment) =>
-            appointment.employee.role === 'ADMIN' && appointment.finishDate.substring(8, 10) == selectedDay
+            appointment.employee.role === 'ADMIN'
         );
     }
     if (!appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments) {
         return appointments.filter((appointment) =>
-            appointment.employee.role === 'USER' && appointment.finishDate.substring(8, 10) == selectedDay
+            appointment.employee.role === 'USER'
         );
     }
     if (appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments) {
-        return appointments.filter((appo) => appo.finishDate.substring(8, 10) == selectedDay);
+        return appointments;
     }
     if (!appointmentsToShow.myAppointments && !appointmentsToShow.employeeAppointments) {
         return [];
     }
 }
 
+function buildHeaderTitle(date) {
+    let dayShortcut;
+    let day = date.getDay();
+    switch (day) {
+        case 0:
+            dayShortcut = "Ndz";
+            break;
+        case 1:
+            dayShortcut = "Pon";
+            break;
+        case 2:
+            dayShortcut = "Wt";
+            break;
+        case 3:
+            dayShortcut = "Śr";
+            break;
+        case 4:
+            dayShortcut = "Czw";
+            break;
+        case 5:
+            dayShortcut = "Pt";
+            break;
+        case 6:
+            dayShortcut = "Sob";
+            break;
+    }
+
+    //return dayShortcut + " - " + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear(); 
+    return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear(); 
+}
 
 const AppointmentScreen = ({ navigation }) => {
     const { state, getAppointments } = useContext(Context);
@@ -84,61 +132,81 @@ const AppointmentScreen = ({ navigation }) => {
     return (
         <>
             {
-                Platform.OS === 'ios' ?
-                    <>
-                        {authState.state.role === 'ADMIN' ?
-                            <View style={[globalBackground, { marginBottom: 0, justifyContent: 'center', zIndex: 2 }]}>
-                                <BaseRadioGroup navigation={navigation} changeAppointmentsToShow={changeAppointmentsToShow} />
-                            </View> : null
-                        }
-                        <ScrollView contentContainerStyle={{ height: 1800 }} showsVerticalScrollIndicator={false}>
-                            <View style={[globalBackground, { position: 'absolute', zIndex: -2, height: 2000, top: authState.state.role === 'ADMIN' ? 30 : 0 }]}>
-                                <FlatList
-                                    data={hours}
-                                    keyExtractor={(item, index) => index.toString()}
-                                    renderItem={({ item, index }) => {
-                                        return (
-                                            <View key={index} style={{ flexDirection: 'row' }}>
-                                                <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:00</Text>
-                                                <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:15</Text>
-                                                <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:30</Text>
-                                                <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:45</Text>
-                                            </View>
+                // Platform.OS === 'ios' ?
+                //     <>
+                //         {authState.state.role === 'ADMIN' ?
+                //             <View style={[globalBackground, { marginBottom: 0, justifyContent: 'center', zIndex: 2 }]}>
+                //                 <BaseRadioGroup navigation={navigation} changeAppointmentsToShow={changeAppointmentsToShow} />
+                //             </View> : null
+                //         }
+                //         <ScrollView contentContainerStyle={{ height: 1800 }} showsVerticalScrollIndicator={false}>
+                //             <View style={[globalBackground, { position: 'absolute', zIndex: -2, height: 2000, top: authState.state.role === 'ADMIN' ? 30 : 0 }]}>
+                //                 <FlatList
+                //                     data={hours}
+                //                     keyExtractor={(item, index) => index.toString()}
+                //                     renderItem={({ item, index }) => {
+                //                         return (
+                //                             <View key={index} style={{ flexDirection: 'row' }}>
+                //                                 <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:00</Text>
+                //                                 <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:15</Text>
+                //                                 <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:30</Text>
+                //                                 <Text style={{ borderColor: '#d9d3d3', borderWidth: 1, height: boxHeight, width: (windowWidth / 60) * (15) }}>{item}:45</Text>
+                //                             </View>
 
-                                        )
-                                    }}
-                                />
-                            </View>
+                //                         )
+                //                     }}
+                //                 />
+                //             </View>
 
-                            <View style={{ position: 'absolute', width: windowWidth, height: 2000, zIndex: -1 }}>
-                                {(appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments) ?
-                                    (
-                                        sortList(state, appointmentsToShow, selectedDay).map((item) => {
-                                            return (
-                                                <View key={item.id.toString()} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
-                                                    <AppointmentItem appointment={item} navigation={navigation} mode={'double'} selectedDate={navigation.getParam('selectedDate')} />
-                                                </View>
-                                            )
-                                        })
+                //             <View style={{ position: 'absolute', width: windowWidth, height: 2000, zIndex: -1 }}>
+                //                 {(appointmentsToShow.myAppointments && appointmentsToShow.employeeAppointments) ?
+                //                     (
+                //                         sortList(state, appointmentsToShow, selectedDay).map((item) => {
+                //                             return (
+                //                                 <View key={item.id.toString()} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
+                //                                     <AppointmentItem appointment={item} navigation={navigation} mode={'double'} selectedDate={navigation.getParam('selectedDate')} />
+                //                                 </View>
+                //                             )
+                //                         })
 
-                                    )
-                                    :
-                                    (
-                                        sortList(state, appointmentsToShow, selectedDay).map((item) => {
-                                            return (
-                                                <View key={item.id.toString()} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
-                                                    <AppointmentItem appointment={item} navigation={navigation} mode={'single'} selectedDate={navigation.getParam('selectedDate')} />
-                                                </View>
-                                            )
-                                        })
-                                    )}
-                            </View>
-                        </ScrollView>
-                    </>
-                    :
-                    <>
-                        <AndroidWeekView navigation={navigation} appointments={state} selectedDate={navigation.getParam('selectedDate')} />
-                    </>
+                //                     )
+                //                     :
+                //                     (
+                //                         sortList(state, appointmentsToShow, selectedDay).map((item) => {
+                //                             return (
+                //                                 <View key={item.id.toString()} style={{ position: 'absolute', backgroundColor: 'yellow', height: windowHeight }}>
+                //                                     <AppointmentItem appointment={item} navigation={navigation} mode={'single'} selectedDate={navigation.getParam('selectedDate')} />
+                //                                 </View>
+                //                             )
+                //                         })
+                //                     )}
+                //             </View>
+                //         </ScrollView>
+                //     </>
+                //     :
+                <>
+                    {authState.state.role === 'ADMIN' ?
+                        <View style={[globalBackground, { marginBottom: 0, justifyContent: 'center', zIndex: 2 }]}>
+                            <BaseRadioGroup navigation={navigation} changeAppointmentsToShow={changeAppointmentsToShow} />
+                        </View> : null
+                    }
+                    <AndroidWeekView
+                        navigation={navigation}
+                        appointments={sortList(state, appointmentsToShow, selectedDay)}
+                        selectedDate={navigation.getParam('selectedDate')}
+                        onChangedDay={(date) => {
+                            headerTitle = buildHeaderTitle(date);
+                            // need to call setParams to update the navigation's header title
+                            navigation.setParams({ param: date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() })
+                            navigation.setParams({ selectedDate: { 
+                                dateString: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
+                                day: date.getDate(),
+                                month: (date.getMonth() + 1),
+                                year: date.getFullYear()
+                            }})
+                        }}
+                    />
+                </>
             }
 
             <TouchableOpacity style={[styles.wrapper, button]} onPress={() => {

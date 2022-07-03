@@ -8,7 +8,7 @@ import { headerTitleColor, globalBackground } from '../../../GlobalStyles';
 addLocale('pl', {
     months: 'Styczeń_Luty_Marzec_Kwiecień_Maj_Czerwiec_Lipiec_Sierpień_Wrzesień_Październik_Listopad_Grudzień'.split('_'),
     monthsShort: 'Sty._Lut._Mar._Kwi._Maj_Czer._Lip._Sier._Wrz._Paź._Lis._Gru.'.split('_'),
-    weekdays: 'Poniedziałek_Wtorek_Środa_Czwartek_Piątek_Sobota_Niedziela'.split('_'),
+    weekdays: 'Niedziela_Poniedziałek_Wtorek_Środa_Czwartek_Piątek_Sobota'.split('_'),
     weekdaysShort: 'Pon._Wt._Śr._Czw._Pt._Sob._Ndz.'.split('_'),
 });
 
@@ -51,13 +51,15 @@ function mapAppointments(appointments) {
             description: appointment.client.name,
             startDate: new Date(appointment.startDate),
             endDate: new Date(appointment.finishDate),
-            works: appointment.appointmentDetails
+            works: appointment.appointmentDetails,
+            userType: appointment.employee.role
         }
             
         
     })
 }
-const AndroidWeekView = ({ navigation, appointments, selectedDate }) => {
+const AndroidWeekView = ({ navigation, appointments, selectedDate, onChangedDay }) => {
+
     return (
         <>
             <WeekView
@@ -68,25 +70,33 @@ const AndroidWeekView = ({ navigation, appointments, selectedDate }) => {
                 selectedDate={new Date(selectedDate.dateString)}
                 numberOfDays={1}
                 startHour={7}
-                hoursInDisplay={14}
-                timeStep={30}
+                hoursInDisplay={3}
+                timeStep={15}
+                beginAgendaAt={6*60}
+                endAgendaAt={22*60}
                 formatDateHeader="dddd" 
                 hourTextStyle={{
                     fontFamily: 'MerriWeatherBold',
-                    color: headerTitleColor
+                    color: headerTitleColor,
+                    marginTop: 0
                 }}
                 headerTextStyle={{
                     fontFamily: 'MerriWeatherBold',
-                    color: headerTitleColor
+                    color: headerTitleColor,
                 }}
                 headerStyle={{
                     borderWidth: 0,
-                    borderColor: globalBackground.backgroundColor
+                    borderColor: globalBackground.backgroundColor,
+                    marginTop: '5%',
+                    height: '100%',
                 }}
                 eventContainerStyle={{
-                    backgroundColor: "#F1D1D0"
+                    // backgroundColor: "#F1D1D0",
+                    borderRadius: 10
                 }}
                 onEventPress={(event) => navigation.navigate('Appointment', { id: event.id })}
+                onSwipeNext={(date) => onChangedDay(date)}
+                onSwipePrev={(date) => onChangedDay(date)}
             />
         </>
     );
