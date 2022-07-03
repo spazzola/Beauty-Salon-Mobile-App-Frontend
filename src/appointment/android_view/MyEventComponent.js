@@ -16,13 +16,14 @@ const MyEventComponent = ({ event, position }) => {
 
     return (
         <>
-            <View>
+            <View style={{ backgroundColor: event.userType === "ADMIN" ? '#FBACCC' : '#1C6DD0', width: '100%', borderRadius: 30, alignItems: 'center' }}>
                 <Text style={{ color: 'red', fontFamily: 'MerriWeatherBold', color: 'black' }}> {event.description}</Text>
                 <Text>
                     {iconNames.length > 0 ? (
                         <FlatList
                             horizontal
                             data={iconNames}
+                            initialNumToRender={10}
                             listKey={(item, index) => index.toString()}
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={({ item }) => {
